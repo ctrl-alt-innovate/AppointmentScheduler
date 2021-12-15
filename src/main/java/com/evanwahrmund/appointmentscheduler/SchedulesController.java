@@ -14,6 +14,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -49,6 +52,17 @@ public class SchedulesController {
     @FXML private TextField startDateTextField;
     @FXML private TextField endDateTextField;
 
+    @FXML private MenuBar applicationMenuBar;
+    @FXML private Menu schedulesMenu;
+    @FXML private Menu editInfoMenu;
+    @FXML private MenuItem editCus;
+    @FXML private MenuItem editApps;
+    @FXML private Menu reportsMenu;
+    @FXML private MenuItem appsByType;
+    @FXML private MenuItem appsAndCusByLoc;
+    @FXML private MenuItem contactSchedules;
+    @FXML private Menu logout;
+
     private ObservableList<LocalDateDuration> weekOptions;
     private ObservableList<LocalDateDuration> monthOptions;
 
@@ -63,6 +77,12 @@ public class SchedulesController {
         schedulesTable.setItems(null);
         modifyButton.setOnAction(event -> modifyAppTime());
         saveButton.setOnAction(event -> updateAppTime());
+
+        appsByType.setOnAction(event -> Loader.Load("FXML/apps_by_type_and_month_report.fxml", "APPS BY TYPE AND MONTH REPORT"));
+        editCus.setOnAction(event -> Loader.Load("FXML/customers.fxml", "CUSTOMERS"));
+        editApps.setOnAction(event -> Loader.Load("FXML/appointments.fxml", "APPOINTMENTS"));
+        //appsAndCusByLoc.setOnAction( event -> Loader.Load("FXML/apps_and_cus_by_loc_report.fxml", "APPS AND CUS BY LOCATION REPORT"));
+        contactSchedules.setOnAction( event -> Loader.Load("FXML/apps_by_contact_report.fxml", "CONTACT SCHEDULES"));
 
         weekRadioButton.setOnAction(event -> {
             choiceLabel.setText("Week");

@@ -28,10 +28,10 @@ public class AppointmentScheduler extends Application {
             //Parent root = FXMLLoader.load(this.getClass().getResource("FXML/customers.fxml"));
             //DatabaseCustomerDao.getInstance();
             //DatabaseAppointmentDao.getInstance();
-            primaryStage.initStyle(StageStyle.UTILITY);
-            ReportVal reportVal = new ReportVal("string", 83);
-            reportVal.print();
-            Parent root = FXMLLoader.load(this.getClass().getResource("FXML/cal.fxml"));
+            //primaryStage.initStyle(StageStyle.UTILITY);
+            //ReportVal reportVal = new ReportVal("string", 83);
+            //reportVal.print();
+            Parent root = FXMLLoader.load(this.getClass().getResource("FXML/schedules.fxml"));
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("STYLESHEET.css").toExternalForm());
             primaryStage.setScene(scene);
