@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="715.0" prefWidth="1039.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.AppsByContactController">
+   <children>
+      <Label fx:id="headerLabel" layoutX="78.0" layoutY="69.0" prefHeight="35.0" prefWidth="585.0" style="-fx-font-weight: bold;" text="Appointment Schedules by Contact">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <TableView fx:id="contactSchedulesTable" layoutX="45.0" layoutY="185.0" prefHeight="419.0" prefWidth="926.0">
+         <columns>
+            <TableColumn fx:id="appIdCol" minWidth="0.0" prefWidth="102.0" text="Appointment_ID" />
+            <TableColumn fx:id="titleCol" prefWidth="175.0" text="Title" />
+            <TableColumn fx:id="typeCol" prefWidth="127.0" text="Type" />
+            <TableColumn fx:id="descriptionCol" prefWidth="183.0" text="Description" />
+            <TableColumn fx:id="startCol" prefWidth="113.0" text="Start Time" />
+            <TableColumn fx:id="endCol" minWidth="0.0" prefWidth="120.0" text="End Time" />
+            <TableColumn fx:id="cusIdCol" prefWidth="105.0" text="Customer_ID" />
+         </columns>
+      </TableView>
+      <Label fx:id="contactLabel" alignment="TOP_CENTER" layoutX="84.0" layoutY="131.0" prefHeight="20.0" prefWidth="114.0" style="-fx-text-alignment: center;" text="Contact" textAlignment="CENTER">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="contactComboBox" layoutX="198.0" layoutY="129.0" prefHeight="25.0" prefWidth="262.0" />
+   </children>
+</AnchorPane>

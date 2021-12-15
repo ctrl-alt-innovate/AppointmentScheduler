@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="715.0" prefWidth="647.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.AppsAndCusByLocController">
+   <children>
+      <Label fx:id="headerLabel" layoutX="31.0" layoutY="41.0" prefHeight="79.0" prefWidth="585.0" style="-fx-font-weight: bold;" text="Number of Customers and Appointments by Location" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="selectionLabel" alignment="TOP_CENTER" layoutX="49.0" layoutY="137.0" prefHeight="20.0" prefWidth="322.0" style="-fx-text-alignment: center;" text="View Number of Appointments by:" textAlignment="CENTER">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="selectionLabel1" alignment="TOP_CENTER" layoutX="49.0" layoutY="409.0" prefHeight="20.0" prefWidth="322.0" style="-fx-text-alignment: center;" text="View Number of Customers by: " textAlignment="CENTER">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TableView fx:id="appointmentsTable" layoutX="89.0" layoutY="185.0" prefHeight="200.0" prefWidth="322.0">
+         <columns>
+            <TableColumn fx:id="appCountryOrDivCol" prefWidth="150.0" text="Country" />
+            <TableColumn fx:id="appNumCol" minWidth="0.0" prefWidth="172.0" text="Number_Of_Appointments" />
+         </columns>
+      </TableView>
+      <TableView fx:id="customersTable" layoutX="89.0" layoutY="457.0" prefHeight="200.0" prefWidth="322.0">
+         <columns>
+            <TableColumn fx:id="cusCountryOrDivCol" prefWidth="150.0" text="Country" />
+            <TableColumn fx:id="cusNumCol" minWidth="0.0" prefWidth="172.0" text="Number_Of_Customers" />
+         </columns>
+      </TableView>
+      <RadioButton fx:id="appCountryRadioButton" layoutX="340.0" layoutY="137.0" mnemonicParsing="false" prefHeight="20.0" text="Country">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="appCountryOrFirstLevelDiv" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="appFirstLevelDivRadioButton" layoutX="440.0" layoutY="137.0" mnemonicParsing="false" text="First Level Division" toggleGroup="$appCountryOrFirstLevelDiv">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </RadioButton>
+      <RadioButton fx:id="cusCountryRadioButton" layoutX="340.0" layoutY="409.0" mnemonicParsing="false" prefHeight="20.0" text="Country">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="cusCountryOrFirstLevelDiv" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="cusFirstLevelDivRadioButton" layoutX="440.0" layoutY="409.0" mnemonicParsing="false" text="First Level Division" toggleGroup="$cusCountryOrFirstLevelDiv">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </RadioButton>
+   </children>
+</AnchorPane>

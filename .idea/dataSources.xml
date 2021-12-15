@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="MySQL - WJ07XA5@wgudb.ucertify.com" uuid="a6a10a44-4b61-4c41-bb49-ebe7ed9dcf4b">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://wgudb.ucertify.com:3306/WJ07XA5</jdbc-url>
+    </data-source>
+  </component>
+</project>

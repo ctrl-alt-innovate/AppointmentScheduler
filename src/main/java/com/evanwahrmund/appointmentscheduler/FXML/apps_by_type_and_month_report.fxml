@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="657.0" prefWidth="647.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.AppsByTypeAndMonthController">
+   <children>
+      <Label fx:id="headerLabel" alignment="CENTER" layoutX="31.0" layoutY="60.0" prefHeight="35.0" prefWidth="585.0" style="-fx-font-weight: bold;" text="Customer Appointments by Type and Month">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <TableView fx:id="typeAndMonthTable" layoutX="89.0" layoutY="140.0" prefHeight="453.0" prefWidth="470.0">
+        <columns>
+            <TableColumn fx:id="monthCol" prefWidth="150.0" text="Month_Of_Appointment" />
+          <TableColumn fx:id="typeCol" prefWidth="150.0" text="Type_Of_Appointment" />
+          <TableColumn fx:id="numAppsCol" minWidth="0.0" prefWidth="172.0" text="Number_Of_Appointments" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
