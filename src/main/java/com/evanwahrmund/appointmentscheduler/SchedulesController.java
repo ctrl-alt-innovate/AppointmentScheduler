@@ -4,6 +4,8 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +58,7 @@ public class SchedulesController {
     @FXML private Menu schedulesMenu;
     @FXML private Menu editInfoMenu;
     @FXML private MenuItem editCus;
-    @FXML private MenuItem editApps;
+    @FXML private MenuItem editApps;d
     @FXML private Menu reportsMenu;
     @FXML private MenuItem appsByType;
     @FXML private MenuItem appsAndCusByLoc;
@@ -135,7 +137,7 @@ public class SchedulesController {
         AppointmentDatabaseDao.getInstance().updateAppTime(appointment);
         schedulesTable.refresh();
     }
-    private void initializeMonthComboBox(){
+    /*private void initializeMonthComboBox(){
         monthOptions = FXCollections.observableArrayList();
         Duration duration = Duration.ofDays(0);
         for(Appointment appointment: Appointments.getAppointments()){
@@ -161,6 +163,19 @@ public class SchedulesController {
             }
         }
         mapAppsToMonth(monthOptions);
+    }*/
+    private void initializeMonthComboBox(){
+        ObservableList<YearMonth> options = FXCollections.observableArrayList();
+        for(Appointment app : Appointments.getAppointments()){
+            Month month = app.getStartDateTime().getMonth();
+            int year = app.getStartDateTime().getYear();
+            YearMonth yearMonth = YearMonth.of(year, month);
+            if (!options.contains(yearMonth)){
+                options.add(yearMonth);
+            }
+
+        }
+        mon
     }
     private void initializeWeekComboBox(){
         weekOptions = FXCollections.observableArrayList();
