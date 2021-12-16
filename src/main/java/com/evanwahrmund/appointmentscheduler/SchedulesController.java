@@ -1,6 +1,5 @@
 package com.evanwahrmund.appointmentscheduler;
 
-import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,8 +7,6 @@ import java.time.Month;
 import java.time.MonthDay;
 import java.time.YearMonth;
 import java.time.temporal.TemporalAccessor;
-import java.util.HashMap;
-import java.util.Map;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -27,7 +24,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
 
 public class SchedulesController {
 
@@ -67,17 +63,16 @@ public class SchedulesController {
     @FXML private MenuItem contactSchedules;
     @FXML private Menu logout;
 
-    private ObservableList<TemporalAccessor> weekOptions = FXCollections.observableArrayList();
+    private ObservableList<TemporalAccessor> options = FXCollections.observableArrayList();
     private ObservableList<YearMonth> monthOptions;
 
-    private Map<LocalDateDuration, ObservableList<Appointment>> dateToApps = new HashMap<>();
 
     public void initialize(){
         monthRadioButton.setSelected(true);
         initializeTable();
         //initializeWeekComboBox();
-        initializeMonthComboBox();
-        choiceComboBox.setItems(weekOptions);
+        setMonthOptions();
+        choiceComboBox.setItems(options);
         schedulesTable.setItems(null);
         modifyButton.setOnAction(event -> modifyAppTime());
         saveButton.setOnAction(event -> updateAppTime());
@@ -90,18 +85,20 @@ public class SchedulesController {
 
         weekRadioButton.setOnAction(event -> {
             choiceLabel.setText("Week");
-            choiceComboBox.setItems(weekOptions);
+            setWeekOptions();
+            choiceComboBox.setItems(options);
             schedulesTable.setItems(null);
-        });/*
+        });
         monthRadioButton.setOnAction(event -> {
             choiceLabel.setText("Month");
-            choiceComboBox.setItems(monthOptions);
+            setMonthOptions();
+            choiceComboBox.setItems(options);
             schedulesTable.setItems(null);
-        });*/
+        });/*
         choiceComboBox.setOnAction(event -> {
             if(choiceComboBox.getValue() != null)
                 schedulesTable.setItems(dateToApps.get(choiceComboBox.getValue()));
-        });
+        });*/
         /*choiceComboBox.setConverter(new StringConverter<LocalDateDuration>() {
             @Override
             public String toString(LocalDateDuration localDateDuration) {
@@ -166,31 +163,35 @@ public class SchedulesController {
         }
         mapAppsToMonth(monthOptions);
     }*/
-    private void initializeMonthComboBox(){
-        weekOptions.clear();
+    private void setMonthOptions(){
+        options.clear();
         for(Appointment app : Appointments.getAppointments()){
             Month month = app.getStartDateTime().getMonth();
             int year = app.getStartDateTime().getYear();
             YearMonth yearMonth = YearMonth.of(year, month);
-            if (weekOptions.contains(yearMonth)){
-                weekOptions.add(yearMonth);
+            if (!options.contains(yearMonth)){
+                options.add(yearMonth);
             }
 
         }
-    }/*
-    private void initializeWeekComboBox(){
-        weekOptions = FXCollections.observableArrayList();
-        for(Appointment appointment: Appointments.getAppointments()){
-            LocalDate week = appointment.getStartDateTime().toLocalDate();
-            while(week.getDayOfWeek() != DayOfWeek.SUNDAY){
-                week = week.minusDays(1);
-            }
-            LocalDateDuration dateDuration = new LocalDateDuration(week, Duration.ofDays(7));
-            if (!weekOptions.contains(dateDuration))
-                weekOptions.add(dateDuration);
-        }
-        mapAppsToWeek(weekOptions);
-    }*/
+    }
+    private void setWeekOptions(){
+      options.clear();
+      for(Appointment app: Appointments.getAppointments()){
+          LocalDate date = app.getStartDateTime().toLocalDate();
+          int day = date.getDayOfWeek().getValue();
+          int diff = 0;
+          while(day > 1){
+            --day;
+            ++diff;
+          }
+          date = date.minusDays(diff);
+          MonthDay week = MonthDay.of(date.getMonth(), date.getDayOfMonth());
+          if(!options.contains(week)){
+              options.add(week);
+          }
+      }
+    }
 
     private void initializeTable(){
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -206,7 +207,7 @@ public class SchedulesController {
     }
     private void mapAppsToWeek(ObservableList<LocalDateDuration> weeks) {
         for (LocalDateDuration date : weeks) {
-            dateToApps.put(date, AppointmentDatabaseDao.getInstance().getFilteredAppointments(date.getDate(), date.getDate().plusDays(6)));
+            //dateToApps.put(date, AppointmentDatabaseDao.getInstance().getFilteredAppointments(date.getDate(), date.getDate().plusDays(6)));
         }
     }
 
@@ -220,7 +221,7 @@ public class SchedulesController {
                 //System.out.println(end.getMonthValue() + "/" + end.getDayOfMonth());
             }
             end.minusDays(1);
-            dateToApps.put(date, AppointmentDatabaseDao.getInstance().getFilteredAppointments(start, end));
+            //dateToApps.put(date, AppointmentDatabaseDao.getInstance().getFilteredAppointments(start, end));
         }
     }
 
