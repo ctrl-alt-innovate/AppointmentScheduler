@@ -44,9 +44,9 @@ public class Appointments {
             appointments.remove(appointment);
         }
     }
-    public static ObservableList<Appointment> getAppsByMonth(LocalDateTime begOfMonth){
+    /*public static ObservableList<Appointment> getAppsByMonth(LocalDateTime begOfMonth){
         String monthName = begOfMonth.getMonth().toString().toUpperCase();
-        ObservableList<Appointment> appsByMonth = AppointmentDatabaseDao.getInstance().getAppsByMonth(monthName);
+        //ObservableList<Appointment> appsByMonth = AppointmentDatabaseDao.getInstance().getAppsByMonth(monthName);
         return appsByMonth;
-    }
+    }*/
 }

@@ -184,11 +184,12 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             ex.printStackTrace();
         }
     }
-    public ObservableList<Appointment> getAppsByMonth(String monthName){
+    public ObservableList<Appointment> getAppsByMonth(int month, int year ){
         ObservableList<Appointment> appsByMonth = FXCollections.observableArrayList();
-        String sql = "SELECT Appointment_ID FROM appointments WHERE MONTHNAME(Start) IN (?);";
+        String sql = "SELECT Appointment_ID FROM appointments WHERE MONTH(Start) = ? and YEAR(start) = ?;";
         try (var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
-            ps.setString(1, monthName);
+            ps.setInt(1, month);
+            ps.setInt(2, year);
             try(var rs = ps.executeQuery()){
                 while(rs.next()){
                     appsByMonth.add(Appointments.getAppointment(rs.getInt(1)));
@@ -198,8 +199,12 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             ex.printStackTrace();
         }
         return appsByMonth;
-
-
-
     }
+
+    public ObservableList<Appointment> getAppsByWeek(LocalDate start, LocalDate end){
+        ObservableList<Appointment> appsByWeek = FXCollections.observableArrayList();
+        String sql = "SELECT Appointment"
+        try( var )
+    }
+
 }

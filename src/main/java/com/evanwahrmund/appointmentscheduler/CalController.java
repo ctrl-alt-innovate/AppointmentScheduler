@@ -104,7 +104,7 @@ public class CalController {
         addAppsToSchedule();
     }
     private void addAppsToSchedule(){
-        currentMonthApps.addAll(Appointments.getAppsByMonth(current));
+        //currentMonthApps.addAll(Appointments.getAppsByMonth(current));
         for(Appointment a: currentMonthApps){
             System.out.println(a.getTitle());
         }

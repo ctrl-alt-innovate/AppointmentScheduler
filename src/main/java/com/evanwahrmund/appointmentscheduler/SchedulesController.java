@@ -1,5 +1,6 @@
 package com.evanwahrmund.appointmentscheduler;
 
+import java.beans.AppletInitializer;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -94,11 +95,11 @@ public class SchedulesController {
             setMonthOptions();
             choiceComboBox.setItems(options);
             schedulesTable.setItems(null);
-        });/*
+        });
         choiceComboBox.setOnAction(event -> {
             if(choiceComboBox.getValue() != null)
-                schedulesTable.setItems(dateToApps.get(choiceComboBox.getValue()));
-        });*/
+                schedulesTable.setItems(setMonthlySchedule());
+        });
         /*choiceComboBox.setConverter(new StringConverter<LocalDateDuration>() {
             @Override
             public String toString(LocalDateDuration localDateDuration) {
@@ -116,6 +117,21 @@ public class SchedulesController {
                 return null;
             }
         });*/
+    }
+
+    private ObservableList<Appointment> setMonthlySchedule(){
+        ObservableList<Appointment> currentSchedule = FXCollections.observableArrayList();
+        TemporalAccessor month = choiceComboBox.getSelectionModel().getSelectedItem();
+        if(monthRadioButton.isSelected()) {
+            int monthVal = ((YearMonth) month).getMonthValue();
+            int yearVal = ((YearMonth) month).getYear();
+            currentSchedule = AppointmentDatabaseDao.getInstance().getAppsByMonth(monthVal, yearVal);
+        } else {
+            LocalDate date = ((LocalDate)month);
+            LocalDate end = date.plusDays(7);
+
+        }
+        return currentSchedule;
     }
 
     private void modifyAppTime() {
@@ -186,9 +202,8 @@ public class SchedulesController {
             ++diff;
           }
           date = date.minusDays(diff);
-          MonthDay week = MonthDay.of(date.getMonth(), date.getDayOfMonth());
-          if(!options.contains(week)){
-              options.add(week);
+          if(!options.contains(date)){
+              options.add(date);
           }
       }
     }
