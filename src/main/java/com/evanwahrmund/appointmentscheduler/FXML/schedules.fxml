@@ -57,7 +57,7 @@
             <Font size="14.0" />
          </font>
       </RadioButton>
-      <ComboBox fx:id="choiceComboBox" layoutX="188.0" layoutY="141.0" prefHeight="25.0" prefWidth="262.0" />
+      <ComboBox fx:id="choiceComboBox" layoutX="188.0" layoutY="141.0" prefHeight="25.0"  prefWidth="262.0" />
       <Label fx:id="adjustTimeLabel" alignment="TOP_CENTER" layoutX="691.0" layoutY="101.0" prefHeight="20.0" prefWidth="217.0" style="-fx-text-alignment: center;" text="Adjust Appointment Time: " textAlignment="CENTER">
          <font>
             <Font size="14.0" />
