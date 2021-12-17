@@ -201,10 +201,21 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         return appsByMonth;
     }
 
-    public ObservableList<Appointment> getAppsByWeek(LocalDate start, LocalDate end){
+    public ObservableList<Appointment> getAppsByWeek(String start, String end){
         ObservableList<Appointment> appsByWeek = FXCollections.observableArrayList();
-        String sql = "SELECT Appointment"
-        try( var )
+        String sql = "SELECT Appointment_ID FROM appointments WHERE DATE(start) BETWEEN ? AND ?;";
+        try( var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
+            ps.setString(1, start);
+            ps.setString(2, end);
+            try( var rs = ps.executeQuery()){
+                while(rs.next()){
+                    appsByWeek.add(Appointments.getAppointment(rs.getInt(1)));
+                }
+            }
+        } catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return appsByWeek;
     }
 
 }

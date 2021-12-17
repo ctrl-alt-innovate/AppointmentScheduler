@@ -25,50 +25,82 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.StringConverter;
 
 public class SchedulesController {
 
-    @FXML private TableView<Appointment> schedulesTable;
-    @FXML private TableColumn<Appointment, Integer> idCol;
-    @FXML private TableColumn<Appointment, String> titleCol;
-    @FXML private TableColumn<Appointment, String> typeCol;
-    @FXML private TableColumn<Appointment, String> descriptionCol;
-    @FXML private TableColumn<Appointment, String> locationCol;
-    @FXML private TableColumn<Appointment, Contact> contactCol;
-    @FXML private TableColumn<Appointment, LocalDateTime> startDateTimeCol;
-    @FXML private TableColumn<Appointment, LocalDateTime> endDateTimeCol;
-    @FXML private TableColumn<Appointment, Customer> customerCol;
+    @FXML
+    private TableView<Appointment> schedulesTable;
+    @FXML
+    private TableColumn<Appointment, Integer> idCol;
+    @FXML
+    private TableColumn<Appointment, String> titleCol;
+    @FXML
+    private TableColumn<Appointment, String> typeCol;
+    @FXML
+    private TableColumn<Appointment, String> descriptionCol;
+    @FXML
+    private TableColumn<Appointment, String> locationCol;
+    @FXML
+    private TableColumn<Appointment, Contact> contactCol;
+    @FXML
+    private TableColumn<Appointment, LocalDateTime> startDateTimeCol;
+    @FXML
+    private TableColumn<Appointment, LocalDateTime> endDateTimeCol;
+    @FXML
+    private TableColumn<Appointment, Customer> customerCol;
 
-    @FXML private ComboBox<TemporalAccessor> choiceComboBox;
-    @FXML private Label choiceLabel;
-    @FXML private ToggleGroup schedulesGroup;
-    @FXML private RadioButton weekRadioButton;
-    @FXML private RadioButton monthRadioButton;
+    @FXML
+    private ComboBox<TemporalAccessor> choiceComboBox;
+    @FXML
+    private Label choiceLabel;
+    @FXML
+    private ToggleGroup schedulesGroup;
+    @FXML
+    private RadioButton weekRadioButton;
+    @FXML
+    private RadioButton monthRadioButton;
 
-    @FXML private Button modifyButton;
-    @FXML private Button saveButton;
+    @FXML
+    private Button modifyButton;
+    @FXML
+    private Button saveButton;
 
-    @FXML private TextField startTimeTextField;
-    @FXML private TextField endTimeTextField;
-    @FXML private TextField startDateTextField;
-    @FXML private TextField endDateTextField;
+    @FXML
+    private TextField startTimeTextField;
+    @FXML
+    private TextField endTimeTextField;
+    @FXML
+    private TextField startDateTextField;
+    @FXML
+    private TextField endDateTextField;
 
-    @FXML private MenuBar applicationMenuBar;
-    @FXML private Menu schedulesMenu;
-    @FXML private Menu editInfoMenu;
-    @FXML private MenuItem editCus;
-    @FXML private MenuItem editApps;
-    @FXML private Menu reportsMenu;
-    @FXML private MenuItem appsByType;
-    @FXML private MenuItem appsAndCusByLoc;
-    @FXML private MenuItem contactSchedules;
-    @FXML private Menu logout;
+    @FXML
+    private MenuBar applicationMenuBar;
+    @FXML
+    private Menu schedulesMenu;
+    @FXML
+    private Menu editInfoMenu;
+    @FXML
+    private MenuItem editCus;
+    @FXML
+    private MenuItem editApps;
+    @FXML
+    private Menu reportsMenu;
+    @FXML
+    private MenuItem appsByType;
+    @FXML
+    private MenuItem appsAndCusByLoc;
+    @FXML
+    private MenuItem contactSchedules;
+    @FXML
+    private Menu logout;
 
     private ObservableList<TemporalAccessor> options = FXCollections.observableArrayList();
     private ObservableList<YearMonth> monthOptions;
 
 
-    public void initialize(){
+    public void initialize() {
         monthRadioButton.setSelected(true);
         initializeTable();
         //initializeWeekComboBox();
@@ -82,7 +114,7 @@ public class SchedulesController {
         editCus.setOnAction(event -> Loader.Load("FXML/customers.fxml", "CUSTOMERS"));
         editApps.setOnAction(event -> Loader.Load("FXML/appointments.fxml", "APPOINTMENTS"));
         //appsAndCusByLoc.setOnAction( event -> Loader.Load("FXML/apps_and_cus_by_loc_report.fxml", "APPS AND CUS BY LOCATION REPORT"));
-        contactSchedules.setOnAction( event -> Loader.Load("FXML/apps_by_contact_report.fxml", "CONTACT SCHEDULES"));
+        contactSchedules.setOnAction(event -> Loader.Load("FXML/apps_by_contact_report.fxml", "CONTACT SCHEDULES"));
 
         weekRadioButton.setOnAction(event -> {
             choiceLabel.setText("Week");
@@ -97,39 +129,40 @@ public class SchedulesController {
             schedulesTable.setItems(null);
         });
         choiceComboBox.setOnAction(event -> {
-            if(choiceComboBox.getValue() != null)
+            if (choiceComboBox.getValue() != null)
                 schedulesTable.setItems(setMonthlySchedule());
         });
-        /*choiceComboBox.setConverter(new StringConverter<LocalDateDuration>() {
+        choiceComboBox.setConverter(new StringConverter<TemporalAccessor>() {
             @Override
-            public String toString(LocalDateDuration localDateDuration) {
-                if(localDateDuration != null){
+            public String toString(TemporalAccessor temporalAccessor) {
+                if (temporalAccessor != null) {
                     return weekRadioButton.isSelected() ?
-                            "Week of: " + localDateDuration.getDate().getMonthValue() + "/" + localDateDuration.getDate().getDayOfMonth() + "/" + localDateDuration.getDate().getYear() :
-                            "Month of: " + localDateDuration.getDate().getMonth().toString().substring(0,1) + localDateDuration.getDate().getMonth().toString().toLowerCase().substring(1) +
-                                    "/" + localDateDuration.getDate().getYear();
-
+                            "Week: " + temporalAccessor.toString().substring(6) + "-" +
+                                    temporalAccessor.toString().substring(0, 4) :
+                            "Month: " + ((YearMonth) temporalAccessor).getMonth().toString() + " " +
+                                    temporalAccessor.toString().substring(0, 4);
                 }
                 return null;
             }
+
             @Override
-            public LocalDateDuration fromString(String s) {
+            public TemporalAccessor fromString(String s) {
                 return null;
             }
-        });*/
+        });
     }
 
-    private ObservableList<Appointment> setMonthlySchedule(){
+    private ObservableList<Appointment> setMonthlySchedule() {
         ObservableList<Appointment> currentSchedule = FXCollections.observableArrayList();
         TemporalAccessor month = choiceComboBox.getSelectionModel().getSelectedItem();
-        if(monthRadioButton.isSelected()) {
+        if (monthRadioButton.isSelected()) {
             int monthVal = ((YearMonth) month).getMonthValue();
             int yearVal = ((YearMonth) month).getYear();
             currentSchedule = AppointmentDatabaseDao.getInstance().getAppsByMonth(monthVal, yearVal);
         } else {
-            LocalDate date = ((LocalDate)month);
+            LocalDate date = ((LocalDate) month);
             LocalDate end = date.plusDays(7);
-
+            currentSchedule = AppointmentDatabaseDao.getInstance().getAppsByWeek(date.toString(), end.toString());
         }
         return currentSchedule;
     }
@@ -141,10 +174,11 @@ public class SchedulesController {
         endDateTextField.setText(Util.formatDate(appointment.getEndDateTime().toLocalDate()));
         endTimeTextField.setText(Util.formatTime(appointment.getEndDateTime().toLocalTime()));
     }
+
     private void updateAppTime() {
         Appointment appointment = schedulesTable.getSelectionModel().getSelectedItem();
         LocalDateTime start = LocalDateTime.of(Util.stringToDate(startDateTextField.getText()),
-                                            Util.stringToTime(startTimeTextField.getText()));
+                Util.stringToTime(startTimeTextField.getText()));
         LocalDateTime end = LocalDateTime.of(Util.stringToDate(endDateTextField.getText()),
                 Util.stringToTime(endTimeTextField.getText()));
         appointment.setStartDateTime(start);
@@ -152,63 +186,38 @@ public class SchedulesController {
         AppointmentDatabaseDao.getInstance().updateAppTime(appointment);
         schedulesTable.refresh();
     }
-    /*private void initializeMonthComboBox(){
-        monthOptions = FXCollections.observableArrayList();
-        Duration duration = Duration.ofDays(0);
-        for(Appointment appointment: Appointments.getAppointments()){
-            LocalDate month = appointment.getStartDateTime().toLocalDate();
-            while(month.getDayOfMonth()  > 1) {
-                month = month.minusDays(1);
-            }
-            int monthVal = month.getMonthValue();
-            LocalDate date = month;
-            while(month.getMonthValue() == monthVal){
-                duration = duration.plusDays(1);
-                month = month.plusDays(1);
-            }
-            Boolean alreadyListed = false;
-            for(LocalDateDuration dateDuration: monthOptions){
-                if (dateDuration.getDate().getMonthValue() == monthVal){
-                    alreadyListed = true;
-                }
-            }
-            if(!alreadyListed){
-                LocalDateDuration localDateDuration= new LocalDateDuration(date,duration);
-                monthOptions.add(localDateDuration);
-            }
-        }
-        mapAppsToMonth(monthOptions);
-    }*/
-    private void setMonthOptions(){
+
+    private void setMonthOptions() {
         options.clear();
-        for(Appointment app : Appointments.getAppointments()){
+        for (Appointment app : Appointments.getAppointments()) {
             Month month = app.getStartDateTime().getMonth();
             int year = app.getStartDateTime().getYear();
             YearMonth yearMonth = YearMonth.of(year, month);
-            if (!options.contains(yearMonth)){
+            if (!options.contains(yearMonth)) {
                 options.add(yearMonth);
             }
 
         }
     }
-    private void setWeekOptions(){
-      options.clear();
-      for(Appointment app: Appointments.getAppointments()){
-          LocalDate date = app.getStartDateTime().toLocalDate();
-          int day = date.getDayOfWeek().getValue();
-          int diff = 0;
-          while(day > 1){
-            --day;
-            ++diff;
-          }
-          date = date.minusDays(diff);
-          if(!options.contains(date)){
-              options.add(date);
-          }
-      }
+
+    private void setWeekOptions() {
+        options.clear();
+        for (Appointment app : Appointments.getAppointments()) {
+            LocalDate date = app.getStartDateTime().toLocalDate();
+            int day = date.getDayOfWeek().getValue();
+            int diff = 0;
+            while (day > 1) {
+                --day;
+                ++diff;
+            }
+            date = date.minusDays(diff);
+            if (!options.contains(date)) {
+                options.add(date);
+            }
+        }
     }
 
-    private void initializeTable(){
+    private void initializeTable() {
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -220,40 +229,6 @@ public class SchedulesController {
         customerCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
 
     }
-    private void mapAppsToWeek(ObservableList<LocalDateDuration> weeks) {
-        for (LocalDateDuration date : weeks) {
-            //dateToApps.put(date, AppointmentDatabaseDao.getInstance().getFilteredAppointments(date.getDate(), date.getDate().plusDays(6)));
-        }
-    }
-
-    private void mapAppsToMonth(ObservableList<LocalDateDuration> months) {
-        for (LocalDateDuration date : months) {
-            LocalDate start = date.getDate();
-            LocalDate end = start;
-            int monthVal = end.getMonthValue();
-            while(end.getMonthValue() == monthVal){
-                end = end.plusDays(1);
-                //System.out.println(end.getMonthValue() + "/" + end.getDayOfMonth());
-            }
-            end.minusDays(1);
-            //dateToApps.put(date, AppointmentDatabaseDao.getInstance().getFilteredAppointments(start, end));
-        }
-    }
-
-    public class LocalDateDuration{
-        private LocalDate date;
-        private Duration duration;
-        public LocalDateDuration (LocalDate date, Duration duration){
-            this.date = date;
-            this.duration = duration;
-        }
-        public LocalDate getDate(){return date;}
-        @Override public String toString(){
-            return duration.toDays() > 7 ?
-                    date.getMonth() + ":" + date.getYear() :
-                    date.getMonthValue() + "/" + date.getDayOfMonth() + "/"+ date.getYear();
 
 
-        }
-    }
 }
