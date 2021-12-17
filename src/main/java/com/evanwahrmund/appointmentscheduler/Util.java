@@ -49,10 +49,10 @@ public class Util {
         int year = Integer.valueOf(date.substring(6));
         return LocalDate.of(year, month, day);
     }
-
+    /*
     public static ZonedDateTime localToZonedTime(ZonedDateTime local){
         return ZonedDateTime.of(local,ZoneId.systemDefault());
-    }
+    } */
 
     public static ZonedDateTime toHQTimezone(ZonedDateTime zoned){
         return zoned.withZoneSameInstant(HQ_TIME_ZONE);

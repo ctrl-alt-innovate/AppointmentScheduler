@@ -104,7 +104,7 @@ public class AppointmentsController {
         String description = descriptionTextField.getText();
         String location = locationTextField.getText();
         String type = typeTextField.getText();
-        LocalDate startDate = startDatePicker.getValue();
+                LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
         LocalTime startTime = Util.stringToTime(startTimeTextField.getText());
         LocalTime endTime = Util.stringToTime(endTimeTextField.getText());
