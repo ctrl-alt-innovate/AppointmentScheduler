@@ -7,7 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +21,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             INSTANCE = new AppointmentDatabaseDao();
         return INSTANCE;
     }
+    @Override
     public ObservableList<Appointment> getAllAppointments(){
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, " +
@@ -31,8 +33,8 @@ public class AppointmentDatabaseDao implements AppointmentDao {
                 String description = rs.getString(3);
                 String location = rs.getString(4);
                 String type = rs.getString(5);
-                LocalDateTime start = rs.getTimestamp(6).toLocalDateTime();
-                LocalDateTime end = rs.getTimestamp(7).toLocalDateTime();
+                ZonedDateTime start = ZonedDateTime.of(rs.getTimestamp(6).toLocalDateTime(), ZoneId.of("UTC-00:00"));
+                ZonedDateTime end = ZonedDateTime.of(rs.getTimestamp(7).toLocalDateTime(), ZoneId.of("UTC-00:00"));
                 Customer customer = Customers.getCustomer(rs.getInt(8));
                 User user = Users.getUser(rs.getInt(9));
                 Contact contact = Contacts.getContact(rs.getInt(10));
@@ -46,6 +48,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         return appointments;
     }
     //HAVE NOT CHECKED
+    @Override
     public Appointment getAppointment(int id){
         String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, User_ID, Contact_ID, Customer_ID " +
                 "FROM appointments WHERE User_ID = ?;";
@@ -58,8 +61,8 @@ public class AppointmentDatabaseDao implements AppointmentDao {
                     String description = rs.getString(3);
                     String location = rs.getString(4);
                     String type = rs.getString(5);
-                    LocalDateTime start = rs.getTimestamp(6).toLocalDateTime();
-                    LocalDateTime end = rs.getTimestamp(7).toLocalDateTime();
+                    ZonedDateTime start = ZonedDateTime.of(rs.getTimestamp(6).toLocalDateTime(), ZoneId.of("UTC-00:00"));
+                    ZonedDateTime end = ZonedDateTime.of(rs.getTimestamp(7).toLocalDateTime(), ZoneId.of("UTC-00:00"));
                     User user = UserDatabaseDao.getInstance().getUser(rs.getInt(8));
                     Contact contact = ContactDatabaseDao.getInstance().getContact(rs.getInt(9));
                     Customer customer = CustomerDatabaseDao.getInstance().getCustomer(rs.getInt(10));
@@ -74,7 +77,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         }
         return null;
     }
-
+    @Override
     public boolean createAppointment(Appointment appointment){
         String sql = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Created_By, Last_Updated_By, " +
                         "Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -83,8 +86,8 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             ps.setString(2, appointment.getDescription());
             ps.setString(3, appointment.getLocation());
             ps.setString(4, appointment.getType());
-            ps.setTimestamp(5, Timestamp.valueOf(appointment.getStartDateTime()));
-            ps.setTimestamp(6, Timestamp.valueOf(appointment.getEndDateTime()));
+            ps.setTimestamp(5, Timestamp.valueOf(appointment.getStartDateTime().toLocalDateTime()));
+            ps.setTimestamp(6, Timestamp.valueOf(appointment.getEndDateTime().toLocalDateTime()));
             ps.setString(7, "Application");
             ps.setString(8, "Application");
             ps.setInt(9, appointment.getCustomer().getId());
@@ -103,6 +106,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         }
         return false;
     }
+    @Override
     public boolean updateAppointment(Appointment appointment){
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
                         "Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?;";
@@ -111,8 +115,8 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             ps.setString(2, appointment.getDescription());
             ps.setString(3, appointment.getLocation());
             ps.setString(4, appointment.getType());
-            ps.setTimestamp(5, Timestamp.valueOf(appointment.getStartDateTime()));
-            ps.setTimestamp(6, Timestamp.valueOf(appointment.getEndDateTime()));
+            ps.setTimestamp(5, Timestamp.valueOf(appointment.getStartDateTime().toLocalDateTime()));
+            ps.setTimestamp(6, Timestamp.valueOf(appointment.getEndDateTime().toLocalDateTime()));
             ps.setInt(7, appointment.getCustomer().getId());
             ps.setInt(8, appointment.getUser().getUserId());
             ps.setInt(9, appointment.getContact().getId());
@@ -124,6 +128,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         }
         return false;
     }
+    @Override
     public boolean deleteAppointment(Appointment appointment){
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?;";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
@@ -134,7 +139,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             System.out.println("Error: Appointment with ID - " + appointment.getId() + " not deleted.");
         }
         return false;
-    }
+    }/*
     public ObservableList<Appointment> getFilteredAppointments(LocalDate start, LocalDate end){
         String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, " +
                 "Contact_ID FROM appointments WHERE (Start BETWEEN ? AND ?) AND (End BETWEEN ? AND ?);";
@@ -151,8 +156,8 @@ public class AppointmentDatabaseDao implements AppointmentDao {
                     String description = rs.getString(3);
                     String location = rs.getString(4);
                     String type = rs.getString(5);
-                    LocalDateTime startTime = rs.getTimestamp(6).toLocalDateTime();
-                    LocalDateTime endTime = rs.getTimestamp(7).toLocalDateTime();
+                    ZonedDateTime startTime = rs.getTimestamp(6).toLocalDateTime();
+                    ZonedDateTime endTime = rs.getTimestamp(7).toLocalDateTime();
                     Customer customer = CustomerDatabaseDao.getInstance().getCustomer(rs.getInt(8));
                     User user = UserDatabaseDao.getInstance().getUser(rs.getInt(9));
                     Contact contact = ContactDatabaseDao.getInstance().getContact(rs.getInt(10));
@@ -166,12 +171,12 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             ex.printStackTrace();
         }
         return filteredApps;
-    }
+    }*/
     public void updateAppTime(Appointment app){
         String sql = "UPDATE appointments SET Start = ?, End = ? WHERE Appointment_ID = ?;";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
-            ps.setTimestamp(1, Timestamp.valueOf(app.getStartDateTime()));
-            ps.setTimestamp(2,Timestamp.valueOf(app.getEndDateTime()));
+            ps.setTimestamp(1, Timestamp.valueOf(app.getStartDateTime().toLocalDateTime()));
+            ps.setTimestamp(2,Timestamp.valueOf(app.getEndDateTime().toLocalDateTime()));
             ps.setInt(3, app.getId());
             ps.executeUpdate();
             /* --Check and Update this

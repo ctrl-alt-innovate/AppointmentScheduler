@@ -1,6 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
@@ -16,8 +17,8 @@ public class AppsByContactController {
     @FXML private TableColumn<Appointment, String> titleCol;
     @FXML private TableColumn<Appointment, String> typeCol;
     @FXML private TableColumn<Appointment, String> descriptionCol;
-    @FXML private TableColumn<Appointment, LocalDateTime> startCol;
-    @FXML private TableColumn<Appointment, LocalDateTime> endCol;
+    @FXML private TableColumn<Appointment, ZonedDateTime> startCol;
+    @FXML private TableColumn<Appointment, ZonedDateTime> endCol;
     @FXML private TableColumn<Appointment, Customer> cusIdCol;
     @FXML private ComboBox<Contact> contactComboBox;
 

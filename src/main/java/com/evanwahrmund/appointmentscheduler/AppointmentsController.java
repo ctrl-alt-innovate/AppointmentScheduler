@@ -3,7 +3,6 @@ package com.evanwahrmund.appointmentscheduler;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -15,7 +14,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
 
 public class AppointmentsController {
 
@@ -26,8 +24,8 @@ public class AppointmentsController {
     @FXML private TableColumn<Appointment, String> descriptionCol;
     @FXML private TableColumn<Appointment, String> locationCol;
     @FXML private TableColumn<Appointment, Contact> contactCol;
-    @FXML private TableColumn<Appointment, LocalDateTime> startDateTimeCol;
-    @FXML private TableColumn<Appointment, LocalDateTime> endDateTimeCol;
+    @FXML private TableColumn<Appointment, ZonedDateTime> startDateTimeCol;
+    @FXML private TableColumn<Appointment, ZonedDateTime> endDateTimeCol;
     @FXML private TableColumn<Appointment, Customer> customerCol;
 
 
@@ -84,7 +82,7 @@ public class AppointmentsController {
         descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         contactCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getContact().getName()));
-        startDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime().at)));
+        startDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime())));
         endDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime())));
         customerCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
 
@@ -110,8 +108,8 @@ public class AppointmentsController {
         LocalDate endDate = endDatePicker.getValue();
         LocalTime startTime = Util.stringToTime(startTimeTextField.getText());
         LocalTime endTime = Util.stringToTime(endTimeTextField.getText());
-        LocalDateTime start = LocalDateTime.of(startDate, startTime);
-        LocalDateTime end = LocalDateTime.of(endDate, endTime);
+        ZonedDateTime start = LocalDateTime.of(startDate, startTime);
+        ZonedDateTime end = LocalDateTime.of(endDate, endTime);
         Customer customer = Customers.getCustomer(Integer.parseInt(customerIdTextField.getText()));
         User user = Users.getUser(Integer.parseInt(userIdTextField.getText()));
         Contact contact = contactComboBox.getValue();
@@ -166,8 +164,8 @@ public class AppointmentsController {
         Appointments.deleteAppointment(appointment);
         //Set label to notify of removal
     }
-    private boolean validateAppointment(String title, String description, String location, String type, LocalDateTime start,
-                                            LocalDateTime end, Customer customer, User user, Contact contact){
+    private boolean validateAppointment(String title, String description, String location, String type, ZonedDateTime start,
+                                        ZonedDateTime end, Customer customer, User user, Contact contact){
         if(title == null || description == null || location == null || type == null || start == null || end == null
                 || customer == null || user == null || contact == null) {
             return false;
@@ -177,7 +175,7 @@ public class AppointmentsController {
 
         return false;
     }
-    private boolean validateAppTime(LocalDateTime start, LocalDateTime end){
+    private boolean validateAppTime(ZonedDateTime start, ZonedDateTime end){
         ZonedDateTime startZoned = Util.localToZonedTime(start);
         ZonedDateTime endZoned = Util.localToZonedTime(end);
         ZonedDateTime startHQZoned = Util.toHQTimezone(startZoned);

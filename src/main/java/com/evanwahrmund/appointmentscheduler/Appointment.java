@@ -1,6 +1,6 @@
 package com.evanwahrmund.appointmentscheduler;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Appointment {
 
@@ -9,14 +9,14 @@ public class Appointment {
     private String description;
     private String location;
     private String type;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+    private ZonedDateTime startDateTime;
+    private ZonedDateTime endDateTime;
     private User user;
     private Contact contact;
     private Customer customer;
 
-    public Appointment(int id, String title, String description, String location, String type, LocalDateTime startDateTime,
-                            LocalDateTime endDateTime, Customer customer, User user, Contact contact){
+    public Appointment(int id, String title, String description, String location, String type, ZonedDateTime startDateTime,
+                       ZonedDateTime endDateTime, Customer customer, User user, Contact contact){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -29,8 +29,8 @@ public class Appointment {
         this.contact = contact;
 
     }
-    public Appointment(String title, String description, String location, String type, LocalDateTime startDateTime,
-                       LocalDateTime endDateTime, Customer customer, User user, Contact contact){
+    public Appointment(String title, String description, String location, String type, ZonedDateTime startDateTime,
+                       ZonedDateTime endDateTime, Customer customer, User user, Contact contact){
         this.title = title;
         this.description = description;
         this.location = location;
@@ -66,16 +66,16 @@ public class Appointment {
     public void setLocation(String location){
         this.location = location;
     }
-    public LocalDateTime getStartDateTime(){
+    public ZonedDateTime getStartDateTime(){
         return startDateTime;
     }
-    public void setStartDateTime(LocalDateTime startDateTime){
+    public void setStartDateTime(ZonedDateTime startDateTime){
         this.startDateTime = startDateTime;
     }
-    public LocalDateTime getEndDateTime(){
+    public ZonedDateTime getEndDateTime(){
         return endDateTime;
     }
-    public void setEndDateTime(LocalDateTime endDateTime){
+    public void setEndDateTime(ZonedDateTime endDateTime){
         this.endDateTime = endDateTime;
     }
     public User getUser(){

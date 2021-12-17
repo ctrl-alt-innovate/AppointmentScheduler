@@ -7,15 +7,7 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
-import java.util.Date;
 import java.util.Locale;
-import java.util.function.UnaryOperator;
-
-import javax.swing.text.DateFormatter;
-
-import javafx.scene.control.TextFormatter;
-import javafx.util.StringConverter;
 
 /**
  * Date: MM/DD/YYYY Or MM-DD
@@ -41,7 +33,7 @@ public class Util {
     public static String formatTime(LocalTime time){
         return timeFormatter.format(time);
     }
-    public static String formatDateTime(LocalDateTime localDateTime){
+    public static String formatDateTime(ZonedDateTime localDateTime){
         return dateTimeFormatter.format(localDateTime);
     }
     public static LocalTime stringToTime(String time){
@@ -58,7 +50,7 @@ public class Util {
         return LocalDate.of(year, month, day);
     }
 
-    public static ZonedDateTime localToZonedTime(LocalDateTime local){
+    public static ZonedDateTime localToZonedTime(ZonedDateTime local){
         return ZonedDateTime.of(local,ZoneId.systemDefault());
     }
 
@@ -74,8 +66,8 @@ public class Util {
         if((startHour > END_HOUR) || (endHour > END_HOUR))
             return false;
         return true;
-    }
-    public static int countDaysInMonth(LocalDateTime firstOfMonth){
+    }/*
+    public static int countDaysInMonth(ZonedDateTime firstOfMonth){
         int count = 1;
         Month month = firstOfMonth.getMonth();
         while(firstOfMonth.getMonth() == month){
@@ -83,7 +75,7 @@ public class Util {
             firstOfMonth = firstOfMonth.plusDays(1);
         }
         return count;
-    }
+    }*/
 
 
 

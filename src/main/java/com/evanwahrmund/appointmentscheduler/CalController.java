@@ -1,10 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
-import java.lang.invoke.CallSite;
 import java.time.LocalDateTime;
-import java.time.Month;
-
-import javax.tools.Tool;
+import java.time.ZonedDateTime;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +16,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -45,7 +41,7 @@ public class CalController {
     @FXML private RadioButton weekButton;
 
 
-    private static LocalDateTime current = LocalDateTime.now().withDayOfMonth(1);
+    private static ZonedDateTime current = LocalDateTime.now().withDayOfMonth(1);
     private static final ObservableList<Appointment> currentMonthApps = FXCollections.observableArrayList();
 
     public void initialize(){

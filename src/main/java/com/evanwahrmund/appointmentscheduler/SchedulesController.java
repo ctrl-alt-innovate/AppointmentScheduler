@@ -1,12 +1,6 @@
 package com.evanwahrmund.appointmentscheduler;
 
-import java.beans.AppletInitializer;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.MonthDay;
-import java.time.YearMonth;
+import java.time.*;
 import java.time.temporal.TemporalAccessor;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -44,9 +38,9 @@ public class SchedulesController {
     @FXML
     private TableColumn<Appointment, Contact> contactCol;
     @FXML
-    private TableColumn<Appointment, LocalDateTime> startDateTimeCol;
+    private TableColumn<Appointment, ZonedDateTime> startDateTimeCol;
     @FXML
-    private TableColumn<Appointment, LocalDateTime> endDateTimeCol;
+    private TableColumn<Appointment, ZonedDateTime endDateTimeCol;
     @FXML
     private TableColumn<Appointment, Customer> customerCol;
 
@@ -177,9 +171,9 @@ public class SchedulesController {
 
     private void updateAppTime() {
         Appointment appointment = schedulesTable.getSelectionModel().getSelectedItem();
-        LocalDateTime start = LocalDateTime.of(Util.stringToDate(startDateTextField.getText()),
+        ZonedDateTime start = LocalDateTime.of(Util.stringToDate(startDateTextField.getText()),
                 Util.stringToTime(startTimeTextField.getText()));
-        LocalDateTime end = LocalDateTime.of(Util.stringToDate(endDateTextField.getText()),
+        ZonedDateTime end = LocalDateTime.of(Util.stringToDate(endDateTextField.getText()),
                 Util.stringToTime(endTimeTextField.getText()));
         appointment.setStartDateTime(start);
         appointment.setEndDateTime(end);
