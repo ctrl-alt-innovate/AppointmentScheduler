@@ -1,9 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.util.Locale;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
@@ -82,8 +80,10 @@ public class AppointmentsController {
         descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         contactCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getContact().getName()));
-        startDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime())));
-        endDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime())));
+        startDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime()
+                .withZoneSameInstant((ZoneId.of("UTC-00:00"))))));
+        endDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime()
+                .withZoneSameInstant(ZoneId.of("UTC-00:00")))));
         customerCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
 
     }
@@ -108,19 +108,21 @@ public class AppointmentsController {
         LocalDate endDate = endDatePicker.getValue();
         LocalTime startTime = Util.stringToTime(startTimeTextField.getText());
         LocalTime endTime = Util.stringToTime(endTimeTextField.getText());
-        ZonedDateTime start = LocalDateTime.of(startDate, startTime);
-        ZonedDateTime end = LocalDateTime.of(endDate, endTime);
+        ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(startDate, startTime), ZoneId.of("UTC-05:00"));
+        start = start.withZoneSameLocal(ZoneId.of("UTC-00:00"));
+        ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.of("UTC-05:00"));
+        end = end.withZoneSameLocal(ZoneId.of("UTC-00:00"));
         Customer customer = Customers.getCustomer(Integer.parseInt(customerIdTextField.getText()));
         User user = Users.getUser(Integer.parseInt(userIdTextField.getText()));
         Contact contact = contactComboBox.getValue();
-        if (validateAppointment(title, description, location, type, start, end, customer, user, contact)) {
+        /*if (validateAppointment(title, description, location, type, start, end, customer, user, contact)) {
             Appointment appointment = new Appointment(title, description, location, type, start, end, customer, user, contact);
             Appointments.createAppointment(appointment);
             resetFields();
         }
         else{
             //notify that appointment was not created
-        }
+        }*/
     }
     public void modifyAppointment(){
         Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
@@ -163,7 +165,7 @@ public class AppointmentsController {
         Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
         Appointments.deleteAppointment(appointment);
         //Set label to notify of removal
-    }
+    }/*
     private boolean validateAppointment(String title, String description, String location, String type, ZonedDateTime start,
                                         ZonedDateTime end, Customer customer, User user, Contact contact){
         if(title == null || description == null || location == null || type == null || start == null || end == null
@@ -174,7 +176,7 @@ public class AppointmentsController {
             return true;
 
         return false;
-    }
+    }/*
     private boolean validateAppTime(ZonedDateTime start, ZonedDateTime end){
         ZonedDateTime startZoned = Util.localToZonedTime(start);
         ZonedDateTime endZoned = Util.localToZonedTime(end);
@@ -185,6 +187,6 @@ public class AppointmentsController {
         LocalTime endTime = endHQZoned.toLocalTime();
         return Util.validateTime(startTime, endTime);
 
-    }
+    }*/
 
 }

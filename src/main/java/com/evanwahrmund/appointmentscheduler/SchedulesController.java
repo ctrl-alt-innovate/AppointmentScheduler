@@ -40,7 +40,7 @@ public class SchedulesController {
     @FXML
     private TableColumn<Appointment, ZonedDateTime> startDateTimeCol;
     @FXML
-    private TableColumn<Appointment, ZonedDateTime endDateTimeCol;
+    private TableColumn<Appointment, ZonedDateTime> endDateTimeCol;
     @FXML
     private TableColumn<Appointment, Customer> customerCol;
 
@@ -102,7 +102,7 @@ public class SchedulesController {
         choiceComboBox.setItems(options);
         schedulesTable.setItems(null);
         modifyButton.setOnAction(event -> modifyAppTime());
-        saveButton.setOnAction(event -> updateAppTime());
+        //saveButton.setOnAction(event -> updateAppTime());
 
         appsByType.setOnAction(event -> Loader.Load("FXML/apps_by_type_and_month_report.fxml", "APPS BY TYPE AND MONTH REPORT"));
         editCus.setOnAction(event -> Loader.Load("FXML/customers.fxml", "CUSTOMERS"));
@@ -168,7 +168,7 @@ public class SchedulesController {
         endDateTextField.setText(Util.formatDate(appointment.getEndDateTime().toLocalDate()));
         endTimeTextField.setText(Util.formatTime(appointment.getEndDateTime().toLocalTime()));
     }
-
+/*
     private void updateAppTime() {
         Appointment appointment = schedulesTable.getSelectionModel().getSelectedItem();
         ZonedDateTime start = LocalDateTime.of(Util.stringToDate(startDateTextField.getText()),
@@ -179,7 +179,7 @@ public class SchedulesController {
         appointment.setEndDateTime(end);
         AppointmentDatabaseDao.getInstance().updateAppTime(appointment);
         schedulesTable.refresh();
-    }
+    }*/
 
     private void setMonthOptions() {
         options.clear();
@@ -218,8 +218,10 @@ public class SchedulesController {
         descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         contactCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getContact().getName()));
-        startDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime())));
-        endDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime())));
+        startDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime()
+                .withZoneSameInstant(ZoneId.of("UTC-05:00")))));
+        endDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime()
+                .withZoneSameInstant(ZoneId.of("UTC-05:00")))));
         customerCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
 
     }
