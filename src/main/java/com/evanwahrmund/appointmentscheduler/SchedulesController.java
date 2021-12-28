@@ -7,17 +7,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 
@@ -61,13 +51,13 @@ public class SchedulesController {
     private Button saveButton;
 
     @FXML
-    private TextField startTimeTextField;
+    private DatePicker startDatePicker;
     @FXML
-    private TextField endTimeTextField;
+    private DatePicker endDatePicker;
     @FXML
-    private TextField startDateTextField;
+    private ComboBox<LocalTime> startTimeComboBox;
     @FXML
-    private TextField endDateTextField;
+    private ComboBox<LocalTime> endTimeComboBox;
 
     @FXML
     private MenuBar applicationMenuBar;
@@ -144,6 +134,7 @@ public class SchedulesController {
                 return null;
             }
         });
+        populateTimeComboBoxes();
     }
 
     private ObservableList<Appointment> setMonthlySchedule() {
@@ -163,10 +154,15 @@ public class SchedulesController {
 
     private void modifyAppTime() {
         Appointment appointment = schedulesTable.getSelectionModel().getSelectedItem();
-        startDateTextField.setText(Util.formatDate(appointment.getStartDateTime().toLocalDate()));
-        startTimeTextField.setText(Util.formatTime(appointment.getStartDateTime().toLocalTime()));
-        endDateTextField.setText(Util.formatDate(appointment.getEndDateTime().toLocalDate()));
-        endTimeTextField.setText(Util.formatTime(appointment.getEndDateTime().toLocalTime()));
+
+        startDatePicker.setValue(appointment.getStartDateTime().toLocalDate());
+
+        endDatePicker.setValue(appointment.getEndDateTime().toLocalDate());
+        startTimeComboBox.setValue(appointment.getStartDateTime().toLocalTime());
+
+        endTimeComboBox.setValue(appointment.getEndDateTime().toLocalTime());
+
+
     }
 /*
     private void updateAppTime() {
@@ -219,12 +215,23 @@ public class SchedulesController {
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         contactCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getContact().getName()));
         startDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime()
-                .withZoneSameInstant(ZoneId.of("UTC-05:00")))));
+                .withZoneSameInstant(ZoneId.of("UTC-05:00"))))); // add system defaults
         endDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime()
-                .withZoneSameInstant(ZoneId.of("UTC-05:00")))));
+                .withZoneSameInstant(ZoneId.of("UTC-05:00"))))); //add system defaults
         customerCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
 
     }
-
+    private void populateTimeComboBoxes(){
+        ObservableList<LocalTime> options = FXCollections.observableArrayList();
+        LocalTime beggining = LocalTime.of(8, 0);
+        int count = 0;
+        while (count <= 24){
+            LocalTime option = beggining.plusMinutes(count * 30);
+            options.add(option);
+            count++;
+        }
+        startTimeComboBox.setItems(options);
+        endTimeComboBox.setItems(options);
+    }
 
 }

@@ -57,7 +57,6 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="endTimeTextField" layoutX="392.0" layoutY="261.0" prefHeight="25.0" prefWidth="146.0" />
       <Label fx:id="endTimeLabel" alignment="TOP_CENTER" layoutX="316.0" layoutY="263.0" prefHeight="20.0" prefWidth="74.0" style="-fx-text-alignment: center;" text="End Time" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
@@ -68,7 +67,6 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="startTimeTextField" layoutX="392.0" layoutY="221.0" prefHeight="25.0" prefWidth="146.0" />
       <Label fx:id="startTimeLabel" alignment="TOP_CENTER" layoutX="316.0" layoutY="223.0" prefHeight="20.0" prefWidth="74.0" style="-fx-text-alignment: center;" text="Start Time" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
@@ -107,5 +105,7 @@
       </Label>
       <DatePicker fx:id="startDatePicker" layoutX="189.0" layoutY="221.0" prefHeight="25.0" prefWidth="121.0" />
       <DatePicker fx:id="endDatePicker" layoutX="189.0" layoutY="261.0" prefHeight="25.0" prefWidth="121.0" />
+      <ComboBox fx:id="endTimeComboBox" layoutX="405.0" layoutY="261.0" prefHeight="25.0" prefWidth="135.0" />
+      <ComboBox fx:id="startTimeComboBox" layoutX="405.0" layoutY="221.0" prefHeight="25.0" prefWidth="135.0" />
    </children>
 </AnchorPane>

@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -9,7 +10,6 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -57,31 +57,27 @@
             <Font size="14.0" />
          </font>
       </RadioButton>
-      <ComboBox fx:id="choiceComboBox" layoutX="188.0" layoutY="141.0" prefHeight="25.0"  prefWidth="262.0" />
+      <ComboBox fx:id="choiceComboBox" layoutX="188.0" layoutY="141.0" prefHeight="25.0" prefWidth="262.0" />
       <Label fx:id="adjustTimeLabel" alignment="TOP_CENTER" layoutX="691.0" layoutY="101.0" prefHeight="20.0" prefWidth="217.0" style="-fx-text-alignment: center;" text="Adjust Appointment Time: " textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="endDateTextField" layoutX="664.0" layoutY="181.0" prefHeight="25.0" prefWidth="121.0" promptText="MM-DD-YYYY" />
       <Label fx:id="endDateLabel" alignment="TOP_CENTER" layoutX="548.0" layoutY="183.0" prefHeight="20.0" prefWidth="115.0" style="-fx-text-alignment: center;" text="End Date" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="endTimeTextField" layoutX="867.0" layoutY="181.0" prefHeight="25.0" prefWidth="146.0" promptText="HH:MM" />
       <Label fx:id="endTimeLabel" alignment="TOP_CENTER" layoutX="791.0" layoutY="183.0" prefHeight="20.0" prefWidth="74.0" style="-fx-text-alignment: center;" text="End Time" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="startDateTextField" layoutX="664.0" layoutY="141.0" prefHeight="25.0" prefWidth="121.0" promptText="MM-DD-YYYY" />
       <Label fx:id="startDateLabel" alignment="TOP_CENTER" layoutX="548.0" layoutY="143.0" prefHeight="20.0" prefWidth="115.0" style="-fx-text-alignment: center;" text="Start Date" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="startTimeTextField" layoutX="867.0" layoutY="141.0" prefHeight="25.0" prefWidth="146.0" promptText="HH:MM" />
       <Label fx:id="startTimeLabel" alignment="TOP_CENTER" layoutX="791.0" layoutY="143.0" prefHeight="20.0" prefWidth="74.0" style="-fx-text-alignment: center;" text="Start Time" textAlignment="CENTER">
          <font>
             <Font size="14.0" />
@@ -108,5 +104,9 @@
             <Menu fx:id="logout" mnemonicParsing="false" text="Logout" />
          </menus>
       </MenuBar>
+      <DatePicker fx:id="startDatePicker" layoutX="653.0" layoutY="141.0" prefHeight="25.0" prefWidth="132.0" />
+      <DatePicker fx:id="endDatePicker" layoutX="653.0" layoutY="181.0" prefHeight="25.0" prefWidth="132.0" />
+      <ComboBox fx:id="startTimeComboBox" layoutX="867.0" layoutY="141.0" prefHeight="25.0" prefWidth="146.0" />
+      <ComboBox fx:id="endTimeComboBox" layoutX="867.0" layoutY="181.0" prefHeight="25.0" prefWidth="146.0" />
    </children>
 </AnchorPane>

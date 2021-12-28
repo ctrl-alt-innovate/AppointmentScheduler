@@ -32,8 +32,8 @@ public class AppointmentsController {
     @FXML private TextField titleTextField;
     @FXML private TextField typeTextField;
     @FXML private TextField locationTextField;
-    @FXML private TextField startTimeTextField;
-    @FXML private TextField endTimeTextField;
+    @FXML private ComboBox<LocalTime> startTimeComboBox;
+    @FXML private ComboBox<LocalTime> endTimeComboBox;
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
     @FXML private TextField userIdTextField;
@@ -93,8 +93,8 @@ public class AppointmentsController {
         descriptionTextField.clear();
         locationTextField.clear();
         typeTextField.clear();
-        startTimeTextField.clear();
-        endTimeTextField.clear();
+        startTimeComboBox.setValue(null);
+        endTimeComboBox.setValue(null);
         customerIdTextField.clear();
         userIdTextField.clear();
         contactComboBox.setValue(null);
@@ -106,8 +106,8 @@ public class AppointmentsController {
         String type = typeTextField.getText();
                 LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
-        LocalTime startTime = Util.stringToTime(startTimeTextField.getText());
-        LocalTime endTime = Util.stringToTime(endTimeTextField.getText());
+        LocalTime startTime = startTimeComboBox.getValue();
+        LocalTime endTime = endTimeComboBox.getValue();
         ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(startDate, startTime), ZoneId.of("UTC-05:00"));
         start = start.withZoneSameLocal(ZoneId.of("UTC-00:00"));
         ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.of("UTC-05:00"));
@@ -131,9 +131,9 @@ public class AppointmentsController {
         descriptionTextField.setText(appointment.getDescription());
         locationTextField.setText(appointment.getLocation());
         typeTextField.setText(appointment.getType());
-        startTimeTextField.setText(appointment.getStartDateTime().toLocalTime().toString());
+        startTimeComboBox.setValue(appointment.getStartDateTime().toLocalTime());
+        endTimeComboBox.setValue(appointment.getStartDateTime().toLocalTime());
         startDatePicker.setValue(appointment.getStartDateTime().toLocalDate());
-        endTimeTextField.setText(appointment.getEndDateTime().toLocalTime().toString());
         endDatePicker.setValue(appointment.getEndDateTime().toLocalDate());
         userIdTextField.setText(String.valueOf(appointment.getUser().getUserId()));
         customerIdTextField.setText(String.valueOf(appointment.getCustomer().getId()));
@@ -146,10 +146,17 @@ public class AppointmentsController {
             appointment.setDescription(descriptionTextField.getText());
             appointment.setLocation(locationTextField.getText());
             appointment.setType(typeTextField.getText());
-            LocalTime time = Util.stringToTime(startTimeTextField.getText());
-            //appointment.setStartDateTime(LocalDateTime.of(date,time));
-            //date = Util.stringToDate(endDateTextField.getText());
-            time = Util.stringToTime(endTimeTextField.getText());
+
+            LocalDateTime start = LocalDateTime.of(startDatePicker.getValue(), startTimeComboBox.getValue());
+            ZonedDateTime startZoned = ZonedDateTime.of(start, ZoneId.of("UTC-05:00"));
+            startZoned = startZoned.withZoneSameInstant(ZoneId.of("UTC-00:00"));
+            appointment.setStartDateTime(startZoned);
+
+            LocalDateTime end = LocalDateTime.of(endDatePicker.getValue(), endTimeComboBox.getValue());
+            ZonedDateTime endZoned = ZonedDateTime.of(end, ZoneId.of("UTC-05:00"));
+            endZoned = endZoned.withZoneSameInstant(ZoneId.of("UTC-00:00"));
+            appointment.setEndDateTime(endZoned);
+
             appointment.setCustomer(CustomerDatabaseDao.getInstance().getCustomer(Integer.parseInt(customerIdTextField.getText())));
             appointment.setUser(UserDatabaseDao.getInstance().getUser(Integer.parseInt(userIdTextField.getText())));
             appointment.setContact(contactComboBox.getValue());
