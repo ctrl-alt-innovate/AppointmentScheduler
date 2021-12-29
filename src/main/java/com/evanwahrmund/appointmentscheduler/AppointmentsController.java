@@ -4,6 +4,8 @@ import java.time.*;
 import java.util.Locale;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -70,7 +72,20 @@ public class AppointmentsController {
         modifyButton.setOnAction(event -> modifyAppointment());
         saveButton.setOnAction(event -> updateAppointment());
         deleteButton.setOnAction(event -> deleteAppointment());
+        populateTimeComboBoxes();
+    }
 
+    private void populateTimeComboBoxes() {
+        ObservableList<LocalTime> options = FXCollections.observableArrayList();
+        LocalTime beginning = LocalTime.of(8, 0);
+        int count = 0;
+        while (count <= 24){
+            LocalTime time = beginning.plusMinutes(count * 30);
+            options.add(time);
+            count++;
+        }
+        startTimeComboBox.setItems(options);
+        endTimeComboBox.setItems(options);
     }
 
     private void initializeTable(){

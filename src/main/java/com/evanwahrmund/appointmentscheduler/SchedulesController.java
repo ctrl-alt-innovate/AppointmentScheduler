@@ -224,6 +224,7 @@ public class SchedulesController {
     private void populateTimeComboBoxes(){
         ObservableList<LocalTime> options = FXCollections.observableArrayList();
         LocalTime beggining = LocalTime.of(8, 0);
+        OffsetTime time = OffsetTime.of(beggining, ZoneOffset.ofHours(2));
         int count = 0;
         while (count <= 24){
             LocalTime option = beggining.plusMinutes(count * 30);
