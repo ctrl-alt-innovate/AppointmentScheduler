@@ -2,6 +2,7 @@ package com.evanwahrmund.appointmentscheduler;
 
 import java.time.*;
 import java.time.temporal.TemporalAccessor;
+import java.util.TimeZone;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -134,7 +135,8 @@ public class SchedulesController {
                 return null;
             }
         });
-        populateTimeComboBoxes();
+        startDatePicker.setOnAction(event -> populateTimeComboBoxes());
+        //populateTimeComboBoxes();
     }
 
     private ObservableList<Appointment> setMonthlySchedule() {
@@ -158,9 +160,9 @@ public class SchedulesController {
         startDatePicker.setValue(appointment.getStartDateTime().toLocalDate());
 
         endDatePicker.setValue(appointment.getEndDateTime().toLocalDate());
-        startTimeComboBox.setValue(appointment.getStartDateTime().toLocalTime());
+        startTimeComboBox.setValue(appointment.getStartDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalTime());
 
-        endTimeComboBox.setValue(appointment.getEndDateTime().toLocalTime());
+        endTimeComboBox.setValue(appointment.getEndDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalTime());
 
 
     }
@@ -223,11 +225,18 @@ public class SchedulesController {
     }
     private void populateTimeComboBoxes(){
         ObservableList<LocalTime> options = FXCollections.observableArrayList();
-        LocalTime beggining = LocalTime.of(8, 0);
-        OffsetTime time = OffsetTime.of(beggining, ZoneOffset.ofHours(2));
+        LocalDate local = startDatePicker.getValue();
+        LocalTime localTime = LocalTime.of(8 , 0);
+        ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.of(local, localTime), ZoneId.of("UTC-05:00") );
+        //TimeZone t = TimeZone.getTimeZone(ZoneId.of("UTC-06:00"));
+        //TimeZone.setDefault(t);
+        //System.out.println(TimeZone.getDefault());
+        zdt = zdt.withZoneSameInstant(ZoneId.systemDefault());
+
+        //OffsetTime time = OffsetTime.of(beggining, ZoneOffset.ofHours(2));
         int count = 0;
         while (count <= 24){
-            LocalTime option = beggining.plusMinutes(count * 30);
+            LocalTime option = zdt.toLocalTime().plusMinutes(count * 30);
             options.add(option);
             count++;
         }
