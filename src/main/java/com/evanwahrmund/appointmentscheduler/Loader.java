@@ -18,7 +18,7 @@ public class Loader {
             Parent root = loader.load();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Loader.class.getResource("STYLESHEET.css").toExternalForm());
-            Stage stage = new Stage(StageStyle.UTILITY);
+            Stage stage = new Stage(/*StageStyle.UTILITY*/);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle(title);

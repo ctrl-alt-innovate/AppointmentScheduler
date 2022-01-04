@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.LoginController">
    <children>
       <Label fx:id="headerLabel" layoutX="14.0" layoutY="14.0" prefHeight="28.0" prefWidth="300.0" style="-fx-font-weight: bold;" text="Appointment Scheduler Login">
          <font>
@@ -27,6 +28,8 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="exceptionText" layoutX="63.0" layoutY="270.0" prefHeight="89.0" prefWidth="306.0" wrapText="true" />
+      <Label fx:id="exceptionText" layoutX="63.0" layoutY="282.0" prefHeight="77.0" prefWidth="280.0" wrapText="true" />
+      <Button fx:id="loginButton" layoutX="363.0" layoutY="245.0" mnemonicParsing="false" text="Login" />
+      <Button fx:id="clearButton" layoutX="291.0" layoutY="245.0" mnemonicParsing="false" text="Clear" />
    </children>
 </AnchorPane>

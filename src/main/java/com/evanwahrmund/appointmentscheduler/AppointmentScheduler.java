@@ -31,7 +31,7 @@ public class AppointmentScheduler extends Application {
             //primaryStage.initStyle(StageStyle.UTILITY);
             //ReportVal reportVal = new ReportVal("string", 83);
             //reportVal.print();
-            Parent root = FXMLLoader.load(this.getClass().getResource("FXML/schedules.fxml"));
+            Parent root = FXMLLoader.load(this.getClass().getResource("FXML/login.fxml"));
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("STYLESHEET.css").toExternalForm());
             primaryStage.setScene(scene);

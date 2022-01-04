@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class SchedulesController {
@@ -79,8 +80,9 @@ public class SchedulesController {
     @FXML
     private MenuItem contactSchedules;
     @FXML
-    private Menu logout;
-
+    private Menu logoutMenu;
+    @FXML
+    private MenuItem logout;
     private ObservableList<TemporalAccessor> options = FXCollections.observableArrayList();
     private ObservableList<YearMonth> monthOptions;
 
@@ -100,7 +102,11 @@ public class SchedulesController {
         editApps.setOnAction(event -> Loader.Load("FXML/appointments.fxml", "APPOINTMENTS"));
         //appsAndCusByLoc.setOnAction( event -> Loader.Load("FXML/apps_and_cus_by_loc_report.fxml", "APPS AND CUS BY LOCATION REPORT"));
         contactSchedules.setOnAction(event -> Loader.Load("FXML/apps_by_contact_report.fxml", "CONTACT SCHEDULES"));
-
+        logout.setOnAction(actionEvent -> {
+            Stage stage = ((Stage)saveButton.getScene().getWindow());
+            stage.close();
+            Loader.Load("FXML/login.fxml", "LOGIN");
+        });
         weekRadioButton.setOnAction(event -> {
             choiceLabel.setText("Week");
             setWeekOptions();
@@ -135,7 +141,11 @@ public class SchedulesController {
                 return null;
             }
         });
-        startDatePicker.setOnAction(event -> populateTimeComboBoxes());
+        startDatePicker.setOnAction(event -> {
+            endDatePicker.setValue(startDatePicker.getValue());
+            populateTimeComboBoxes();
+        });
+
         //populateTimeComboBoxes();
     }
 
@@ -223,17 +233,17 @@ public class SchedulesController {
         customerCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
 
     }
+    //
     private void populateTimeComboBoxes(){
         ObservableList<LocalTime> options = FXCollections.observableArrayList();
         LocalDate local = startDatePicker.getValue();
         LocalTime localTime = LocalTime.of(8 , 0);
         ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.of(local, localTime), ZoneId.of("UTC-05:00") );
-        //TimeZone t = TimeZone.getTimeZone(ZoneId.of("UTC-06:00"));
-        //TimeZone.setDefault(t);
-        //System.out.println(TimeZone.getDefault());
+
         zdt = zdt.withZoneSameInstant(ZoneId.systemDefault());
 
-        //OffsetTime time = OffsetTime.of(beggining, ZoneOffset.ofHours(2));
+
+
         int count = 0;
         while (count <= 24){
             LocalTime option = zdt.toLocalTime().plusMinutes(count * 30);

@@ -101,7 +101,10 @@
                   <MenuItem fx:id="contactSchedules" mnemonicParsing="false" text="Schedules by Contact" />
                </items>
             </Menu>
-            <Menu fx:id="logout" mnemonicParsing="false" text="Logout" />
+            <Menu fx:id="logoutMenu" mnemonicParsing="false" text="Logout">
+               <items>
+                  <MenuItem fx:id="logout" mnemonicParsing="false" text="logout" />
+               </items></Menu>
          </menus>
       </MenuBar>
       <DatePicker fx:id="startDatePicker" layoutX="653.0" layoutY="141.0" prefHeight="25.0" prefWidth="132.0" />
