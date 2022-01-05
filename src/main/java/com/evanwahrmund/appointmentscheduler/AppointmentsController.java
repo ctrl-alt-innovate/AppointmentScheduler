@@ -7,12 +7,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class AppointmentsController {
@@ -41,6 +36,7 @@ public class AppointmentsController {
     @FXML private TextField userIdTextField;
     @FXML private TextField customerIdTextField;
     @FXML private ComboBox<Contact> contactComboBox;
+    @FXML private Label deleteLabel;
 
     @FXML private Button addButton;
     @FXML private Button modifyButton;
@@ -64,8 +60,7 @@ public class AppointmentsController {
                 return null;
             }
         });*/
-
-
+        startDatePicker.setValue(LocalDate.now());
         appointmentsTable.setItems(Appointments.getAppointments());
         resetButton.setOnAction(event -> resetFields());
         addButton.setOnAction(event -> createAppointment());
@@ -78,9 +73,12 @@ public class AppointmentsController {
     private void populateTimeComboBoxes() {
         ObservableList<LocalTime> options = FXCollections.observableArrayList();
         LocalTime beginning = LocalTime.of(8, 0);
+        LocalDate date = startDatePicker.getValue();
+        ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.of(date, beginning), ZoneId.of("UTC-05:00"));
+        zdt = zdt.withZoneSameInstant(ZoneId.systemDefault());
         int count = 0;
         while (count <= 24){
-            LocalTime time = beginning.plusMinutes(count * 30);
+            LocalTime time = zdt.toLocalTime().plusMinutes(count * 30);
             options.add(time);
             count++;
         }
@@ -96,9 +94,9 @@ public class AppointmentsController {
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         contactCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getContact().getName()));
         startDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime()
-                .withZoneSameInstant((ZoneId.of("UTC-00:00"))))));
+                .withZoneSameInstant((ZoneId.systemDefault())))));
         endDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime()
-                .withZoneSameInstant(ZoneId.of("UTC-00:00")))));
+                .withZoneSameInstant(ZoneId.systemDefault()))));
         customerCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
 
     }
@@ -146,8 +144,8 @@ public class AppointmentsController {
         descriptionTextField.setText(appointment.getDescription());
         locationTextField.setText(appointment.getLocation());
         typeTextField.setText(appointment.getType());
-        startTimeComboBox.setValue(appointment.getStartDateTime().toLocalTime());
-        endTimeComboBox.setValue(appointment.getStartDateTime().toLocalTime());
+        startTimeComboBox.setValue(appointment.getStartDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalTime());
+        endTimeComboBox.setValue(appointment.getEndDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalTime());
         startDatePicker.setValue(appointment.getStartDateTime().toLocalDate());
         endDatePicker.setValue(appointment.getEndDateTime().toLocalDate());
         userIdTextField.setText(String.valueOf(appointment.getUser().getUserId()));
@@ -186,7 +184,7 @@ public class AppointmentsController {
     public void deleteAppointment(){
         Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
         Appointments.deleteAppointment(appointment);
-        //Set label to notify of removal
+        deleteLabel.setText(appointment.getTitle() + " has been successfully deleted");
     }/*
     private boolean validateAppointment(String title, String description, String location, String type, ZonedDateTime start,
                                         ZonedDateTime end, Customer customer, User user, Contact contact){

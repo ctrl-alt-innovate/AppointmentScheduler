@@ -107,5 +107,10 @@
       <DatePicker fx:id="endDatePicker" layoutX="189.0" layoutY="261.0" prefHeight="25.0" prefWidth="121.0" />
       <ComboBox fx:id="endTimeComboBox" layoutX="405.0" layoutY="261.0" prefHeight="25.0" prefWidth="135.0" />
       <ComboBox fx:id="startTimeComboBox" layoutX="405.0" layoutY="221.0" prefHeight="25.0" prefWidth="135.0" />
+      <Label fx:id="deleteLabel" alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="640.0" layoutY="341.0" prefHeight="61.0" prefWidth="394.0" style="-fx-text-alignment: center;" wrapText="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

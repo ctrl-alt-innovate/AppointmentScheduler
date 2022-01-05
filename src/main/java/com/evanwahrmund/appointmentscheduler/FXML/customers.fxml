@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.CustomersController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.CustomersController">
    <children>
       <TableView fx:id="customersTable" layoutX="40.0" layoutY="360.0" prefHeight="318.0" prefWidth="959.0">
         <columns>
@@ -74,6 +74,9 @@
       <Button fx:id="deleteButton" layoutX="171.0" layoutY="298.0" mnemonicParsing="false" text="Delete" />
       <Button fx:id="saveButton" layoutX="379.0" layoutY="298.0" mnemonicParsing="false" text="Save" />
       <Button fx:id="resetButton" layoutX="484.0" layoutY="298.0" mnemonicParsing="false" text="Reset" />
-      <Label fx:id="deleteLabel" alignment="CENTER" layoutX="671.0" layoutY="136.0" prefHeight="17.0" prefWidth="264.0" textAlignment="CENTER" />
+      <Label fx:id="deleteLabel" alignment="CENTER" layoutX="671.0" layoutY="136.0" prefHeight="86.0" prefWidth="264.0" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
    </children>
 </AnchorPane>

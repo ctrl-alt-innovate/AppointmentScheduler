@@ -227,9 +227,9 @@ public class SchedulesController {
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         contactCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getContact().getName()));
         startDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime()
-                .withZoneSameInstant(ZoneId.of("UTC-05:00"))))); // add system defaults
+                .withZoneSameInstant(ZoneId.systemDefault())))); // add system defaults
         endDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime()
-                .withZoneSameInstant(ZoneId.of("UTC-05:00"))))); //add system defaults
+                .withZoneSameInstant(ZoneId.systemDefault())))); //add system defaults
         customerCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
 
     }

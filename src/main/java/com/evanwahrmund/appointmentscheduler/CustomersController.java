@@ -139,8 +139,15 @@ public class CustomersController {
     }
     public void deleteCustomer(){
         Customer cusToDelete = customersTable.getSelectionModel().getSelectedItem();
+        for(Appointment a: Appointments.getAppointments()){
+            if(a.getCustomer() == cusToDelete) {
+                deleteLabel.setText("Customer " + cusToDelete.getName() + " can not be deleted due to having existinng appointments.");
+                return;
+            }
+        }
         deleteLabel.setText("Customer " + cusToDelete.getName() + " has been removed.");
         CustomerDatabaseDao.getInstance().deleteCustomer(cusToDelete);
+
     }
     public void resetFields(){
         idTextField.clear();

@@ -14,7 +14,7 @@ import java.util.Locale;
  */
 public class Util {
 
-    public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-uuuu HH:mm", Locale.US);
+    public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-uuuu HH:mm");
     public static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM-dd-uuuu");
     public static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 

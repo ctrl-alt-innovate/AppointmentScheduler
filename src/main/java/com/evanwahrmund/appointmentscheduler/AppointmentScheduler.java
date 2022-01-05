@@ -1,6 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
 import java.io.IOException;
+import java.time.ZoneId;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +32,8 @@ public class AppointmentScheduler extends Application {
             //primaryStage.initStyle(StageStyle.UTILITY);
             //ReportVal reportVal = new ReportVal("string", 83);
             //reportVal.print();
-            Parent root = FXMLLoader.load(this.getClass().getResource("FXML/login.fxml"));
+            System.out.println(ZoneId.systemDefault());
+            Parent root = FXMLLoader.load(this.getClass().getResource("FXML/schedules.fxml"));
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("STYLESHEET.css").toExternalForm());
             primaryStage.setScene(scene);

@@ -1,6 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -48,8 +49,10 @@ public class AppsByContactController {
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        startCol.setCellValueFactory( cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime())));
-        endCol.setCellValueFactory( cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime())));
+        startCol.setCellValueFactory( cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime()
+                .withZoneSameInstant(ZoneId.systemDefault()))));
+        endCol.setCellValueFactory( cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime()
+                .withZoneSameInstant(ZoneId.systemDefault()))));
         cusIdCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
     }
 }
