@@ -7,6 +7,7 @@ import java.util.TimeZone;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -85,12 +86,14 @@ public class SchedulesController {
     private MenuItem logout;
     private ObservableList<TemporalAccessor> options = FXCollections.observableArrayList();
     private ObservableList<YearMonth> monthOptions;
+    private LocalDate current = LocalDateTime.now().toLocalDate();
 
 
     public void initialize() {
         monthRadioButton.setSelected(true);
         initializeTable();
         //initializeWeekComboBox();
+
         setMonthOptions();
         choiceComboBox.setItems(options);
         schedulesTable.setItems(null);
@@ -142,10 +145,31 @@ public class SchedulesController {
             }
         });
         startDatePicker.setOnAction(event -> {
-            endDatePicker.setValue(startDatePicker.getValue());
+            //endDatePicker.setValue(startDatePicker.getValue());
+            //changed = false;
+
+            //current = startDatePicker.getValue();
             populateTimeComboBoxes();
         });
+        startDatePicker.setValue(current);
+        populateTimeComboBoxes();
+        startTimeComboBox.setOnAction(actionEvent -> {
+            LocalDate today = current;
+            LocalDate next = current.plusDays(1);
+            int index = startTimeComboBox.getItems().indexOf(startTimeComboBox.getValue());
+            //SortedList<LocalTime> sorted = startTimeComboBox.getItems().sorted();
+            int indexOfNextDay = startTimeComboBox.getItems().indexOf(LocalTime.of(0,0));
+            System.out.println(index + " " + indexOfNextDay);
+            if(index >= indexOfNextDay){
+                current = current.minusDays(1);
+                startDatePicker.setValue(next);
+            }  else  {
+                System.out.println(today);
+                startDatePicker.setValue(today);
+            }
 
+
+        });
         //populateTimeComboBoxes();
     }
 
@@ -240,13 +264,13 @@ public class SchedulesController {
         LocalTime localTime = LocalTime.of(8 , 0);
         ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.of(local, localTime), ZoneId.of("UTC-05:00") );
 
-        zdt = zdt.withZoneSameInstant(ZoneId.systemDefault());
-
+        zdt = zdt.withZoneSameInstant(ZoneId.of("UTC"));
+        ObservableList<LocalDate> localDates = FXCollections.observableArrayList();
 
 
         int count = 0;
         while (count <= 24){
-            LocalTime option = zdt.toLocalTime().plusMinutes(count * 30);
+            LocalTime option = zdt.plusMinutes(count * 30).toLocalTime();
             options.add(option);
             count++;
         }
