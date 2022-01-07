@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 import java.time.ZoneId;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 public class LoginController {
@@ -19,11 +20,17 @@ public class LoginController {
     @FXML private Button clearButton;
     @FXML private Button loginButton;
 
+    @FXML private Label headerLabel;
+    @FXML private Label countryLabel;
+    @FXML private Label usernameLabel;
+    @FXML private Label passwordLabel;
+
+
     public void initialize(){
         countryText.setText(ZoneId.systemDefault().getId());
         clearButton.setOnAction(event -> clearFields());
         loginButton.setOnAction(event -> login());
-
+        localize();
     }
 
     private void clearFields(){
@@ -47,6 +54,16 @@ public class LoginController {
             }
         }
     }
-
+    private void localize(){
+        Locale current = new Locale("fr");
+        //Locale current = Locale.getDefault();
+        ResourceBundle rb = ResourceBundle.getBundle("com.evanwahrmund.appointmentscheduler/Login", current);
+        headerLabel.setText(rb.getString("title"));
+        countryLabel.setText(rb.getString("location"));
+        loginButton.setText(rb.getString("login"));
+        clearButton.setText(rb.getString("clear"));
+        usernameLabel.setText(rb.getString("username"));
+        passwordLabel.setText(rb.getString("password"));
+    }
 
 }

@@ -9,16 +9,16 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.LoginController">
    <children>
-      <Label fx:id="headerLabel" layoutX="14.0" layoutY="14.0" prefHeight="28.0" prefWidth="300.0" style="-fx-font-weight: bold;" text="Appointment Scheduler Login">
+      <Label fx:id="headerLabel" alignment="TOP_CENTER" layoutX="14.0" layoutY="14.0" prefHeight="86.0" prefWidth="300.0" style="-fx-font-weight: bold;" text="Appointment Scheduler Login" wrapText="true">
          <font>
             <Font size="19.0" />
          </font>
       </Label>
       <PasswordField fx:id="passwordField" layoutX="264.0" layoutY="197.0" />
       <TextField fx:id="usernameField" layoutX="264.0" layoutY="155.0" />
-      <Label fx:id="usernameLabel" layoutX="188.0" layoutY="159.0" text="Username" />
-      <Label fx:id="passwordLabel" layoutX="188.0" layoutY="201.0" text="Password" />
-      <Label fx:id="countryLabel" layoutX="349.0" layoutY="20.0" prefHeight="20.0" prefWidth="80.0" text="Time Zone:">
+      <Label fx:id="usernameLabel" layoutX="154.0" layoutY="159.0" text="Username" />
+      <Label fx:id="passwordLabel" layoutX="154.0" layoutY="201.0" text="Password" />
+      <Label fx:id="countryLabel" alignment="TOP_LEFT" layoutX="334.0" layoutY="20.0" prefHeight="77.0" prefWidth="96.0" text="Time Zone:" wrapText="true">
          <font>
             <Font size="14.0" />
          </font>
@@ -29,7 +29,7 @@
          </font>
       </Label>
       <Label fx:id="exceptionText" layoutX="63.0" layoutY="282.0" prefHeight="77.0" prefWidth="280.0" wrapText="true" />
-      <Button fx:id="loginButton" layoutX="363.0" layoutY="245.0" mnemonicParsing="false" text="Login" />
-      <Button fx:id="clearButton" layoutX="291.0" layoutY="245.0" mnemonicParsing="false" text="Clear" />
+      <Button fx:id="loginButton" layoutX="349.0" layoutY="245.0" mnemonicParsing="false" text="Login" />
+      <Button fx:id="clearButton" layoutX="277.0" layoutY="245.0" mnemonicParsing="false" text="Clear" />
    </children>
 </AnchorPane>

@@ -2,6 +2,8 @@ package com.evanwahrmund.appointmentscheduler;
 
 import java.io.IOException;
 import java.time.ZoneId;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -33,11 +35,12 @@ public class AppointmentScheduler extends Application {
             //ReportVal reportVal = new ReportVal("string", 83);
             //reportVal.print();
             System.out.println(ZoneId.systemDefault());
-            Parent root = FXMLLoader.load(this.getClass().getResource("FXML/schedules.fxml"));
+            Parent root = FXMLLoader.load(this.getClass().getResource("FXML/login.fxml"));
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("STYLESHEET.css").toExternalForm());
             primaryStage.setScene(scene);
-            primaryStage.setTitle("APPOINTMENT SCHEDULER");
+            primaryStage.setTitle(ResourceBundle.getBundle("com.evanwahrmund.appointmentscheduler/Login", new Locale("fr"))
+                                .getString("title").toUpperCase());
             primaryStage.show();
         } catch (IOException ex){
             ex.printStackTrace();
