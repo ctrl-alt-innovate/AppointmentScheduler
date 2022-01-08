@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TimeZone;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -39,8 +41,11 @@ public class AppointmentScheduler extends Application {
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("STYLESHEET.css").toExternalForm());
             primaryStage.setScene(scene);
-            primaryStage.setTitle(ResourceBundle.getBundle("com.evanwahrmund.appointmentscheduler/Login", new Locale("fr"))
-                                .getString("title").toUpperCase());
+            //primaryStage.setTitle(ResourceBundle.getBundle("com.evanwahrmund.appointmentscheduler/Login", new Locale("fr"))
+                                //.getString("title").toUpperCase());
+            Set<String> ids = ZoneId.getAvailableZoneIds();
+            for(String id: ids)
+                System.out.println(id);
             primaryStage.show();
         } catch (IOException ex){
             ex.printStackTrace();

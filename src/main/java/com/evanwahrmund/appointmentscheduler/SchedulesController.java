@@ -2,6 +2,7 @@ package com.evanwahrmund.appointmentscheduler;
 
 import java.time.*;
 import java.time.temporal.TemporalAccessor;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -58,9 +59,9 @@ public class SchedulesController {
     @FXML
     private DatePicker endDatePicker;
     @FXML
-    private ComboBox<LocalTime> startTimeComboBox;
+    private ComboBox<LocalDateTime> startTimeComboBox;
     @FXML
-    private ComboBox<LocalTime> endTimeComboBox;
+    private ComboBox<LocalDateTime> endTimeComboBox;
 
     @FXML
     private MenuBar applicationMenuBar;
@@ -90,7 +91,7 @@ public class SchedulesController {
 
 
     public void initialize() {
-        monthRadioButton.setSelected(true);
+
         initializeTable();
         //initializeWeekComboBox();
 
@@ -122,6 +123,7 @@ public class SchedulesController {
             choiceComboBox.setItems(options);
             schedulesTable.setItems(null);
         });
+        monthRadioButton.setSelected(true);
         choiceComboBox.setOnAction(event -> {
             if (choiceComboBox.getValue() != null)
                 schedulesTable.setItems(setMonthlySchedule());
@@ -153,7 +155,7 @@ public class SchedulesController {
         });
         startDatePicker.setValue(current);
         populateTimeComboBoxes();
-        startTimeComboBox.setOnAction(actionEvent -> {
+        /*startTimeComboBox.setOnAction(actionEvent -> {
             LocalDate today = current;
             LocalDate next = current.plusDays(1);
             int index = startTimeComboBox.getItems().indexOf(startTimeComboBox.getValue());
@@ -169,7 +171,24 @@ public class SchedulesController {
             }
 
 
+        });*/
+        startTimeComboBox.setConverter(new StringConverter<LocalDateTime>() {
+            @Override
+            public String toString(LocalDateTime localDateTime) {
+                if(localDateTime != null)
+                    return localDateTime.toLocalTime().toString();
+                return null;
+            }
+
+            @Override
+            public LocalDateTime fromString(String s) {
+                return null;
+            }
         });
+        startTimeComboBox.setOnAction(actionEvent -> {
+            startDatePicker.setValue(startTimeComboBox.getValue().toLocalDate());
+        });
+
         //populateTimeComboBoxes();
     }
 
@@ -194,9 +213,9 @@ public class SchedulesController {
         startDatePicker.setValue(appointment.getStartDateTime().toLocalDate());
 
         endDatePicker.setValue(appointment.getEndDateTime().toLocalDate());
-        startTimeComboBox.setValue(appointment.getStartDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalTime());
+        startTimeComboBox.setValue(appointment.getStartDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime());
 
-        endTimeComboBox.setValue(appointment.getEndDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalTime());
+        endTimeComboBox.setValue(appointment.getEndDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime());
 
 
     }
@@ -259,10 +278,9 @@ public class SchedulesController {
     }
     //
     private void populateTimeComboBoxes(){
-        ObservableList<LocalTime> options = FXCollections.observableArrayList();
+        ObservableList<LocalDateTime> options = FXCollections.observableArrayList();
         LocalDate local = startDatePicker.getValue();
-        LocalTime localTime = LocalTime.of(8 , 0);
-        ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.of(local, localTime), ZoneId.of("UTC-05:00") );
+        ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.of(local, LocalTime.of(8,0)), ZoneId.of("America/New_York") );
 
         zdt = zdt.withZoneSameInstant(ZoneId.of("UTC"));
         ObservableList<LocalDate> localDates = FXCollections.observableArrayList();
@@ -270,7 +288,7 @@ public class SchedulesController {
 
         int count = 0;
         while (count <= 24){
-            LocalTime option = zdt.plusMinutes(count * 30).toLocalTime();
+            LocalDateTime option = zdt.plusMinutes(count * 30).toLocalDateTime();
             options.add(option);
             count++;
         }
