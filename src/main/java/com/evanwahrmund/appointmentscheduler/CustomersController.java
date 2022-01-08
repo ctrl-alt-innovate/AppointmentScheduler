@@ -2,12 +2,7 @@ package com.evanwahrmund.appointmentscheduler;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 
@@ -139,8 +134,14 @@ public class CustomersController {
     }
     public void deleteCustomer(){
         Customer cusToDelete = customersTable.getSelectionModel().getSelectedItem();
+
         for(Appointment a: Appointments.getAppointments()){
             if(a.getCustomer() == cusToDelete) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Customer Deletion Error");
+                alert.setContentText("Customer " + cusToDelete.getName() + " can not be deleted due to having exisiting appointments." +
+                        " Please delete appointments for this customer and try again.");
+                alert.show();
                 deleteLabel.setText("Customer " + cusToDelete.getName() + " can not be deleted due to having existinng appointments.");
                 return;
             }

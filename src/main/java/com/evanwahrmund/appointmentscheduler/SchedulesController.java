@@ -1,5 +1,6 @@
 package com.evanwahrmund.appointmentscheduler;
 
+import java.awt.event.ActionEvent;
 import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
@@ -149,12 +150,16 @@ public class SchedulesController {
         startDatePicker.setOnAction(event -> {
             //endDatePicker.setValue(startDatePicker.getValue());
             //changed = false;
-
+            LocalDateTime ldt = startTimeComboBox.getSelectionModel().getSelectedItem();
+            //System.out.println(ldt.toString());
+            //changeDay(ldt);
             //current = startDatePicker.getValue();
-            populateTimeComboBoxes();
+            current = startDatePicker.getValue();
+            initializeComboBoxes();
+            //changeDay(ldt);
         });
         startDatePicker.setValue(current);
-        populateTimeComboBoxes();
+        initializeComboBoxes();
         /*startTimeComboBox.setOnAction(actionEvent -> {
             LocalDate today = current;
             LocalDate next = current.plusDays(1);
@@ -171,7 +176,14 @@ public class SchedulesController {
             }
 
 
+
         });*/
+        startTimeComboBox.setOnAction(event -> {
+            if(startTimeComboBox.getValue().toLocalDate().isAfter(startDatePicker.getValue())) {
+                current = startDatePicker.getValue();
+                startDatePicker.setValue(startDatePicker.getValue().plusDays(1));
+            }
+        });
         startTimeComboBox.setConverter(new StringConverter<LocalDateTime>() {
             @Override
             public String toString(LocalDateTime localDateTime) {
@@ -186,7 +198,8 @@ public class SchedulesController {
             }
         });
         startTimeComboBox.setOnAction(actionEvent -> {
-            startDatePicker.setValue(startTimeComboBox.getValue().toLocalDate());
+            //startDatePicker.setValue(startTimeComboBox.getValue().toLocalDate());
+
         });
 
         //populateTimeComboBoxes();
@@ -277,9 +290,10 @@ public class SchedulesController {
 
     }
     //
-    private void populateTimeComboBoxes(){
+    private void initializeComboBoxes(){
         ObservableList<LocalDateTime> options = FXCollections.observableArrayList();
         LocalDate local = startDatePicker.getValue();
+        current = local;
         ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.of(local, LocalTime.of(8,0)), ZoneId.of("America/New_York") );
 
         zdt = zdt.withZoneSameInstant(ZoneId.of("UTC"));
@@ -294,6 +308,17 @@ public class SchedulesController {
         }
         startTimeComboBox.setItems(options);
         endTimeComboBox.setItems(options);
+        startTimeComboBox.setValue(null);
     }
-
+    private void changeDay(LocalDateTime ldt) {
+        if (ldt == null) {
+            initializeComboBoxes();
+            return;
+        }
+        if (ldt.toLocalDate().isAfter(current)) {
+            startDatePicker.setValue(current.plusDays(1));
+        } else {
+            startDatePicker.setValue(current);
+        }
+    }
 }

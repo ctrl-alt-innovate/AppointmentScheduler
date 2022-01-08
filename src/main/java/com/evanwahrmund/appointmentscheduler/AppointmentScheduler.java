@@ -43,9 +43,9 @@ public class AppointmentScheduler extends Application {
             primaryStage.setScene(scene);
             //primaryStage.setTitle(ResourceBundle.getBundle("com.evanwahrmund.appointmentscheduler/Login", new Locale("fr"))
                                 //.getString("title").toUpperCase());
-            Set<String> ids = ZoneId.getAvailableZoneIds();
-            for(String id: ids)
-                System.out.println(id);
+            //Set<String> ids = ZoneId.getAvailableZoneIds();
+            //for(String id: ids)
+              //  System.out.println(id);
             primaryStage.show();
         } catch (IOException ex){
             ex.printStackTrace();

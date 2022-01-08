@@ -7,8 +7,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -30,16 +37,24 @@ public class LoginController {
     @FXML private Label passwordLabel;
 
     private Alert incorrectLogin;
+    private File loginActivity;
+    private PrintWriter pw;
+    private FileWriter fw;
 
-
-    public void initialize(){
+    public void initialize() throws IOException {
         //TimeZone.setDefault(TimeZone.getTimeZone("America/Chicago"));
         countryText.setText(ZoneId.systemDefault().getId());
         clearButton.setOnAction(event -> clearFields());
         loginButton.setOnAction(event -> login());
-        incorrectLogin = new Alert(Alert.AlertType.ERROR, "Incorrect Username or Password. ");
+        incorrectLogin = new Alert(Alert.AlertType.ERROR);
         //incorrectLogin.setTitle("Error: Login");
         localize();
+        fw = new FileWriter("login_activity.txt", true);
+        pw = new PrintWriter(fw);
+        ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"));
+        pw.println("Login at " + Util.formatDateTime(zdt));
+        pw.close();
+
     }
 
     private void clearFields(){
