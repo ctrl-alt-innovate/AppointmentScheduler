@@ -30,7 +30,8 @@ public class AppsAndCusByLocController {
     public void initialize(){
         appointmentsTableCountry.setItems(ReportsDao.getInstance().getAppsByCountry());
         customersTableCountry.setItems(ReportsDao.getInstance().getCusByCountry());
-
+        appointmentsTableDiv.setItems(ReportsDao.getInstance().getAppsByFirstLevelDiv());
+        customersTableDiv.setItems(ReportsDao.getInstance().getCusByFirstLevelDiv());
         initializeTables();
     }
 
