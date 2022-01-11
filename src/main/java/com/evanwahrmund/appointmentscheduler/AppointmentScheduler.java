@@ -37,7 +37,7 @@ public class AppointmentScheduler extends Application {
             //ReportVal reportVal = new ReportVal("string", 83);
             //reportVal.print();
             System.out.println(ZoneId.systemDefault());
-            Parent root = FXMLLoader.load(this.getClass().getResource("FXML/login.fxml"));
+            Parent root = FXMLLoader.load(this.getClass().getResource("FXML/schedules.fxml"));
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("STYLESHEET.css").toExternalForm());
             primaryStage.setScene(scene);

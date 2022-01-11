@@ -21,7 +21,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="choiceLabel" alignment="TOP_CENTER" layoutX="74.0" layoutY="143.0" prefHeight="20.0" prefWidth="114.0" style="-fx-text-alignment: center;" text="Week" textAlignment="CENTER">
+      <Label fx:id="choiceLabel" alignment="TOP_CENTER" layoutX="74.0" layoutY="143.0" prefHeight="71.0" prefWidth="102.0" style="-fx-text-alignment: center;" text="Week" textAlignment="CENTER" wrapText="true">
          <font>
             <Font size="14.0" />
          </font>
@@ -52,7 +52,7 @@
             <Font size="14.0" />
          </font>
       </RadioButton>
-      <RadioButton fx:id="monthRadioButton" layoutX="453.0" layoutY="101.0" mnemonicParsing="false" text="Month" toggleGroup="$schedulesGroup">
+      <RadioButton fx:id="monthRadioButton" layoutX="438.0" layoutY="101.0" mnemonicParsing="false" text="Month" toggleGroup="$schedulesGroup">
          <font>
             <Font size="14.0" />
          </font>
@@ -111,5 +111,10 @@
       <DatePicker fx:id="endDatePicker" layoutX="653.0" layoutY="181.0" prefHeight="25.0" prefWidth="132.0" />
       <ComboBox fx:id="startTimeComboBox" layoutX="867.0" layoutY="141.0" prefHeight="25.0" prefWidth="146.0" />
       <ComboBox fx:id="endTimeComboBox" layoutX="867.0" layoutY="181.0" prefHeight="25.0" prefWidth="146.0" />
+      <RadioButton fx:id="allRadioButton" layoutX="528.0" layoutY="101.0" mnemonicParsing="false" prefHeight="20.0" text="All" toggleGroup="$schedulesGroup">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </RadioButton>
    </children>
 </AnchorPane>
