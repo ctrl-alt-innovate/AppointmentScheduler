@@ -34,15 +34,15 @@ public class Appointments {
         AppointmentDatabaseDao.getInstance().createAppointment(appointment);
         appointments.add(appointment);
     }
-    public static void updateAppointment(Appointment appointment){
-        if(AppointmentDatabaseDao.getInstance().updateAppointment(appointment)){
-            appointments.set(appointments.indexOf(appointment), appointment);
-        }
+    public static void updateAppointment(Appointment appointment) throws SQLException{
+        AppointmentDatabaseDao.getInstance().updateAppointment(appointment);
+        appointments.set(appointments.indexOf(appointment), appointment);
+
     }
-    public static void deleteAppointment(Appointment appointment){
-        if (AppointmentDatabaseDao.getInstance().deleteAppointment(appointment)) {
-            appointments.remove(appointment);
-        }
+    public static void deleteAppointment(Appointment appointment) throws SQLException{
+        AppointmentDatabaseDao.getInstance().deleteAppointment(appointment);
+        appointments.remove(appointment);
+
     }
     /*public static ObservableList<Appointment> getAppsByMonth(LocalDateTime begOfMonth){
         String monthName = begOfMonth.getMonth().toString().toUpperCase();

@@ -10,6 +10,6 @@ public interface AppointmentDao {
     ObservableList<Appointment> getAllAppointments();
     Appointment getAppointment(int id);
     void createAppointment(Appointment appointment) throws SQLException;
-    boolean updateAppointment(Appointment appointment);
-    boolean deleteAppointment(Appointment appointment);
+    void updateAppointment(Appointment appointment) throws SQLException;
+    void deleteAppointment(Appointment appointment) throws SQLException;
 }

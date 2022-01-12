@@ -1,6 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
 import java.sql.SQLException;
+import java.sql.SQLWarning;
 import java.time.*;
 import java.util.Locale;
 
@@ -69,6 +70,7 @@ public class AppointmentsController {
         saveButton.setOnAction(event -> updateAppointment());
         deleteButton.setOnAction(event -> deleteAppointment());
         populateTimeComboBoxes();
+        loadTestData();
     }
 
     private void populateTimeComboBoxes() {
@@ -119,7 +121,7 @@ public class AppointmentsController {
             String description = descriptionTextField.getText();
             String location = locationTextField.getText();
             String type = typeTextField.getText();
-            if(title == null || description == null || location == null || type == null){
+            if(title.isBlank() || description.isBlank() || location.isBlank() || type.isBlank()){
                 throw new IllegalArgumentException("Fields Can not be left blank");
             }
 
@@ -134,15 +136,19 @@ public class AppointmentsController {
             Customer customer = Customers.getCustomer(Integer.parseInt(customerIdTextField.getText()));
             User user = Users.getUser(Integer.parseInt(userIdTextField.getText()));
             Contact contact = contactComboBox.getSelectionModel().getSelectedItem();
-            System.out.println("user: " + user.getUsername() + " contact: " + contact.getName() + " customer " + customer.getName());
+            //System.out.println("user: " + user.getUsername() + " contact: " + contact.getName() + " customer " + customer.getName());
 
             Appointment appointment = new Appointment(title, description, location, type, start, end, customer, user, contact);
             Appointments.createAppointment(appointment);
+            Alert confirm = new Alert(Alert.AlertType.INFORMATION, "Appointment ID: " + appointment.getId() + " - " +
+                    appointment.getType() + " created successfully.");
+            confirm.setHeaderText("Appointment Added");
+            confirm.show();
             resetFields();
 
         } catch (NullPointerException | IllegalArgumentException | SQLException ex){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Error creating Appointment. Please ensure all fields are filled and valid.");
-            alert.setContentText(ex.getMessage());
+            alert.setContentText(alert.getContentText() + "\n" + ex.getMessage());
             alert.show();
         }
 
@@ -163,38 +169,74 @@ public class AppointmentsController {
         contactComboBox.setValue(appointment.getContact());
     }
     public void updateAppointment() {
+        Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
         try {
-            Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
+
             appointment.setTitle(titleTextField.getText());
             appointment.setDescription(descriptionTextField.getText());
             appointment.setLocation(locationTextField.getText());
             appointment.setType(typeTextField.getText());
 
             LocalDateTime start = LocalDateTime.of(startDatePicker.getValue(), startTimeComboBox.getValue());
-            ZonedDateTime startZoned = ZonedDateTime.of(start, ZoneId.of("UTC-05:00"));
-            startZoned = startZoned.withZoneSameInstant(ZoneId.of("UTC-00:00"));
+            ZonedDateTime startZoned = ZonedDateTime.of(start, ZoneId.systemDefault());
+            startZoned = startZoned.withZoneSameInstant(ZoneId.of("UTC"));
             appointment.setStartDateTime(startZoned);
 
             LocalDateTime end = LocalDateTime.of(endDatePicker.getValue(), endTimeComboBox.getValue());
-            ZonedDateTime endZoned = ZonedDateTime.of(end, ZoneId.of("UTC-05:00"));
-            endZoned = endZoned.withZoneSameInstant(ZoneId.of("UTC-00:00"));
+            ZonedDateTime endZoned = ZonedDateTime.of(end, ZoneId.systemDefault());
+            endZoned = endZoned.withZoneSameInstant(ZoneId.of("UTC"));
             appointment.setEndDateTime(endZoned);
 
-            appointment.setCustomer(CustomerDatabaseDao.getInstance().getCustomer(Integer.parseInt(customerIdTextField.getText())));
-            appointment.setUser(UserDatabaseDao.getInstance().getUser(Integer.parseInt(userIdTextField.getText())));
+            appointment.setCustomer(Customers.getCustomer(Integer.parseInt(customerIdTextField.getText())));
+            appointment.setUser(Users.getUser(Integer.parseInt(userIdTextField.getText())));
             appointment.setContact(contactComboBox.getValue());
+            if(contactComboBox.getValue() == null){
+                throw ne
+            }
             if (contactComboBox.getValue() == null) {
                 throw new IllegalArgumentException("Please select an appointment and try again.");
             }
             Appointments.updateAppointment(appointment);
-        } catch(IllegalArgumentException ex){
+            Alert confirm = new Alert(Alert.AlertType.INFORMATION, "Appointment ID: " + appointment.getId() + " - " +
+                    appointment.getType() + " updated successfully.");
+            confirm.setHeaderText("Appointment Updated");
+            confirm.show();
+        } catch(IllegalArgumentException | SQLException | NullPointerException ex){
+            Alert error = new Alert(Alert.AlertType.ERROR,"Error updating Appointment ID: " + appointment.getId() + " - " +
+                    appointment.getType() + "\n" + ex.getMessage());
+            error.setHeaderText("Appointment Update Error");
+            error.show();
             System.out.println(ex.getMessage());
         }
     }
     public void deleteAppointment(){
-        Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
-        Appointments.deleteAppointment(appointment);
-        deleteLabel.setText(appointment.getTitle() + " has been successfully deleted");
-        //ALERT HERE NOTIFY DELETEION DISPLAY ID AND TYPE
+        try {
+            Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
+            Appointments.deleteAppointment(appointment);
+            //deleteLabel.setText(appointment.getTitle() + " has been successfully deleted");
+            Alert confirm = new Alert(Alert.AlertType.INFORMATION, "Appointment ID: " + appointment.getId() + " - " +
+                    appointment.getType() + " deleted successfully.");
+            confirm.setHeaderText("Appointment Deleted");
+            confirm.show();
+            //ALERT HERE NOTIFY DELETEION DISPLAY ID AND TYPE
+        } catch (SQLException ex){
+            Alert error = new Alert(Alert.AlertType.ERROR, "Error deleting Appointment" + "\n" + ex.getMessage());
+            error.setHeaderText("Appointment Deletion Error");
+            error.show();
+
+        }
+    }
+    private void loadTestData(){
+        titleTextField.setText("title");
+        locationTextField.setText("location");
+        typeTextField.setText("Board Meeting");
+        descriptionTextField.setText("description");
+        userIdTextField.setText("1");
+        customerIdTextField.setText("1");
+        startDatePicker.setValue(LocalDate.now().plusDays(7));
+        endDatePicker.setValue(LocalDate.now().plusDays(7));
+        contactComboBox.setValue(contactComboBox.getItems().get(0));
+        startTimeComboBox.setValue(startTimeComboBox.getItems().get(6));
+        endTimeComboBox.setValue(endTimeComboBox.getItems().get(8));
     }
 }

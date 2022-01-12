@@ -25,7 +25,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
     public ObservableList<Appointment> getAllAppointments(){
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, " +
-                "Contact_ID FROM appointments ORDER BY Start;";
+                "Contact_ID FROM appointments ORDER BY Appointment_ID;";
         try (var rs = DatabaseConnection.getConnection().prepareStatement(sql).executeQuery()) {
             while (rs.next()) {
                 int id = rs.getInt(1);
@@ -131,7 +131,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         //return false;
     }
     @Override
-    public boolean updateAppointment(Appointment appointment){
+    public void updateAppointment(Appointment appointment) throws SQLException{
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
                         "Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?;";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
@@ -146,24 +146,25 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             ps.setInt(9, appointment.getContact().getId());
             ps.setInt(10, appointment.getId());
             ps.executeUpdate();
-            return true;
-        } catch( SQLException ex){
+            //return true;
+        } /*catch( SQLException ex){
             System.out.println("Error: Appointment with ID - " + appointment.getId() + " not updated.");
         }
-        return false;
+        return false;*/
     }
     @Override
-    public boolean deleteAppointment(Appointment appointment){
+    public void deleteAppointment(Appointment appointment) throws SQLException{
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?;";
-        try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
+        try (var ps = DatabaseConnection.getConnection().prepareStatement(sql)) {
             ps.setInt(1, appointment.getId());
             ps.executeUpdate();
-            return true;
-        } catch (SQLException ex){
+            //return true;
+        } /*catch (SQLException ex){
             System.out.println("Error: Appointment with ID - " + appointment.getId() + " not deleted.");
-        }
-        return false;
-    }/*
+
+        return false;*/
+    }
+    /*
     public ObservableList<Appointment> getFilteredAppointments(LocalDate start, LocalDate end){
         String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, " +
                 "Contact_ID FROM appointments WHERE (Start BETWEEN ? AND ?) AND (End BETWEEN ? AND ?);";
