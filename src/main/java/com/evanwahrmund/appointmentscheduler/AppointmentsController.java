@@ -45,6 +45,8 @@ public class AppointmentsController {
     @FXML private Button deleteButton;
     @FXML private Button saveButton;
     @FXML private Button resetButton;
+    private Boolean startChanged = false;
+    private Boolean endChanged = false;
 
     public void initialize(){
         initializeTable();
@@ -71,6 +73,39 @@ public class AppointmentsController {
         deleteButton.setOnAction(event -> deleteAppointment());
         populateTimeComboBoxes();
         loadTestData();
+        startDatePicker.setOnAction(event -> startChanged = false);
+        startTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
+            if(startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                    && startChanged == false) {
+                startDatePicker.setValue(startDatePicker.getValue().plusDays(1));
+                startChanged = true;
+            }else if(startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                    && startChanged == true){
+                System.out.println("NO change");
+            }else if(startTimeComboBox.getItems().indexOf(newVal) < startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                    && startChanged == false)
+                System.out.println("NO change");
+            else {
+                startDatePicker.setValue(startDatePicker.getValue().minusDays(1));
+            }
+        });
+        endDatePicker.setOnAction(event -> endChanged = false);
+        endTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
+            if(endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                    && endChanged == false) {
+                endDatePicker.setValue(endDatePicker.getValue().plusDays(1));
+                endChanged = true;
+            }else if(endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                    && endChanged == true){
+                System.out.println("NO change");
+            }else if(endTimeComboBox.getItems().indexOf(newVal) < endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                    && endChanged == false)
+                System.out.println("NO change");
+            else {
+                endDatePicker.setValue(endDatePicker.getValue().minusDays(1));
+            }
+        });
+
     }
 
     private void populateTimeComboBoxes() {
@@ -78,7 +113,7 @@ public class AppointmentsController {
         LocalTime beginning = LocalTime.of(8, 0);
         LocalDate date = startDatePicker.getValue();
         ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.of(date, beginning), ZoneId.of("UTC-05:00"));
-        zdt = zdt.withZoneSameInstant(ZoneId.systemDefault());
+        zdt = zdt.withZoneSameInstant(ZoneId.of("UTC"));
         int count = 0;
         while (count <= 24){
             LocalTime time = zdt.toLocalTime().plusMinutes(count * 30);
@@ -163,6 +198,12 @@ public class AppointmentsController {
     }
     public void modifyAppointment(){
         Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
+        if(appointment == null) {
+            Alert error = new Alert(Alert.AlertType.ERROR, "No Appointment selected.");
+            error.setHeaderText("Modify Appointment Error");
+            error.show();
+            return;
+        }
         idTextField.setText(String.valueOf(appointment.getId()));
         titleTextField.setText(appointment.getTitle());
         descriptionTextField.setText(appointment.getDescription());
@@ -234,6 +275,11 @@ public class AppointmentsController {
     public void deleteAppointment(){
         try {
             Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
+            if(appointment == null){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "No Appointment selected to delete.");
+                alert.setHeaderText("Appointment Deletion Error");
+                alert.show();
+            }
             Appointments.deleteAppointment(appointment);
             //deleteLabel.setText(appointment.getTitle() + " has been successfully deleted");
             Alert confirm = new Alert(Alert.AlertType.INFORMATION, "Appointment ID: " + appointment.getId() + " - " +

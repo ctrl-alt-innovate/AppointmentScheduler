@@ -23,92 +23,58 @@ import javax.swing.*;
 
 public class SchedulesController {
 
-    @FXML
-    private TableView<Appointment> schedulesTable;
-    @FXML
-    private TableColumn<Appointment, Integer> idCol;
-    @FXML
-    private TableColumn<Appointment, String> titleCol;
-    @FXML
-    private TableColumn<Appointment, String> typeCol;
-    @FXML
-    private TableColumn<Appointment, String> descriptionCol;
-    @FXML
-    private TableColumn<Appointment, String> locationCol;
-    @FXML
-    private TableColumn<Appointment, Contact> contactCol;
-    @FXML
-    private TableColumn<Appointment, ZonedDateTime> startDateTimeCol;
-    @FXML
-    private TableColumn<Appointment, ZonedDateTime> endDateTimeCol;
-    @FXML
-    private TableColumn<Appointment, Customer> customerCol;
+    @FXML private TableView<Appointment> schedulesTable;
+    @FXML private TableColumn<Appointment, Integer> idCol;
+    @FXML private TableColumn<Appointment, String> titleCol;
+    @FXML private TableColumn<Appointment, String> typeCol;
+    @FXML private TableColumn<Appointment, String> descriptionCol;
+    @FXML private TableColumn<Appointment, String> locationCol;
+    @FXML private TableColumn<Appointment, Contact> contactCol;
+    @FXML private TableColumn<Appointment, ZonedDateTime> startDateTimeCol;
+    @FXML private TableColumn<Appointment, ZonedDateTime> endDateTimeCol;
+    @FXML private TableColumn<Appointment, Customer> customerCol;
+    @FXML private ComboBox<TemporalAccessor> choiceComboBox;
+    @FXML private Label choiceLabel;
+    @FXML private ToggleGroup schedulesGroup;
+    @FXML private RadioButton weekRadioButton;
+    @FXML private RadioButton monthRadioButton;
+    @FXML private RadioButton allRadioButton;
+    @FXML private Button modifyButton;
+    @FXML private Button saveButton;
+    @FXML private DatePicker startDatePicker;
+    @FXML private DatePicker endDatePicker;
+    @FXML private ComboBox<LocalTime> startTimeComboBox;
+    @FXML private ComboBox<LocalTime> endTimeComboBox;
+    @FXML private MenuBar applicationMenuBar;
+    @FXML private Menu schedulesMenu;
+    @FXML private Menu editInfoMenu;
+    @FXML private MenuItem editCus;
+    @FXML private MenuItem editApps;
+    @FXML private Menu reportsMenu;
+    @FXML private MenuItem appsByType;
+    @FXML private MenuItem appsAndCusByLoc;
+    @FXML private MenuItem contactSchedules;
+    @FXML private Menu logoutMenu;
+    @FXML private MenuItem logout;
 
-    @FXML
-    private ComboBox<TemporalAccessor> choiceComboBox;
-    @FXML
-    private Label choiceLabel;
-    @FXML
-    private ToggleGroup schedulesGroup;
-    @FXML
-    private RadioButton weekRadioButton;
-    @FXML
-    private RadioButton monthRadioButton;
-    @FXML
-    private RadioButton allRadioButton;
-
-    @FXML
-    private Button modifyButton;
-    @FXML
-    private Button saveButton;
-
-    @FXML
-    private DatePicker startDatePicker;
-    @FXML
-    private DatePicker endDatePicker;
-    @FXML
-    private ComboBox<LocalDateTime> startTimeComboBox;
-    @FXML
-    private ComboBox<LocalDateTime> endTimeComboBox;
-
-    @FXML
-    private MenuBar applicationMenuBar;
-    @FXML
-    private Menu schedulesMenu;
-    @FXML
-    private Menu editInfoMenu;
-    @FXML
-    private MenuItem editCus;
-    @FXML
-    private MenuItem editApps;
-    @FXML
-    private Menu reportsMenu;
-    @FXML
-    private MenuItem appsByType;
-    @FXML
-    private MenuItem appsAndCusByLoc;
-    @FXML
-    private MenuItem contactSchedules;
-    @FXML
-    private Menu logoutMenu;
-    @FXML
-    private MenuItem logout;
     private ObservableList<TemporalAccessor> options = FXCollections.observableArrayList();
     private ObservableList<YearMonth> monthOptions;
     private LocalDate current = LocalDateTime.now().toLocalDate();
+    private Boolean startChanged = false;
+    private Boolean endChanged = false;
 
     @FXML
     public void initialize() {
-
         initializeTable();
-        //initializeWeekComboBox();
+        initializeMenu();
+        initializeRadioButtons();
 
         setMonthOptions();
         choiceComboBox.setItems(options);
         schedulesTable.setItems(null);
         modifyButton.setOnAction(event -> modifyAppTime());
         //saveButton.setOnAction(event -> updateAppTime());
-        EventHandler<ActionEvent> eventHandler = (event) -> {
+        /*EventHandler<ActionEvent> eventHandler = (event) -> {
             System.out.println(event.getSource());
             if(event.getSource() == startTimeComboBox){
                     LocalDateTime ldt = startTimeComboBox.getSelectionModel().getSelectedItem();
@@ -122,44 +88,17 @@ public class SchedulesController {
             }else if(event.getSource() == startDatePicker){
                 initializeComboBoxes();
             }
-        };
-        startTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
+        };*/
+        /*startTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
             if(newVal != null && newVal.toLocalDate().isAfter(startDatePicker.getValue())){
                 startDatePicker.setValue(newVal.toLocalDate());
                 for(LocalDateTime ldt: startTimeComboBox.getItems()){
                     ldt.minusDays(1);
                 }
             }
-        });
-        appsByType.setOnAction(event -> Loader.Load("FXML/apps_by_type_and_month_report.fxml", "APPS BY TYPE AND MONTH REPORT"));
-        editCus.setOnAction(event -> Loader.Load("FXML/customers.fxml", "CUSTOMERS"));
-        editApps.setOnAction(event -> Loader.Load("FXML/appointments.fxml", "APPOINTMENTS"));
-        appsAndCusByLoc.setOnAction( event -> Loader.Load("FXML/apps_and_cus_by_loc_report.fxml", "APPS AND CUS BY LOCATION REPORT"));
-        contactSchedules.setOnAction(event -> Loader.Load("FXML/apps_by_contact_report.fxml", "CONTACT SCHEDULES"));
-        logout.setOnAction(actionEvent -> {
-            Stage stage = ((Stage)saveButton.getScene().getWindow());
-            stage.close();
-            Loader.Load("FXML/login.fxml", "LOGIN");
-        });
-        weekRadioButton.setOnAction(event -> {
-            choiceLabel.setText("Week");
-            setWeekOptions();
-            choiceComboBox.setItems(options);
-            schedulesTable.setItems(null);
-        });
-        monthRadioButton.setOnAction(event -> {
-            choiceLabel.setText("Month");
-            setMonthOptions();
-            choiceComboBox.setItems(options);
-            schedulesTable.setItems(null);
-        });
-        allRadioButton.setOnAction(event -> {
-            choiceLabel.setText("Viewing All Appointments");
-            schedulesTable.setItems(Appointments.getAppointments());
-            choiceComboBox.setItems(null);
+        });*/
 
-        });
-        monthRadioButton.setSelected(true);
+
         choiceComboBox.setOnAction(event -> {
             if (choiceComboBox.getValue() != null)
                 schedulesTable.setItems(setMonthlySchedule());
@@ -193,12 +132,13 @@ public class SchedulesController {
             //initializeComboBoxes();
             //changeDay(ldt);
         //});
-        startDatePicker.setOnAction(event -> initializeComboBoxes());
+
+        //startDatePicker.setOnAction(event -> initializeComboBoxes());
         startDatePicker.setValue(current);
         initializeComboBoxes();
 
         Platform.runLater(() -> {
-            notifyUpcomingAppointment();
+            //notifyUpcomingAppointment();
         });
         /*startTimeComboBox.setOnAction(actionEvent -> {
             LocalDate today = current;
@@ -237,6 +177,38 @@ public class SchedulesController {
                 return null;
             }
         });*/
+        startDatePicker.setOnAction(event -> startChanged = false);
+        startTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
+            if(startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                    && startChanged == false) {
+                startDatePicker.setValue(startDatePicker.getValue().plusDays(1));
+                startChanged = true;
+            }else if(startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                        && startChanged == true){
+                System.out.println("NO change");
+            }else if(startTimeComboBox.getItems().indexOf(newVal) < startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                && startChanged == false)
+                System.out.println("NO change");
+            else {
+                startDatePicker.setValue(startDatePicker.getValue().minusDays(1));
+            }
+        });
+        endDatePicker.setOnAction(event -> endChanged = false);
+        endTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
+            if(endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                    && endChanged == false) {
+                endDatePicker.setValue(endDatePicker.getValue().plusDays(1));
+                endChanged = true;
+            }else if(endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                    && endChanged == true){
+                System.out.println("NO change");
+            }else if(endTimeComboBox.getItems().indexOf(newVal) < endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                    && endChanged == false)
+                System.out.println("NO change");
+            else {
+                endDatePicker.setValue(endDatePicker.getValue().minusDays(1));
+            }
+        });
 
 
 
@@ -291,9 +263,9 @@ public class SchedulesController {
         startDatePicker.setValue(appointment.getStartDateTime().toLocalDate());
 
         endDatePicker.setValue(appointment.getEndDateTime().toLocalDate());
-        startTimeComboBox.setValue(appointment.getStartDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime());
+        startTimeComboBox.setValue(appointment.getStartDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalTime());
 
-        endTimeComboBox.setValue(appointment.getEndDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime());
+        endTimeComboBox.setValue(appointment.getEndDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalTime());
 
 
     }
@@ -356,21 +328,20 @@ public class SchedulesController {
     }
     //
     private void initializeComboBoxes(){
-        ObservableList<LocalDateTime> options = FXCollections.observableArrayList();
+        ObservableList<LocalTime> options = FXCollections.observableArrayList();
         LocalDate local = startDatePicker.getValue();
-        System.out.println(local);
-        current = local;
-        System.out.println("current val: " + current);
+        //current = local;
+
         ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.of(local, LocalTime.of(8,0)), ZoneId.of("America/New_York") );
 
         zdt = zdt.withZoneSameInstant(ZoneId.of("UTC"));
-        ObservableList<LocalDate> localDates = FXCollections.observableArrayList();
+
 
 
         int count = 0;
         while (count <= 24){
-            LocalDateTime option = zdt.plusMinutes(count * 30).toLocalDateTime();
-            System.out.println(option.toLocalDate());
+            LocalTime option = zdt.plusMinutes(count * 30).toLocalTime();
+            //System.out.println(option.toLocalDate());
             options.add(option);
             count++;
         }
@@ -390,5 +361,39 @@ public class SchedulesController {
                 startDatePicker.setValue(current);
             }
 
+    }
+    private void initializeMenu(){
+        appsByType.setOnAction(event -> Loader.Load("FXML/apps_by_type_and_month_report.fxml", "APPS BY TYPE AND MONTH REPORT"));
+        editCus.setOnAction(event -> Loader.Load("FXML/customers.fxml", "CUSTOMERS"));
+        editApps.setOnAction(event -> Loader.Load("FXML/appointments.fxml", "APPOINTMENTS"));
+        appsAndCusByLoc.setOnAction( event -> Loader.Load("FXML/apps_and_cus_by_loc_report.fxml", "APPS AND CUS BY LOCATION REPORT"));
+        contactSchedules.setOnAction(event -> Loader.Load("FXML/apps_by_contact_report.fxml", "CONTACT SCHEDULES"));
+        logout.setOnAction(actionEvent -> {
+            Stage stage = ((Stage)saveButton.getScene().getWindow());
+            stage.close();
+            Loader.Load("FXML/login.fxml", "LOGIN");
+        });
+    }
+    private void initializeRadioButtons(){
+
+        weekRadioButton.setOnAction(event -> {
+            choiceLabel.setText("Week");
+            setWeekOptions();
+            choiceComboBox.setItems(options);
+            schedulesTable.setItems(null);
+        });
+        monthRadioButton.setOnAction(event -> {
+            choiceLabel.setText("Month");
+            setMonthOptions();
+            choiceComboBox.setItems(options);
+            schedulesTable.setItems(null);
+        });
+        allRadioButton.setOnAction(event -> {
+            choiceLabel.setText("Viewing All Appointments");
+            schedulesTable.setItems(Appointments.getAppointments());
+            choiceComboBox.setItems(null);
+
+        });
+        monthRadioButton.setSelected(true);
     }
 }
