@@ -121,22 +121,30 @@ public class AppointmentsController {
             String description = descriptionTextField.getText();
             String location = locationTextField.getText();
             String type = typeTextField.getText();
-            if(title.isBlank() || description.isBlank() || location.isBlank() || type.isBlank()){
-                throw new IllegalArgumentException("Fields Can not be left blank");
-            }
+
 
             LocalDate startDate = startDatePicker.getValue();
             LocalDate endDate = endDatePicker.getValue();
             LocalTime startTime = startTimeComboBox.getValue();
             LocalTime endTime = endTimeComboBox.getValue();
+
+            if(title.isBlank() || description.isBlank() || location.isBlank() || type.isBlank() || startDate == null ||
+                    endDate == null || startTime == null || endTime == null){
+                throw new IllegalArgumentException("Fields Can not be left blank");
+            }
+
+            Customer customer = Customers.getCustomer(Integer.parseInt(customerIdTextField.getText()));
+            User user = Users.getUser(Integer.parseInt(userIdTextField.getText()));
+            Contact contact = contactComboBox.getValue();
+
+            if(customer == null || user == null || contact == null){
+                throw new IllegalArgumentException("Please select a valid contact, customer, and user.");
+            }
+
             ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(startDate, startTime), ZoneId.systemDefault());
             start = start.withZoneSameInstant(ZoneId.of("UTC"));
             ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.systemDefault());
             end = end.withZoneSameInstant(ZoneId.of("UTC"));
-            Customer customer = Customers.getCustomer(Integer.parseInt(customerIdTextField.getText()));
-            User user = Users.getUser(Integer.parseInt(userIdTextField.getText()));
-            Contact contact = contactComboBox.getSelectionModel().getSelectedItem();
-            //System.out.println("user: " + user.getUsername() + " contact: " + contact.getName() + " customer " + customer.getName());
 
             Appointment appointment = new Appointment(title, description, location, type, start, end, customer, user, contact);
             Appointments.createAppointment(appointment);
@@ -170,37 +178,51 @@ public class AppointmentsController {
     }
     public void updateAppointment() {
         Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
+        if(appointment == null){
+            Alert error = new Alert(Alert.AlertType.ERROR, "Please select an appointment to update.");
+            error.setHeaderText("Appointment Update Error");
+            error.show();
+        }
         try {
+            if(titleTextField.getText().isBlank() || descriptionTextField.getText().isBlank() || locationTextField.getText().isBlank() ||
+                typeTextField.getText().isBlank() || startDatePicker.getValue() == null || endDatePicker.getValue() == null ||
+                startTimeComboBox.getValue() == null || endTimeComboBox.getValue() == null || userIdTextField.getText().isBlank() ||
+                customerIdTextField.getText().isBlank() || contactComboBox.getValue() == null){
+                    throw new IllegalArgumentException("Fields can not be left blank.");
+            }
+            Contact contact = contactComboBox.getValue();
+            User user = Users.getUser(Integer.parseInt(userIdTextField.getText()));
+            Customer cus = Customers.getCustomer(Integer.parseInt(customerIdTextField.getText()));
+            if(contact == null || user == null || cus == null){
+                throw new IllegalArgumentException("Please select a valid contact, user, and customer.");
+            }
+
+            LocalDateTime start = LocalDateTime.of(startDatePicker.getValue(), startTimeComboBox.getValue());
+            ZonedDateTime startZoned = ZonedDateTime.of(start, ZoneId.systemDefault());
+            startZoned = startZoned.withZoneSameInstant(ZoneId.of("UTC"));
+
+            LocalDateTime end = LocalDateTime.of(endDatePicker.getValue(), endTimeComboBox.getValue());
+            ZonedDateTime endZoned = ZonedDateTime.of(end, ZoneId.systemDefault());
+            endZoned = endZoned.withZoneSameInstant(ZoneId.of("UTC"));
+
 
             appointment.setTitle(titleTextField.getText());
             appointment.setDescription(descriptionTextField.getText());
             appointment.setLocation(locationTextField.getText());
             appointment.setType(typeTextField.getText());
-
-            LocalDateTime start = LocalDateTime.of(startDatePicker.getValue(), startTimeComboBox.getValue());
-            ZonedDateTime startZoned = ZonedDateTime.of(start, ZoneId.systemDefault());
-            startZoned = startZoned.withZoneSameInstant(ZoneId.of("UTC"));
             appointment.setStartDateTime(startZoned);
-
-            LocalDateTime end = LocalDateTime.of(endDatePicker.getValue(), endTimeComboBox.getValue());
-            ZonedDateTime endZoned = ZonedDateTime.of(end, ZoneId.systemDefault());
-            endZoned = endZoned.withZoneSameInstant(ZoneId.of("UTC"));
             appointment.setEndDateTime(endZoned);
+            appointment.setCustomer(cus);
+            appointment.setUser(user);
+            appointment.setContact(contact);
 
-            appointment.setCustomer(Customers.getCustomer(Integer.parseInt(customerIdTextField.getText())));
-            appointment.setUser(Users.getUser(Integer.parseInt(userIdTextField.getText())));
-            appointment.setContact(contactComboBox.getValue());
-            if(contactComboBox.getValue() == null){
-                throw ne
-            }
-            if (contactComboBox.getValue() == null) {
-                throw new IllegalArgumentException("Please select an appointment and try again.");
-            }
             Appointments.updateAppointment(appointment);
+
             Alert confirm = new Alert(Alert.AlertType.INFORMATION, "Appointment ID: " + appointment.getId() + " - " +
                     appointment.getType() + " updated successfully.");
             confirm.setHeaderText("Appointment Updated");
             confirm.show();
+
         } catch(IllegalArgumentException | SQLException | NullPointerException ex){
             Alert error = new Alert(Alert.AlertType.ERROR,"Error updating Appointment ID: " + appointment.getId() + " - " +
                     appointment.getType() + "\n" + ex.getMessage());
