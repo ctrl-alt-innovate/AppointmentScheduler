@@ -6,6 +6,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
 
+import java.sql.SQLException;
+
 /**
  * Controller for adding, removing, and updating Customers. <p>
  * Used by: FXML/customers.fxml.
@@ -122,12 +124,15 @@ public class CustomersController {
                 throw new NullPointerException("No Division Selected. Please Choose a Country with an operating office. ");
             }
             Customer cus = new Customer(name, address, postalCode, phone, div);
-            CustomerDatabaseDao.getInstance().createCustomer(cus);
+            Customers.createCustomer(cus);
             resetFields();
             //customersTable.refresh();
 
-        } catch(NullPointerException ex){
-            System.out.println(ex.getMessage());
+        } catch(NullPointerException | SQLException ex){
+            ex.printStackTrace();
+            Alert error = new Alert(Alert.AlertType.ERROR, "Error creating customer. Please ensure fields are filled and valid."0);
+            error.setHeaderText("Add Customer Error");
+            error.show();
 
 
         }
@@ -146,8 +151,8 @@ public class CustomersController {
                 return;
             }
         }
-        deleteLabel.setText("Customer " + cusToDelete.getName() + " has been removed.");
-        CustomerDatabaseDao.getInstance().deleteCustomer(cusToDelete);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION)
+        Customers.deleteCustomer(cusToDelete);
 
     }
     public void resetFields(){

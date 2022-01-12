@@ -2,6 +2,10 @@ package com.evanwahrmund.appointmentscheduler;
 
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,16 +39,33 @@ public class CustomerDatabaseDao implements CustomerDao {
        }
        return customers;
    }
-
-   public boolean createCustomer(Customer customer){
-       String insertSql = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, Division_ID)" +
+    /*Table: customers
+Columns:
+Customer_ID int AI PK
+Customer_Name varchar(50)
+Address varchar(100)
+Postal_Code varchar(50)
+Phone varchar(50)
+Create_Date datetime
+Created_By varchar(50)
+Last_Update timestamp
+Last_Updated_By varchar(50)
+Division_ID int*/
+    @Override
+   public boolean createCustomer(Customer customer) throws SQLException {
+       String insertSql = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Create_Date, " +
+               "Created_By, Last_Update, Last_Updated_By, Division_ID)" +
                " VALUES(?,?,?,?,?,?,?,?,?);";
        try (var ps = DatabaseConnection.getConnection().prepareStatement(insertSql, PreparedStatement.RETURN_GENERATED_KEYS)){
            ps.setString(1, customer.getName());
            ps.setString(2, customer.getAddress());
            ps.setString(3, customer.getPostalCode());
            ps.setString(4, customer.getPhone());
+           ps.setTimestamp(5, Timestamp.valueOf(ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault())
+                   .withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
            ps.setString(6, "Application");
+           ps.setTimestamp(7, Timestamp.valueOf(ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault())
+                   .withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
            ps.setString(8, "Application");
            ps.setInt(9, customer.getDivision().getId());
            ps.executeUpdate();
@@ -55,9 +76,10 @@ public class CustomerDatabaseDao implements CustomerDao {
                }
                System.out.println("Error: Customer id not set.");
            }
-       } catch(SQLException ex){
+       } /*catch(SQLException ex){
             System.out.println("Error: Customer not created.");
-       }
+            ex.printStackTrace();*/
+
        return false;
    }
 

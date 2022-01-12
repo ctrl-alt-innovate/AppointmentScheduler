@@ -1,5 +1,6 @@
 package com.evanwahrmund.appointmentscheduler;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 import javafx.collections.FXCollections;
@@ -29,7 +30,7 @@ public class Appointments {
         }
         return null;
     }
-    public static void createAppointment(Appointment appointment){
+    public static void createAppointment(Appointment appointment) throws SQLException {
         if (AppointmentDatabaseDao.getInstance().createAppointment(appointment)) {
             appointments.add(appointment);
         }

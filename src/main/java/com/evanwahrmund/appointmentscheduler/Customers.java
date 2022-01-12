@@ -2,6 +2,8 @@ package com.evanwahrmund.appointmentscheduler;
 
 import javafx.collections.ObservableList;
 
+import java.sql.SQLException;
+
 public class Customers {
 
     private static ObservableList<Customer> customers;
@@ -19,15 +21,15 @@ public class Customers {
         }
         return null;
     }
-    public static void createCustomer(Customer customer){
-        if(CustomerDatabaseDao.getInstance().createCustomer(customer)){
-            customers.add(customer);
-        }
+    public static void createCustomer(Customer customer) throws SQLException {
+        CustomerDatabaseDao.getInstance().createCustomer(customer);
+        customers.add(customer);
     }
     public static void updateCustomer(Customer customer){
         if(CustomerDatabaseDao.getInstance().updateCustomer(customer)){
             customers.set(customers.indexOf(customer), customer);
         }
+
     }
     public static void deleteCustomer(Customer customer){
         if (CustomerDatabaseDao.getInstance().deleteCustomer(customer)) {

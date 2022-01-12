@@ -126,14 +126,14 @@ public class AppointmentsController {
             LocalDate endDate = endDatePicker.getValue();
             LocalTime startTime = startTimeComboBox.getValue();
             LocalTime endTime = endTimeComboBox.getValue();
-            ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(startDate, startTime), ZoneId.of("UTC-05:00"));
-            start = start.withZoneSameLocal(ZoneId.of("UTC-00:00"));
-            ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.of("UTC-05:00"));
-            end = end.withZoneSameLocal(ZoneId.of("UTC-00:00"));
+            ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(startDate, startTime), ZoneId.systemDefault());
+            start = start.withZoneSameInstant(ZoneId.of("UTC"));
+            ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.systemDefault());
+            end = end.withZoneSameInstant(ZoneId.of("UTC"));
             Customer customer = Customers.getCustomer(Integer.parseInt(customerIdTextField.getText()));
             User user = Users.getUser(Integer.parseInt(userIdTextField.getText()));
-            Contact contact = contactComboBox.getValue();
-
+            Contact contact = contactComboBox.getSelectionModel().getSelectedItem();
+            System.out.println("user: " + user.getUsername() + " contact: " + contact.getName() + " customer " + customer.getName());
 
             Appointment appointment = new Appointment(title, description, location, type, start, end, customer, user, contact);
             Appointments.createAppointment(appointment);

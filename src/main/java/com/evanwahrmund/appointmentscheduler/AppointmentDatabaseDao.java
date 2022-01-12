@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -77,10 +78,27 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         }
         return null;
     }
+        /*Table: appointments
+    Columns:
+    Appointment_ID int AI PK
+    Title varchar(50)
+    Description varchar(50)
+    Location varchar(50)
+    Type varchar(50)
+    Start datetime
+    End datetime
+    Create_Date datetime
+    Created_By varchar(50)
+    Last_Update timestamp
+    Last_Updated_By varchar(50)
+    Customer_ID int
+    User_ID int
+    Contact_ID int
+    */
     @Override
-    public boolean createAppointment(Appointment appointment){
-        String sql = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Created_By, Last_Updated_By, " +
-                        "Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    public boolean createAppointment(Appointment appointment) throws SQLException{
+        String sql = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Create_Date, Created_By," +
+                "Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             ps.setString(1,appointment.getTitle());
             ps.setString(2, appointment.getDescription());
@@ -88,24 +106,30 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             ps.setString(4, appointment.getType());
             ps.setTimestamp(5, Timestamp.valueOf(appointment.getStartDateTime().toLocalDateTime()));
             ps.setTimestamp(6, Timestamp.valueOf(appointment.getEndDateTime().toLocalDateTime()));
-            ps.setString(7, "Application");
+            ps.setTimestamp(7, Timestamp.valueOf(ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault())
+                    .withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
             ps.setString(8, "Application");
-            ps.setInt(9, appointment.getCustomer().getId());
-            ps.setInt(10, appointment.getUser().getUserId());
-            ps.setInt(11, appointment.getContact().getId());
+            ps.setTimestamp(9, Timestamp.valueOf(ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault())
+                    .withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+            ps.setString(10, "Application");
+            ps.setInt(11, appointment.getCustomer().getId());
+            ps.setInt(12, appointment.getUser().getUserId());
+            ps.setInt(13, appointment.getContact().getId());
             ps.executeUpdate();
             try(var rs = ps.getGeneratedKeys()){
                 if (rs.next()){
-                    appointment.setId(rs.getInt("Appointment_ID"));
+                    appointment.setId(rs.getInt(1));
                     System.out.println("Appointment added");
-                    return true;
+                    //return true;
                 }
                 System.out.println("Error: Customer id not set.");
             }
-        } catch(SQLException ex){
+        } /*catch(SQLException ex){
             System.out.println("Error in adding appointment.");
-        }
-        return false;
+            ex.printStackTrace();
+            return false;
+        }*/
+        //return false;
     }
     @Override
     public boolean updateAppointment(Appointment appointment){
