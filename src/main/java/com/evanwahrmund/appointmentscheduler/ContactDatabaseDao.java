@@ -3,6 +3,7 @@ package com.evanwahrmund.appointmentscheduler;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.evanwahrmund.appointmentscheduler.interfaces.ContactDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

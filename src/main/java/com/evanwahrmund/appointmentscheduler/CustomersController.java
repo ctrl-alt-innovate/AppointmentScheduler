@@ -71,6 +71,7 @@ public class CustomersController {
         deleteButton.setOnAction(event -> deleteCustomer());
         resetButton.setOnAction(event -> resetFields());
         saveButton.setOnAction(event -> updateCustomer());
+
         customersTable.setItems(Customers.getCustomers());
         customersTable.itemsProperty().addListener((obs, oldVal, newVal) -> {
             System.out.println("Activated");
@@ -120,17 +121,24 @@ public class CustomersController {
             String postalCode = postalCodeTextField.getText();
             String phone = phoneTextField.getText();
             Division div = divisionComboBox.getValue();
+            if(name.isBlank() || address.isBlank() || postalCode.isBlank() || phone.isBlank()){
+                throw new IllegalArgumentException("Fields can not be blank");
+            }
             if (div == null) {
                 throw new NullPointerException("No Division Selected. Please Choose a Country with an operating office. ");
             }
             Customer cus = new Customer(name, address, postalCode, phone, div);
             Customers.createCustomer(cus);
+            Alert confirmation = new Alert(Alert.AlertType.INFORMATION, "Customer: " + cus.getName() + " created successfully!");
+            confirmation.setHeaderText("Customer Created");
+            confirmation.show();
             resetFields();
             //customersTable.refresh();
 
-        } catch(NullPointerException | SQLException ex){
+        } catch(NullPointerException | SQLException | IllegalArgumentException ex){
             ex.printStackTrace();
-            Alert error = new Alert(Alert.AlertType.ERROR, "Error creating customer. Please ensure fields are filled and valid."0);
+            Alert error = new Alert(Alert.AlertType.ERROR, "Error creating customer. Please ensure fields are filled and valid.");
+            error.setContentText(error.getContentText() + "\n" + ex.getMessage());
             error.setHeaderText("Add Customer Error");
             error.show();
 
@@ -139,7 +147,12 @@ public class CustomersController {
     }
     public void deleteCustomer(){
         Customer cusToDelete = customersTable.getSelectionModel().getSelectedItem();
-
+        if(cusToDelete == null) {
+            Alert error = new Alert(Alert.AlertType.ERROR, "Please Select a customer to delete.");
+            error.setHeaderText("Customer Deletion Error");
+            error.show();
+            return;
+        }
         for(Appointment a: Appointments.getAppointments()){
             if(a.getCustomer() == cusToDelete) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -147,12 +160,19 @@ public class CustomersController {
                 alert.setContentText("Customer " + cusToDelete.getName() + " can not be deleted due to having exisiting appointments." +
                         " Please delete appointments for this customer and try again.");
                 alert.show();
-                deleteLabel.setText("Customer " + cusToDelete.getName() + " can not be deleted due to having existinng appointments.");
+                //deleteLabel.setText("Customer " + cusToDelete.getName() + " can not be deleted due to having existinng appointments.");
                 return;
             }
         }
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION)
-        Customers.deleteCustomer(cusToDelete);
+        try{
+            Customers.deleteCustomer(cusToDelete);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Customer: " + cusToDelete.getName() + " deleted successfully.");
+            alert.setHeaderText("Customer Deleted");
+            alert.show();
+        } catch (SQLException ex){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error in deleting customer.");
+            alert.setHeaderText("Customer Deletion Unexpected Error");
+        }
 
     }
     public void resetFields(){
@@ -165,6 +185,7 @@ public class CustomersController {
         divisionComboBox.setValue(null);
 
     }
+
     public void modifyCustomer(){
         Customer cusToMod = customersTable.getSelectionModel().getSelectedItem();
         idTextField.setText(String.valueOf(cusToMod.getId()));
@@ -175,24 +196,36 @@ public class CustomersController {
         countryComboBox.setValue(cusToMod.getDivision().getCountry());
         divisionComboBox.setValue(cusToMod.getDivision());
     }
+
     public void updateCustomer(){
         try {
             //Customer cusToUpdate = DatabaseCustomerDao.getInstance().getCustomer(Integer.parseInt(idTextField.getText()));
+
+            //System.out.println("controller: " + cusToUpdate);
+            if (divisionComboBox.getValue() == null) {
+                throw new IllegalArgumentException("ERROR: Please select a valid First Level Division and try again.");
+            }
+            if(nameTextField.getText() == null || addressTextField.getText() == null || postalCodeTextField.getText() == null ||
+                    phoneTextField == null || divisionComboBox.getValue() == null){
+                throw new IllegalArgumentException("Fields can not be left blank.");
+            }
+
+
             Customer cusToUpdate = customersTable.getSelectionModel().getSelectedItem();
-            System.out.println("controller: " + cusToUpdate);
+
             cusToUpdate.setName(nameTextField.getText());
             cusToUpdate.setAddress(addressTextField.getText());
             cusToUpdate.setPostalCode(postalCodeTextField.getText());
             cusToUpdate.setPhone(phoneTextField.getText());
+
             cusToUpdate.setDivision(divisionComboBox.getValue());
-            if (divisionComboBox.getValue() == null) {
-                throw new IllegalArgumentException("ERROR: Please select a valid First Level Division and try again.");
-            }
-            CustomerDatabaseDao.getInstance().updateCustomer(cusToUpdate);
+            Customer.
 
             // customersTable.refresh();
         } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
+            Alert error = new Alert(Alert.AlertType.ERROR, "Error in updating customer." + "\n" + ex.getMessage());
+            error.setHeaderText("Customer Update Error");
+            error.show();
 
 
             System.out.println(ex.getMessage());

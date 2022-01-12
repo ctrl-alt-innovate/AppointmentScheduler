@@ -2,6 +2,7 @@ package com.evanwahrmund.appointmentscheduler;
 
 import java.sql.SQLException;
 
+import com.evanwahrmund.appointmentscheduler.interfaces.ReadyOnlyDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

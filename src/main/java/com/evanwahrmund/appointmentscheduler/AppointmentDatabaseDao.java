@@ -2,15 +2,14 @@ package com.evanwahrmund.appointmentscheduler;
 
 
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import com.evanwahrmund.appointmentscheduler.interfaces.AppointmentDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -96,7 +95,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
     Contact_ID int
     */
     @Override
-    public boolean createAppointment(Appointment appointment) throws SQLException{
+    public void createAppointment(Appointment appointment) throws SQLException{
         String sql = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Create_Date, Created_By," +
                 "Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){

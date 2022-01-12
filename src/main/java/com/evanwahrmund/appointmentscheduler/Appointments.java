@@ -31,9 +31,8 @@ public class Appointments {
         return null;
     }
     public static void createAppointment(Appointment appointment) throws SQLException {
-        if (AppointmentDatabaseDao.getInstance().createAppointment(appointment)) {
-            appointments.add(appointment);
-        }
+        AppointmentDatabaseDao.getInstance().createAppointment(appointment);
+        appointments.add(appointment);
     }
     public static void updateAppointment(Appointment appointment){
         if(AppointmentDatabaseDao.getInstance().updateAppointment(appointment)){

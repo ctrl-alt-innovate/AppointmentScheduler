@@ -1,5 +1,7 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.interfaces;
 
+import com.evanwahrmund.appointmentscheduler.Country;
+import com.evanwahrmund.appointmentscheduler.Division;
 import javafx.collections.ObservableList;
 
 /**

@@ -31,9 +31,9 @@ public class Customers {
         }
 
     }
-    public static void deleteCustomer(Customer customer){
-        if (CustomerDatabaseDao.getInstance().deleteCustomer(customer)) {
-            customers.remove(customer);
-        }
+    public static void deleteCustomer(Customer customer) throws SQLException{
+        CustomerDatabaseDao.getInstance().deleteCustomer(customer);
+        customers.remove(customer);
+
     }
 }

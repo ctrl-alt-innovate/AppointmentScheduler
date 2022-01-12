@@ -1,5 +1,6 @@
 package com.evanwahrmund.appointmentscheduler;
 
+import java.sql.SQLException;
 import java.time.*;
 import java.util.Locale;
 
@@ -139,7 +140,7 @@ public class AppointmentsController {
             Appointments.createAppointment(appointment);
             resetFields();
 
-        } catch (NullPointerException | IllegalArgumentException ex){
+        } catch (NullPointerException | IllegalArgumentException | SQLException ex){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Error creating Appointment. Please ensure all fields are filled and valid.");
             alert.setContentText(ex.getMessage());
             alert.show();

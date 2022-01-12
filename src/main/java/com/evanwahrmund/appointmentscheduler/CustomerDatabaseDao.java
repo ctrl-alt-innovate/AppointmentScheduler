@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import com.evanwahrmund.appointmentscheduler.interfaces.CustomerDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -52,7 +53,7 @@ Last_Update timestamp
 Last_Updated_By varchar(50)
 Division_ID int*/
     @Override
-   public boolean createCustomer(Customer customer) throws SQLException {
+   public void createCustomer(Customer customer) throws SQLException {
        String insertSql = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Create_Date, " +
                "Created_By, Last_Update, Last_Updated_By, Division_ID)" +
                " VALUES(?,?,?,?,?,?,?,?,?);";
@@ -72,15 +73,15 @@ Division_ID int*/
            try(var rs = ps.getGeneratedKeys()){
                if (rs.next()){
                   customer.setId(rs.getInt(1));
-                  return true;
+
                }
-               System.out.println("Error: Customer id not set.");
+               //System.out.println("Error: Customer id not set.");
            }
        } /*catch(SQLException ex){
             System.out.println("Error: Customer not created.");
             ex.printStackTrace();*/
 
-       return false;
+       //return false;
    }
 
    public boolean updateCustomer(Customer customer){
@@ -100,16 +101,16 @@ Division_ID int*/
             return false;
         }
    }
-   public boolean deleteCustomer(Customer customer){
+   public void deleteCustomer(Customer customer) throws SQLException{
        String deleteSQL = "DELETE FROM customers WHERE Customer_ID = ?;";
        try(var ps = DatabaseConnection.getConnection().prepareStatement(deleteSQL)){
            ps.setInt(1,customer.getId());
            ps.executeUpdate();
-           return true;
-       } catch(SQLException ex){
+           //return true;
+       } /*catch(SQLException ex){
            System.out.println("Error: Customer with ID - " + customer.getId() + " not deleted");
            return false;
-       }
+       }*/
    }
    //HAVE NOT CHECKED
    public Customer getCustomer(int id){

@@ -1,5 +1,6 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.interfaces;
 
+import com.evanwahrmund.appointmentscheduler.User;
 import javafx.collections.ObservableList;
 
 public interface UserDao {

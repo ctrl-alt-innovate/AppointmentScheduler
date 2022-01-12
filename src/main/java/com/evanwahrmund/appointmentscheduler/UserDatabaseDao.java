@@ -2,10 +2,11 @@ package com.evanwahrmund.appointmentscheduler;
 
 import java.sql.SQLException;
 
+import com.evanwahrmund.appointmentscheduler.interfaces.UserDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class UserDatabaseDao implements  UserDao {
+public class UserDatabaseDao implements UserDao {
 
     private static UserDatabaseDao INSTANCE;
     public static UserDatabaseDao getInstance(){
