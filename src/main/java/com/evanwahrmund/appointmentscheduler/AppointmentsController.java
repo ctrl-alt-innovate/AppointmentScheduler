@@ -113,7 +113,7 @@ public class AppointmentsController {
         LocalTime beginning = LocalTime.of(8, 0);
         LocalDate date = startDatePicker.getValue();
         ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.of(date, beginning), ZoneId.of("UTC-05:00"));
-        zdt = zdt.withZoneSameInstant(ZoneId.of("UTC"));
+        zdt = zdt.withZoneSameInstant(ZoneId.systemDefault());
         int count = 0;
         while (count <= 24){
             LocalTime time = zdt.toLocalTime().plusMinutes(count * 30);
@@ -180,6 +180,33 @@ public class AppointmentsController {
             start = start.withZoneSameInstant(ZoneId.of("UTC"));
             ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.systemDefault());
             end = end.withZoneSameInstant(ZoneId.of("UTC"));
+            for(Appointment app: Appointments.getAppointments()){
+                /*if(start.isAfter(app.getStartDateTime()) && start.isBefore(app.getEndDateTime())){
+                    throw new IllegalArgumentException("Appointments can not overlap.");
+                }
+                if(end.isAfter(app.getStartDateTime()) && end.isBefore(app.getEndDateTime())){
+                    throw new IllegalArgumentException("Appointments can not overlap.");
+                }*/
+                if(start.isEqual(app.getStartDateTime()) && end.isEqual(app.getEndDateTime())){
+                    throw new IllegalArgumentException("Appointment already exists for this time");
+                }
+                if(start.isEqual(app.getStartDateTime()) && end.isBefore(app.getEndDateTime())){
+                    throw new IllegalArgumentException("Can not schedule overlapping appointments");
+                }
+                if(start.isAfter(app.getStartDateTime()) && end.isEqual(app.getEndDateTime())){
+                    throw new IllegalArgumentException("Can not schedule overlapping appointments");
+                }
+                if(start.isAfter(app.getStartDateTime()) && end.isBefore(app.getEndDateTime())){
+                    throw new IllegalArgumentException("Can not schedule overlapping appointments");
+                }
+                if(start.isBefore(app.getStartDateTime()) && (end.isAfter(app.getStartDateTime()) && end.isBefore(app.getEndDateTime()))){
+                    throw new IllegalArgumentException("Can not schedule overlapping appointments");
+                }
+                if(end.isAfter(app.getEndDateTime()) && (start.isAfter(app.getStartDateTime())&& start.isBefore(app.getEndDateTime()))){
+                    throw new IllegalArgumentException("Can not schedule overlapping appointments");
+                }
+
+            }
 
             Appointment appointment = new Appointment(title, description, location, type, start, end, customer, user, contact);
             Appointments.createAppointment(appointment);
