@@ -9,7 +9,7 @@ public interface CustomerDao {
     ObservableList<Customer> getAllCustomers();
     Customer getCustomer(int id);
     void createCustomer(Customer customer) throws SQLException;
-    boolean updateCustomer(Customer customer);
+    void updateCustomer(Customer customer)throws SQLException;
     void deleteCustomer(Customer customer) throws SQLException;
 
 }

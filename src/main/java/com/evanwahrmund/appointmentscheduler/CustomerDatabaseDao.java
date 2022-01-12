@@ -84,7 +84,7 @@ Division_ID int*/
        //return false;
    }
 
-   public boolean updateCustomer(Customer customer){
+   public void updateCustomer(Customer customer) throws SQLException {
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? " +
                 "WHERE Customer_ID = ?;";
         try (var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
@@ -95,11 +95,11 @@ Division_ID int*/
             ps.setInt(5, customer.getDivision().getId());
             ps.setInt(6, customer.getId());
             ps.executeUpdate();
-            return true;
-        }catch (SQLException ex){
+            //return true;
+        }/*catch (SQLException ex){
             System.out.println("Error: Customer with ID - " + customer.getId() + " not updated");
-            return false;
-        }
+            //return false;
+        }*/
    }
    public void deleteCustomer(Customer customer) throws SQLException{
        String deleteSQL = "DELETE FROM customers WHERE Customer_ID = ?;";

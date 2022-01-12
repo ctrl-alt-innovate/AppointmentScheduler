@@ -199,17 +199,13 @@ public class CustomersController {
 
     public void updateCustomer(){
         try {
-            //Customer cusToUpdate = DatabaseCustomerDao.getInstance().getCustomer(Integer.parseInt(idTextField.getText()));
-
-            //System.out.println("controller: " + cusToUpdate);
-            if (divisionComboBox.getValue() == null) {
-                throw new IllegalArgumentException("ERROR: Please select a valid First Level Division and try again.");
-            }
-            if(nameTextField.getText() == null || addressTextField.getText() == null || postalCodeTextField.getText() == null ||
-                    phoneTextField == null || divisionComboBox.getValue() == null){
+            if(nameTextField.getText().isBlank() || addressTextField.getText().isBlank() || postalCodeTextField.getText().isBlank() ||
+                    phoneTextField.getText().isBlank()){
                 throw new IllegalArgumentException("Fields can not be left blank.");
             }
-
+            if (divisionComboBox.getValue() == null) {
+                throw new IllegalArgumentException("Please select a valid First Level Division.");
+            }
 
             Customer cusToUpdate = customersTable.getSelectionModel().getSelectedItem();
 
@@ -217,19 +213,16 @@ public class CustomersController {
             cusToUpdate.setAddress(addressTextField.getText());
             cusToUpdate.setPostalCode(postalCodeTextField.getText());
             cusToUpdate.setPhone(phoneTextField.getText());
-
             cusToUpdate.setDivision(divisionComboBox.getValue());
-            Customer.
-
-            // customersTable.refresh();
-        } catch (IllegalArgumentException ex) {
+            Customers.updateCustomer(cusToUpdate);
+            Alert confirm = new Alert(Alert.AlertType.INFORMATION, "Customer: " + cusToUpdate.getName() + " updated successfully.");
+            confirm.setHeaderText("Customer Updated");
+            confirm.show();
+        } catch (IllegalArgumentException | SQLException ex) {
             Alert error = new Alert(Alert.AlertType.ERROR, "Error in updating customer." + "\n" + ex.getMessage());
             error.setHeaderText("Customer Update Error");
             error.show();
-
-
             System.out.println(ex.getMessage());
-
         }
     }
     /**

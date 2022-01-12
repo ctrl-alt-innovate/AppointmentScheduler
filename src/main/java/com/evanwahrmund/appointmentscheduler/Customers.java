@@ -25,10 +25,10 @@ public class Customers {
         CustomerDatabaseDao.getInstance().createCustomer(customer);
         customers.add(customer);
     }
-    public static void updateCustomer(Customer customer){
-        if(CustomerDatabaseDao.getInstance().updateCustomer(customer)){
-            customers.set(customers.indexOf(customer), customer);
-        }
+    public static void updateCustomer(Customer customer) throws SQLException {
+        CustomerDatabaseDao.getInstance().updateCustomer(customer);
+        customers.set(customers.indexOf(customer), customer);
+
 
     }
     public static void deleteCustomer(Customer customer) throws SQLException{
