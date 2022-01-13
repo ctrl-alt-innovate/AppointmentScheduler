@@ -97,6 +97,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             try(var rs = ps.getGeneratedKeys()){
                 if (rs.next()){
                     appointment.setId(rs.getInt("Appointment_ID"));
+                    System.out.println("Appointment added");
                     return true;
                 }
                 System.out.println("Error: Customer id not set.");

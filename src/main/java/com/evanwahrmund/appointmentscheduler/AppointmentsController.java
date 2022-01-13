@@ -113,29 +113,38 @@ public class AppointmentsController {
         contactComboBox.setValue(null);
     }
     public void createAppointment(){
-        String title = titleTextField.getText();
-        String description = descriptionTextField.getText();
-        String location = locationTextField.getText();
-        String type = typeTextField.getText();
-                LocalDate startDate = startDatePicker.getValue();
-        LocalDate endDate = endDatePicker.getValue();
-        LocalTime startTime = startTimeComboBox.getValue();
-        LocalTime endTime = endTimeComboBox.getValue();
-        ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(startDate, startTime), ZoneId.of("UTC-05:00"));
-        start = start.withZoneSameLocal(ZoneId.of("UTC-00:00"));
-        ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.of("UTC-05:00"));
-        end = end.withZoneSameLocal(ZoneId.of("UTC-00:00"));
-        Customer customer = Customers.getCustomer(Integer.parseInt(customerIdTextField.getText()));
-        User user = Users.getUser(Integer.parseInt(userIdTextField.getText()));
-        Contact contact = contactComboBox.getValue();
-        /*if (validateAppointment(title, description, location, type, start, end, customer, user, contact)) {
+        try{
+            String title = titleTextField.getText();
+            String description = descriptionTextField.getText();
+            String location = locationTextField.getText();
+            String type = typeTextField.getText();
+            if(title == null || description == null || location == null || type == null){
+                throw new IllegalArgumentException("Fields Can not be left blank");
+            }
+
+            LocalDate startDate = startDatePicker.getValue();
+            LocalDate endDate = endDatePicker.getValue();
+            LocalTime startTime = startTimeComboBox.getValue();
+            LocalTime endTime = endTimeComboBox.getValue();
+            ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(startDate, startTime), ZoneId.of("UTC-05:00"));
+            start = start.withZoneSameLocal(ZoneId.of("UTC-00:00"));
+            ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.of("UTC-05:00"));
+            end = end.withZoneSameLocal(ZoneId.of("UTC-00:00"));
+            Customer customer = Customers.getCustomer(Integer.parseInt(customerIdTextField.getText()));
+            User user = Users.getUser(Integer.parseInt(userIdTextField.getText()));
+            Contact contact = contactComboBox.getValue();
+
+
             Appointment appointment = new Appointment(title, description, location, type, start, end, customer, user, contact);
             Appointments.createAppointment(appointment);
             resetFields();
+
+        } catch (NullPointerException | IllegalArgumentException ex){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error creating Appointment. Please ensure all fields are filled and valid.");
+            alert.setContentText(ex.getMessage());
+            alert.show();
         }
-        else{
-            //notify that appointment was not created
-        }*/
+
     }
     public void modifyAppointment(){
         Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
@@ -185,28 +194,6 @@ public class AppointmentsController {
         Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
         Appointments.deleteAppointment(appointment);
         deleteLabel.setText(appointment.getTitle() + " has been successfully deleted");
-    }/*
-    private boolean validateAppointment(String title, String description, String location, String type, ZonedDateTime start,
-                                        ZonedDateTime end, Customer customer, User user, Contact contact){
-        if(title == null || description == null || location == null || type == null || start == null || end == null
-                || customer == null || user == null || contact == null) {
-            return false;
-        }
-        if(validateAppTime(start, end))
-            return true;
-
-        return false;
-    }/*
-    private boolean validateAppTime(ZonedDateTime start, ZonedDateTime end){
-        ZonedDateTime startZoned = Util.localToZonedTime(start);
-        ZonedDateTime endZoned = Util.localToZonedTime(end);
-        ZonedDateTime startHQZoned = Util.toHQTimezone(startZoned);
-        ZonedDateTime endHQZoned = Util.toHQTimezone(endZoned);
-
-        LocalTime startTime = startHQZoned.toLocalTime();
-        LocalTime endTime = endHQZoned.toLocalTime();
-        return Util.validateTime(startTime, endTime);
-
-    }*/
-
+        //ALERT HERE NOTIFY DELETEION DISPLAY ID AND TYPE
+    }
 }
