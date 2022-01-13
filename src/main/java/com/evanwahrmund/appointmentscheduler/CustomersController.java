@@ -63,7 +63,7 @@ public class CustomersController {
     public void initialize() {
         initializeTable();
         initializeComboBoxes();
-        //loadTestData();
+        loadTestData();
         addButton.setOnAction(event -> {
             createCustomer();
         });

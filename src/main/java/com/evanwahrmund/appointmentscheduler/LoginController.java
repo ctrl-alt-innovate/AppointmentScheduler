@@ -1,10 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -46,14 +43,14 @@ public class LoginController {
         countryText.setText(ZoneId.systemDefault().getId());
         clearButton.setOnAction(event -> clearFields());
         loginButton.setOnAction(event -> login());
-        incorrectLogin = new Alert(Alert.AlertType.ERROR);
+        //incorrectLogin = new Alert(Alert.AlertType.ERROR);
         //incorrectLogin.setTitle("Error: Login");
         localize();
         fw = new FileWriter("login_activity.txt", true);
         pw = new PrintWriter(fw);
-        ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"));
-        pw.println("Login at " + Util.formatDateTime(zdt));
-        pw.close();
+        //ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"));
+        //pw.println("Login at " + Util.formatDateTime(zdt));
+        //pw.close();
 
     }
 
@@ -71,6 +68,8 @@ public class LoginController {
                     incorrect = false;
                     Stage stage = ((Stage)loginButton.getScene().getWindow());
                     stage.close();
+                    pw.println("Successful Login Attempt at: " + Util.formatDateTime(ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"))));
+                    pw.close();
                     Loader.Load("FXML/schedules.fxml", "APPOINTMENT SCHEDULER");
                 }else {
                     //exceptionText.setText("Incorrect Username or Password");
@@ -81,13 +80,18 @@ public class LoginController {
 
             }
             if(incorrect)
+                pw.println("Unsuccessful Login Attempt at: " + Util.formatDateTime(ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"))));
+                pw.close();
                 incorrectLogin.show();
         }
     }
     private void localize(){
-        Locale current = new Locale("fr");
+        //Locale current = new Locale("fr");
+
         //Locale current = Locale.getDefault();
-        ResourceBundle rb = ResourceBundle.getBundle("com.evanwahrmund.appointmentscheduler/Login", current);
+        ResourceBundle rb = ResourceBundle.getBundle("com.evanwahrmund.appointmentscheduler/Login", Locale.getDefault());
+        ButtonType ok = new ButtonType(rb.getString("ok"), ButtonBar.ButtonData.OK_DONE);
+        incorrectLogin = new Alert(Alert.AlertType.ERROR, rb.getString("content"), ok);
         headerLabel.setText(rb.getString("title"));
         countryLabel.setText(rb.getString("location"));
         loginButton.setText(rb.getString("login"));
@@ -96,7 +100,8 @@ public class LoginController {
         passwordLabel.setText(rb.getString("password"));
         incorrectLogin.setTitle(rb.getString("error"));
         incorrectLogin.setHeaderText(rb.getString("message"));
-        incorrectLogin.setContentText(rb.getString("content"));
+        //incorrectLogin.setContentText(rb.getString("content"));
+        //incorrectLogin
     }
 
 }
