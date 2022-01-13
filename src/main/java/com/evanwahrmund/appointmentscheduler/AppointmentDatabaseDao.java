@@ -4,6 +4,7 @@ package com.evanwahrmund.appointmentscheduler;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -133,7 +134,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
     @Override
     public void updateAppointment(Appointment appointment) throws SQLException{
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
-                        "Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?;";
+                        "Customer_ID = ?, User_ID = ?, Contact_ID = ?, Last_Update = ?, Last_Updated_By = ? WHERE Appointment_ID = ?;";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
             ps.setString(1, appointment.getTitle());
             ps.setString(2, appointment.getDescription());
@@ -144,7 +145,10 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             ps.setInt(7, appointment.getCustomer().getId());
             ps.setInt(8, appointment.getUser().getUserId());
             ps.setInt(9, appointment.getContact().getId());
-            ps.setInt(10, appointment.getId());
+            ps.setTimestamp(10, Timestamp.valueOf(
+                    ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+            ps.setString(11, "Application");
+            ps.setInt(12, appointment.getId());
             ps.executeUpdate();
             //return true;
         } /*catch( SQLException ex){

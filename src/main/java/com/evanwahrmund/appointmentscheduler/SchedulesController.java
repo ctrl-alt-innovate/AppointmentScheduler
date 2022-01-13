@@ -1,6 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
 
+import java.sql.SQLException;
 import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
@@ -10,6 +11,7 @@ import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -57,8 +59,8 @@ public class SchedulesController {
     @FXML private Menu logoutMenu;
     @FXML private MenuItem logout;
 
-    private ObservableList<TemporalAccessor> options = FXCollections.observableArrayList();
-    private ObservableList<YearMonth> monthOptions;
+    //private ObservableList<TemporalAccessor> options = FXCollections.observableArrayList();
+    //private ObservableList<Appointment> currentSchedule = FXCollections
     private LocalDate current = LocalDateTime.now().toLocalDate();
     private Boolean startChanged = false;
     private Boolean endChanged = false;
@@ -69,39 +71,16 @@ public class SchedulesController {
         initializeMenu();
         initializeRadioButtons();
 
-        setMonthOptions();
-        choiceComboBox.setItems(options);
-        schedulesTable.setItems(null);
+        //setMonthOptions();
+        //choiceComboBox.setItems(options);
+        schedulesTable.setItems(Appointments.getAppointments());
         modifyButton.setOnAction(event -> modifyAppTime());
-        //saveButton.setOnAction(event -> updateAppTime());
-        /*EventHandler<ActionEvent> eventHandler = (event) -> {
-            System.out.println(event.getSource());
-            if(event.getSource() == startTimeComboBox){
-                    LocalDateTime ldt = startTimeComboBox.getSelectionModel().getSelectedItem();
-                    System.out.println("ldt: " + ldt);
-                    startTimeComboBox.setValue(ldt);
-                    LocalDate ld = ldt.toLocalDate();
-                    System.out.println(ld);
-                    // startTimeComboBox.setValue(startTimeComboBox.getSelectionModel().getSelectedItem());
-                    changeDay(startTimeComboBox.getSelectionModel().getSelectedItem());
-
-            }else if(event.getSource() == startDatePicker){
-                initializeComboBoxes();
-            }
-        };*/
-        /*startTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
-            if(newVal != null && newVal.toLocalDate().isAfter(startDatePicker.getValue())){
-                startDatePicker.setValue(newVal.toLocalDate());
-                for(LocalDateTime ldt: startTimeComboBox.getItems()){
-                    ldt.minusDays(1);
-                }
-            }
-        });*/
-
+        saveButton.setOnAction(event -> updateAppTime());
 
         choiceComboBox.setOnAction(event -> {
             if (choiceComboBox.getValue() != null)
                 schedulesTable.setItems(setMonthlySchedule());
+
         });
         choiceComboBox.setConverter(new StringConverter<TemporalAccessor>() {
             @Override
@@ -121,92 +100,60 @@ public class SchedulesController {
                 return null;
             }
         });
-        //startDatePicker.setOnAction(event -> {
-            //endDatePicker.setValue(startDatePicker.getValue());
-            //changed = false;
-            //LocalDateTime ldt = startTimeComboBox.getSelectionModel().getSelectedItem();
-            //System.out.println(ldt.toString());
-            //changeDay(ldt);
-            //current = startDatePicker.getValue();
-            //current = startDatePicker.getValue();
-            //initializeComboBoxes();
-            //changeDay(ldt);
-        //});
 
-        //startDatePicker.setOnAction(event -> initializeComboBoxes());
         startDatePicker.setValue(current);
+        endDatePicker.setValue(current);
         initializeComboBoxes();
 
         Platform.runLater(() -> {
             //notifyUpcomingAppointment();
         });
-        /*startTimeComboBox.setOnAction(actionEvent -> {
-            LocalDate today = current;
-            LocalDate next = current.plusDays(1);
-            int index = startTimeComboBox.getItems().indexOf(startTimeComboBox.getValue());
-            //SortedList<LocalTime> sorted = startTimeComboBox.getItems().sorted();
-            int indexOfNextDay = startTimeComboBox.getItems().indexOf(LocalTime.of(0,0));
-            System.out.println(index + " " + indexOfNextDay);
-            if(index >= indexOfNextDay){
-                current = current.minusDays(1);
-                startDatePicker.setValue(next);
-            }  else  {
-                System.out.println(today);
-                startDatePicker.setValue(today);
-            }
 
-
-
-        });*//*
-        startTimeComboBox.setOnAction(event -> {
-            if(startTimeComboBox.getValue().toLocalDate().isAfter(startDatePicker.getValue())) {
-                current = startDatePicker.getValue();
-                startDatePicker.setValue(startDatePicker.getValue().plusDays(1));
-            }
-        });*/
-        /*startTimeComboBox.setConverter(new StringConverter<LocalDateTime>() {
-            @Override
-            public String toString(LocalDateTime localDateTime) {
-                if(localDateTime != null)
-                    return localDateTime.toLocalTime().toString();
-                return null;
-            }
-
-            @Override
-            public LocalDateTime fromString(String s) {
-                return null;
-            }
-        });*/
-        startDatePicker.setOnAction(event -> startChanged = false);
-        startTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
-            if(startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                    && startChanged == false) {
-                startDatePicker.setValue(startDatePicker.getValue().plusDays(1));
-                startChanged = true;
-            }else if(startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                        && startChanged == true){
-                System.out.println("NO change");
-            }else if(startTimeComboBox.getItems().indexOf(newVal) < startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                && startChanged == false)
-                System.out.println("NO change");
-            else {
-                startDatePicker.setValue(startDatePicker.getValue().minusDays(1));
+        startDatePicker.setOnAction(event -> {
+            startChanged = false;
+            if(!startTimeComboBox.getItems().contains(LocalTime.of(0,0))){
+                endDatePicker.setValue(startDatePicker.getValue());
             }
         });
-        endDatePicker.setOnAction(event -> endChanged = false);
+        startTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
+            if(startTimeComboBox.getItems().contains(LocalTime.of(0,0))) {
+                if (startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0, 0))
+                        && startChanged == false) {
+                    startDatePicker.setValue(startDatePicker.getValue().plusDays(1));
+                    startChanged = true;
+                } else if (startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0, 0))
+                        && startChanged == true) {
+                    System.out.println("NO change");
+                } else if (startTimeComboBox.getItems().indexOf(newVal) < startTimeComboBox.getItems().indexOf(LocalTime.of(0, 0))
+                        && startChanged == false)
+                    System.out.println("NO change");
+                else {
+                    startDatePicker.setValue(startDatePicker.getValue().minusDays(1));
+                }
+            }
+        });
+
+        endDatePicker.setOnAction(event -> {
+            endChanged = false;
+            if(!endTimeComboBox.getItems().contains(LocalTime.of(0,0))){
+                startDatePicker.setValue(endDatePicker.getValue());
+            }
+        });
         endTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
-            if(endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                    && endChanged == false) {
-                endDatePicker.setValue(endDatePicker.getValue().plusDays(1));
-                endChanged = true;
-            }else if(endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                    && endChanged == true){
-                System.out.println("NO change");
-            }else if(endTimeComboBox.getItems().indexOf(newVal) < endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                    && endChanged == false)
-                System.out.println("NO change");
-            else {
-                endDatePicker.setValue(endDatePicker.getValue().minusDays(1));
+            if(endTimeComboBox.getItems().contains(LocalTime.of(0,0))) {
+                if (endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0, 0))
+                        && endChanged == false) {
+                    endDatePicker.setValue(endDatePicker.getValue().plusDays(1));
+                    endChanged = true;
+                } else if (endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0, 0))
+                        && endChanged == true) {
+                    System.out.println("NO change");
+                } else if (endTimeComboBox.getItems().indexOf(newVal) < endTimeComboBox.getItems().indexOf(LocalTime.of(0, 0))
+                        && endChanged == false)
+                    System.out.println("NO change");
+                else {
+                    endDatePicker.setValue(endDatePicker.getValue().minusDays(1));
+                }
             }
         });
 
@@ -243,12 +190,13 @@ public class SchedulesController {
     }
 
     private ObservableList<Appointment> setMonthlySchedule() {
-        ObservableList<Appointment> currentSchedule = FXCollections.observableArrayList();
+        ObservableList currentSchedule = new FilteredList<>(Appointments.getAppointments());
         TemporalAccessor month = choiceComboBox.getSelectionModel().getSelectedItem();
         if (monthRadioButton.isSelected()) {
             int monthVal = ((YearMonth) month).getMonthValue();
             int yearVal = ((YearMonth) month).getYear();
             currentSchedule = AppointmentDatabaseDao.getInstance().getAppsByMonth(monthVal, yearVal);
+
         } else {
             LocalDate date = ((LocalDate) month);
             LocalDate end = date.plusDays(7);
@@ -259,31 +207,57 @@ public class SchedulesController {
 
     private void modifyAppTime() {
         Appointment appointment = schedulesTable.getSelectionModel().getSelectedItem();
-
         startDatePicker.setValue(appointment.getStartDateTime().toLocalDate());
-
         endDatePicker.setValue(appointment.getEndDateTime().toLocalDate());
         startTimeComboBox.setValue(appointment.getStartDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalTime());
-
         endTimeComboBox.setValue(appointment.getEndDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalTime());
-
-
     }
-/*
-    private void updateAppTime() {
-        Appointment appointment = schedulesTable.getSelectionModel().getSelectedItem();
-        ZonedDateTime start = LocalDateTime.of(Util.stringToDate(startDateTextField.getText()),
-                Util.stringToTime(startTimeTextField.getText()));
-        ZonedDateTime end = LocalDateTime.of(Util.stringToDate(endDateTextField.getText()),
-                Util.stringToTime(endTimeTextField.getText()));
-        appointment.setStartDateTime(start);
-        appointment.setEndDateTime(end);
-        AppointmentDatabaseDao.getInstance().updateAppTime(appointment);
-        schedulesTable.refresh();
-    }*/
 
-    private void setMonthOptions() {
-        options.clear();
+    private void updateAppTime() {
+
+        try{
+            Appointment app = schedulesTable.getSelectionModel().getSelectedItem();
+            if(app == null){
+                Alert error = new Alert(Alert.AlertType.ERROR, "Please select an appointment.");
+                error.setHeaderText("Update Appointment Time Error");
+                error.show();
+                return;
+            }
+            LocalDate startDate = startDatePicker.getValue();
+            LocalDate endDate = endDatePicker.getValue();
+            LocalTime startTime = startTimeComboBox.getValue();
+            LocalTime endTime = endTimeComboBox.getValue();
+            if(startDate == null || endDate == null || startTime == null || endTime == null){
+                throw new IllegalArgumentException("Dates and times must not be left blank");
+            }
+            ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(startDate, startTime), ZoneId.systemDefault());
+            start = start.withZoneSameInstant(ZoneId.of("UTC"));
+
+            ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.systemDefault());
+            end = end.withZoneSameInstant(ZoneId.of("UTC"));
+            for(Appointment a: Appointments.getAppointments()){
+                if(!(a.getId() == app.getId()))
+                    AppointmentsController.checkForOverlap(a, start, end);
+            }
+
+            app.setStartDateTime(start);
+            app.setEndDateTime(end);
+            Appointments.updateAppointment(app);
+
+            Alert confirm = new Alert(Alert.AlertType.INFORMATION, "Appointment ID: " + app.getId() + " - " + app.getType()
+                                        + " updated successfully.");
+            confirm.setHeaderText("Appointment Time Updated");
+            confirm.show();
+
+        } catch (SQLException | IllegalArgumentException ex){
+            Alert error = new Alert(Alert.AlertType.ERROR, "Error updating appointment time" + "\n" + ex.getMessage());
+            error.setHeaderText("Update Appointment Time Error");
+            error.show();
+        }
+    }
+
+    private ObservableList<TemporalAccessor> setMonthOptions() {
+        ObservableList<TemporalAccessor> options = FXCollections.observableArrayList();
         for (Appointment app : Appointments.getAppointments()) {
             Month month = app.getStartDateTime().getMonth();
             int year = app.getStartDateTime().getYear();
@@ -293,10 +267,11 @@ public class SchedulesController {
             }
 
         }
+        return options;
     }
 
-    private void setWeekOptions() {
-        options.clear();
+    private ObservableList<TemporalAccessor> setWeekOptions() {
+        ObservableList<TemporalAccessor> options = FXCollections.observableArrayList();
         for (Appointment app : Appointments.getAppointments()) {
             LocalDate date = app.getStartDateTime().toLocalDate();
             int day = date.getDayOfWeek().getValue();
@@ -310,6 +285,7 @@ public class SchedulesController {
                 options.add(date);
             }
         }
+        return options;
     }
 
     private void initializeTable() {
@@ -330,13 +306,10 @@ public class SchedulesController {
     private void initializeComboBoxes(){
         ObservableList<LocalTime> options = FXCollections.observableArrayList();
         LocalDate local = startDatePicker.getValue();
-        //current = local;
 
         ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.of(local, LocalTime.of(8,0)), ZoneId.of("America/New_York") );
 
-        zdt = zdt.withZoneSameInstant(ZoneId.of("UTC"));
-
-
+        zdt = zdt.withZoneSameInstant(ZoneId.systemDefault());
 
         int count = 0;
         while (count <= 24){
@@ -349,11 +322,11 @@ public class SchedulesController {
         endTimeComboBox.setItems(options);
         //startTimeComboBox.setValue(null);
     }
-    private void changeDay(LocalDateTime ldt) {
+    /*private void changeDay(LocalDateTime ldt) {
         /*if (ldt == null) {
             initializeComboBoxes();
             return;
-        }*/System.out.println(ldt);
+        }System.out.println(ldt);
             if (ldt.toLocalDate().isAfter(current)) {
                 current = current.plusDays(1);
                 startDatePicker.setValue(current);
@@ -361,7 +334,7 @@ public class SchedulesController {
                 startDatePicker.setValue(current);
             }
 
-    }
+    }*/
     private void initializeMenu(){
         appsByType.setOnAction(event -> Loader.Load("FXML/apps_by_type_and_month_report.fxml", "APPS BY TYPE AND MONTH REPORT"));
         editCus.setOnAction(event -> Loader.Load("FXML/customers.fxml", "CUSTOMERS"));
@@ -378,14 +351,14 @@ public class SchedulesController {
 
         weekRadioButton.setOnAction(event -> {
             choiceLabel.setText("Week");
-            setWeekOptions();
-            choiceComboBox.setItems(options);
+            //setWeekOptions();
+            choiceComboBox.setItems(setWeekOptions());
             schedulesTable.setItems(null);
         });
         monthRadioButton.setOnAction(event -> {
             choiceLabel.setText("Month");
-            setMonthOptions();
-            choiceComboBox.setItems(options);
+            //setMonthOptions();
+            choiceComboBox.setItems(setMonthOptions());
             schedulesTable.setItems(null);
         });
         allRadioButton.setOnAction(event -> {
@@ -394,6 +367,6 @@ public class SchedulesController {
             choiceComboBox.setItems(null);
 
         });
-        monthRadioButton.setSelected(true);
+        allRadioButton.setSelected(true);
     }
 }

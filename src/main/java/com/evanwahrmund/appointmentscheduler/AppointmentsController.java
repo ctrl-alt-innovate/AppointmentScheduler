@@ -212,7 +212,7 @@ public class AppointmentsController {
         }
 
     }
-    private void checkForOverlap(Appointment existing, ZonedDateTime start, ZonedDateTime end)  throws IllegalArgumentException {
+    public static void checkForOverlap(Appointment existing, ZonedDateTime start, ZonedDateTime end)  throws IllegalArgumentException {
         ZonedDateTime existingStart = existing.getStartDateTime();
         ZonedDateTime existingEnd = existing.getEndDateTime();
         //1. proposed equal to existing
@@ -323,10 +323,10 @@ public class AppointmentsController {
 
         } catch(IllegalArgumentException | SQLException | NullPointerException ex){
             Alert error = new Alert(Alert.AlertType.ERROR,"Error updating Appointment ID: " + appointment.getId() + " - " +
-                    appointment.getType() + "\n" + ex.getMessage());
+                    appointment.getType() + "\n"  + ex.getMessage());
             error.setHeaderText("Appointment Update Error");
             error.show();
-            System.out.println(ex.getMessage());
+
         }
     }
     public void deleteAppointment(){
