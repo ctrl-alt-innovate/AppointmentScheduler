@@ -51,61 +51,72 @@ public class AppointmentsController {
     public void initialize(){
         initializeTable();
         contactComboBox.setItems(Contacts.getContacts());
-        /*contactComboBox.setConverter(new StringConverter<Contact>() {
-            @Override
-            public String toString(Contact contact) {
-                if(contact != null)
-                    return contact.getId() + " - " + contact.getName();
-                return null;
-            }
 
-            @Override
-            public Contact fromString(String s) {
-                return null;
-            }
-        });*/
-        startDatePicker.setValue(LocalDate.now());
+
         appointmentsTable.setItems(Appointments.getAppointments());
         resetButton.setOnAction(event -> resetFields());
         addButton.setOnAction(event -> createAppointment());
         modifyButton.setOnAction(event -> modifyAppointment());
         saveButton.setOnAction(event -> updateAppointment());
         deleteButton.setOnAction(event -> deleteAppointment());
-        populateTimeComboBoxes();
-        loadTestData();
-        startDatePicker.setOnAction(event -> startChanged = false);
-        startTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
-            if(startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                    && startChanged == false) {
-                startDatePicker.setValue(startDatePicker.getValue().plusDays(1));
-                startChanged = true;
-            }else if(startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                    && startChanged == true){
-                System.out.println("NO change");
-            }else if(startTimeComboBox.getItems().indexOf(newVal) < startTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                    && startChanged == false)
-                System.out.println("NO change");
-            else {
-                startDatePicker.setValue(startDatePicker.getValue().minusDays(1));
+
+
+
+        startDatePicker.setValue(LocalDate.now());
+        startDatePicker.setOnAction(event -> {
+            startChanged = false;
+            if(!startTimeComboBox.getItems().contains(LocalTime.of(0,0))){
+                endDatePicker.setValue(startDatePicker.getValue());
             }
         });
-        endDatePicker.setOnAction(event -> endChanged = false);
-        endTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
-            if(endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                    && endChanged == false) {
-                endDatePicker.setValue(endDatePicker.getValue().plusDays(1));
-                endChanged = true;
-            }else if(endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                    && endChanged == true){
-                System.out.println("NO change");
-            }else if(endTimeComboBox.getItems().indexOf(newVal) < endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
-                    && endChanged == false)
-                System.out.println("NO change");
-            else {
-                endDatePicker.setValue(endDatePicker.getValue().minusDays(1));
+        startTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
+            if(startTimeComboBox.getItems().contains(LocalTime.of(0,0))) {
+                if (startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0, 0))
+                        && startChanged == false) {
+                    startDatePicker.setValue(startDatePicker.getValue().plusDays(1));
+                    //startDatePicker.setValue(startDatePicker.getValue());
+                    startChanged = true;
+                } else if (startTimeComboBox.getItems().indexOf(newVal) >= startTimeComboBox.getItems().indexOf(LocalTime.of(0, 0))
+                        && startChanged == true) {
+                    System.out.println("NO change");
+                } else if (startTimeComboBox.getItems().indexOf(newVal) < startTimeComboBox.getItems().indexOf(LocalTime.of(0, 0))
+                        && startChanged == false)
+                    System.out.println("NO change");
+                else {
+                    startDatePicker.setValue(startDatePicker.getValue().minusDays(1));
+                }
             }
         });
 
+
+        endDatePicker.setValue(LocalDate.now());
+        endDatePicker.setOnAction(event -> {
+            endChanged = false;
+            if(!endTimeComboBox.getItems().contains(LocalTime.of(0,0))){
+                startDatePicker.setValue(endDatePicker.getValue());
+            }
+
+        });
+        endTimeComboBox.valueProperty().addListener((obs, old, newVal) -> {
+            if(endTimeComboBox.getItems().contains(LocalTime.of(0,0))){
+                if(endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                        && endChanged == false) {
+                    endDatePicker.setValue(endDatePicker.getValue().plusDays(1));
+                    endChanged = true;
+                }else if(endTimeComboBox.getItems().indexOf(newVal) >= endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                        && endChanged == true){
+                    System.out.println("NO change");
+                }else if(endTimeComboBox.getItems().indexOf(newVal) < endTimeComboBox.getItems().indexOf(LocalTime.of(0,0))
+                        && endChanged == false)
+                    System.out.println("NO change");
+                else {
+                    endDatePicker.setValue(endDatePicker.getValue().minusDays(1));
+                }
+
+            }
+        });
+        populateTimeComboBoxes();
+        loadTestData();
     }
 
     private void populateTimeComboBoxes() {
@@ -146,12 +157,14 @@ public class AppointmentsController {
         typeTextField.clear();
         startTimeComboBox.setValue(null);
         endTimeComboBox.setValue(null);
+        startDatePicker.setValue(LocalDate.now());
+        endDatePicker.setValue(LocalDate.now());
         customerIdTextField.clear();
         userIdTextField.clear();
         contactComboBox.setValue(null);
     }
     public void createAppointment(){
-        try{
+        try {
             String title = titleTextField.getText();
             String description = descriptionTextField.getText();
             String location = locationTextField.getText();
@@ -163,8 +176,8 @@ public class AppointmentsController {
             LocalTime startTime = startTimeComboBox.getValue();
             LocalTime endTime = endTimeComboBox.getValue();
 
-            if(title.isBlank() || description.isBlank() || location.isBlank() || type.isBlank() || startDate == null ||
-                    endDate == null || startTime == null || endTime == null){
+            if (title.isBlank() || description.isBlank() || location.isBlank() || type.isBlank() || startDate == null ||
+                    endDate == null || startTime == null || endTime == null) {
                 throw new IllegalArgumentException("Fields Can not be left blank");
             }
 
@@ -172,42 +185,18 @@ public class AppointmentsController {
             User user = Users.getUser(Integer.parseInt(userIdTextField.getText()));
             Contact contact = contactComboBox.getValue();
 
-            if(customer == null || user == null || contact == null){
+            if (customer == null || user == null || contact == null) {
                 throw new IllegalArgumentException("Please select a valid contact, customer, and user.");
             }
 
             ZonedDateTime start = ZonedDateTime.of(LocalDateTime.of(startDate, startTime), ZoneId.systemDefault());
             start = start.withZoneSameInstant(ZoneId.of("UTC"));
+
             ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.systemDefault());
             end = end.withZoneSameInstant(ZoneId.of("UTC"));
-            for(Appointment app: Appointments.getAppointments()){
-                /*if(start.isAfter(app.getStartDateTime()) && start.isBefore(app.getEndDateTime())){
-                    throw new IllegalArgumentException("Appointments can not overlap.");
-                }
-                if(end.isAfter(app.getStartDateTime()) && end.isBefore(app.getEndDateTime())){
-                    throw new IllegalArgumentException("Appointments can not overlap.");
-                }*/
-                if(start.isEqual(app.getStartDateTime()) && end.isEqual(app.getEndDateTime())){
-                    throw new IllegalArgumentException("Appointment already exists for this time");
-                }
-                if(start.isEqual(app.getStartDateTime()) && end.isBefore(app.getEndDateTime())){
-                    throw new IllegalArgumentException("Can not schedule overlapping appointments");
-                }
-                if(start.isAfter(app.getStartDateTime()) && end.isEqual(app.getEndDateTime())){
-                    throw new IllegalArgumentException("Can not schedule overlapping appointments");
-                }
-                if(start.isAfter(app.getStartDateTime()) && end.isBefore(app.getEndDateTime())){
-                    throw new IllegalArgumentException("Can not schedule overlapping appointments");
-                }
-                if(start.isBefore(app.getStartDateTime()) && (end.isAfter(app.getStartDateTime()) && end.isBefore(app.getEndDateTime()))){
-                    throw new IllegalArgumentException("Can not schedule overlapping appointments");
-                }
-                if(end.isAfter(app.getEndDateTime()) && (start.isAfter(app.getStartDateTime())&& start.isBefore(app.getEndDateTime()))){
-                    throw new IllegalArgumentException("Can not schedule overlapping appointments");
-                }
-
+            for (Appointment app : Appointments.getAppointments()) {
+                checkForOverlap(app, start, end);
             }
-
             Appointment appointment = new Appointment(title, description, location, type, start, end, customer, user, contact);
             Appointments.createAppointment(appointment);
             Alert confirm = new Alert(Alert.AlertType.INFORMATION, "Appointment ID: " + appointment.getId() + " - " +
@@ -222,6 +211,46 @@ public class AppointmentsController {
             alert.show();
         }
 
+    }
+    private void checkForOverlap(Appointment existing, ZonedDateTime start, ZonedDateTime end)  throws IllegalArgumentException {
+        ZonedDateTime existingStart = existing.getStartDateTime();
+        ZonedDateTime existingEnd = existing.getEndDateTime();
+        //1. proposed equal to existing
+        if((existingStart.isEqual(start)) && (existingEnd.isEqual(end))) {
+            throw new IllegalArgumentException("Apppointment already exists for this time");
+        }
+        //2. proposed between existing app
+        if((start.isAfter(existingStart) && (end.isBefore(existingEnd)))){
+            throw new IllegalArgumentException("Can not schedule overlapping appointments");
+        }
+        //3. existing between proposed
+        if((start.isBefore(existingStart) && (end.isAfter(existingEnd)))){
+            throw new IllegalArgumentException("Can not schedule overlapping appointments");
+        }
+        //4 starts equal and proposed before existing end
+        if((start.isEqual(existingStart)) && (end.isBefore(existingEnd))){
+            throw new IllegalArgumentException("Can not schedule overlapping appointments");
+        }
+        //5. starts equal and proposed after existing end
+        if((start.isEqual(existingStart)) && (end.isAfter(existingEnd))){
+            throw new IllegalArgumentException("Can not schedule overlapping appointments");
+        }
+        //6. ends equal and proposed before existing start
+        if((start.isBefore(existingStart)) && (end.isEqual(existingEnd))){
+            throw new IllegalArgumentException("Can not schedule overlapping appointments");
+        }
+        //7. ends equal and proposed after existing start
+        if((start.isAfter(existingStart)) && (end.isEqual(existingEnd))){
+            throw new IllegalArgumentException("Can not schedule overlapping appointments");
+        }
+        //8 proposed start before existing and proposed end between existing start and end
+        if((start.isBefore(existingStart)) && ((end.isAfter(existingStart)) && end.isBefore(existingEnd))){
+            throw new IllegalArgumentException("Can not schedule overlapping appointments");
+        }
+        //9 proposed end after existing and proposed start between existing start and end
+        if((end.isAfter(existingEnd)) && ((start.isAfter(existingStart)) && start.isBefore(existingEnd))){
+            throw new IllegalArgumentException("Can not schedule overlapping appointments");
+        }
     }
     public void modifyAppointment(){
         Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
@@ -250,6 +279,7 @@ public class AppointmentsController {
             Alert error = new Alert(Alert.AlertType.ERROR, "Please select an appointment to update.");
             error.setHeaderText("Appointment Update Error");
             error.show();
+            return;
         }
         try {
             if(titleTextField.getText().isBlank() || descriptionTextField.getText().isBlank() || locationTextField.getText().isBlank() ||
