@@ -58,31 +58,27 @@ public class LoginController {
         usernameField.clear();
         passwordField.clear();
     }
-    private void login(){
+    private void login() {
         String name = usernameField.getText();
         String password = passwordField.getText();
         boolean incorrect = true;
-        for(User u : Users.getUsers()){
-            if(u.getUsername().equals(name)){
-                if(u.getPassword().equals(password)){
+        for (User u : Users.getUsers()) {
+            if (u.getUsername().equals(name)) {
+                if (u.getPassword().equals(password)) {
                     incorrect = false;
-                    Stage stage = ((Stage)loginButton.getScene().getWindow());
+                    Stage stage = ((Stage) loginButton.getScene().getWindow());
                     stage.close();
                     pw.println("Successful Login Attempt at: " + Util.formatDateTime(ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"))));
                     pw.close();
                     Loader.Load("FXML/schedules.fxml", "APPOINTMENT SCHEDULER");
-                }else {
-                    //exceptionText.setText("Incorrect Username or Password");
-
                 }
-            } else {
-                //exceptionText.setText("Incorrect Username or Password. Please try again.");
-
             }
-            if(incorrect)
-                pw.println("Unsuccessful Login Attempt at: " + Util.formatDateTime(ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"))));
-                pw.close();
-                incorrectLogin.show();
+        }
+        if (incorrect) {
+            System.out.println("here");
+            pw.println("Unsuccessful Login Attempt at: " + Util.formatDateTime(ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"))));
+            pw.close();
+            incorrectLogin.show();
         }
     }
     private void localize(){
@@ -92,6 +88,7 @@ public class LoginController {
         ResourceBundle rb = ResourceBundle.getBundle("com.evanwahrmund.appointmentscheduler/Login", Locale.getDefault());
         ButtonType ok = new ButtonType(rb.getString("ok"), ButtonBar.ButtonData.OK_DONE);
         incorrectLogin = new Alert(Alert.AlertType.ERROR, rb.getString("content"), ok);
+
         headerLabel.setText(rb.getString("title"));
         countryLabel.setText(rb.getString("location"));
         loginButton.setText(rb.getString("login"));

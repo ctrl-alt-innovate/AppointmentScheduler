@@ -171,10 +171,12 @@ public class SchedulesController {
         notification.setHeaderText("Upcoming Appointments");
         StringBuilder sb = new StringBuilder();
         for(Appointment a: Appointments.getAppointments()) {
-            if(checkIfUpcoming(a)){
+            long min = checkIfUpcoming(a);
+            if(min > 0){
                 System.out.println("Up");
                 sb.append("Upcoming Apppointment - ID: " + a.getId() + "-" + a.getTitle() + " at: "
-                        + Util.formatDateTime(a.getStartDateTime().withZoneSameInstant(ZoneId.systemDefault())) + "\n");
+                        + Util.formatDateTime(a.getStartDateTime().withZoneSameInstant(ZoneId.systemDefault()))
+            + " starting in " + min + " minutes." + "\n");
             }
         }
         if(sb.length() == 0){
@@ -184,16 +186,20 @@ public class SchedulesController {
         }
         notification.show();
     }
-    private Boolean checkIfUpcoming(Appointment app){
+    private long checkIfUpcoming(Appointment app){
         LocalDateTime nowLocal = LocalDateTime.now();
         ZonedDateTime now = ZonedDateTime.of(nowLocal, ZoneId.systemDefault());
 
         ZonedDateTime appStart = app.getStartDateTime();
         appStart = appStart.withZoneSameInstant(ZoneId.systemDefault());
-        if(now.isAfter(appStart.minusMinutes(60))&& now.isBefore(appStart))
-            return true;
+
+        if(now.isAfter(appStart.minusMinutes(15))&& now.isBefore(appStart)) {
+            Duration untilStart = Duration.between(now, appStart);
+            long min = untilStart.toMinutes() + 1;
+            return min;
+        }
         else
-            return false;
+            return 0;
 
         //ZonedDateTime utc = zdt.withZoneSameInstant(ZoneId.of("UTC"));
         /*if((now.isAfter(app.getStartDateTime().toLocalDateTime())) && (now.isBefore(app.getEndDateTime().toLocalDateTime()))){
