@@ -6,6 +6,8 @@ import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.function.Predicate;
+import java.util.logging.Filter;
 
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -22,6 +24,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 import javax.swing.*;
+import javax.swing.text.html.HTMLDocument;
 
 public class SchedulesController {
 
@@ -79,7 +82,8 @@ public class SchedulesController {
 
         choiceComboBox.setOnAction(event -> {
             if (choiceComboBox.getValue() != null)
-                schedulesTable.setItems(setMonthlySchedule());
+
+                schedulesTable.setItems(filterList(setMonthlySchedule()));
 
         });
         choiceComboBox.setConverter(new StringConverter<TemporalAccessor>() {
@@ -106,7 +110,7 @@ public class SchedulesController {
         initializeComboBoxes();
 
         Platform.runLater(() -> {
-            //notifyUpcomingAppointment();
+            notifyUpcomingAppointment();
         });
 
         startDatePicker.setOnAction(event -> {
@@ -164,10 +168,13 @@ public class SchedulesController {
 
     private void notifyUpcomingAppointment() {
         Alert notification = new Alert(Alert.AlertType.INFORMATION);
+        notification.setHeaderText("Upcoming Appointments");
         StringBuilder sb = new StringBuilder();
         for(Appointment a: Appointments.getAppointments()) {
             if(checkIfUpcoming(a)){
-                sb.append("UPcoming app: " + a.getTitle() + "\n");
+                System.out.println("Up");
+                sb.append("Upcoming Apppointment - ID: " + a.getId() + "-" + a.getTitle() + " at: "
+                        + Util.formatDateTime(a.getStartDateTime().withZoneSameInstant(ZoneId.systemDefault())) + "\n");
             }
         }
         if(sb.length() == 0){
@@ -178,19 +185,34 @@ public class SchedulesController {
         notification.show();
     }
     private Boolean checkIfUpcoming(Appointment app){
-        LocalDateTime now = LocalDateTime.now();
-        ZonedDateTime zdt = ZonedDateTime.of(now, ZoneId.systemDefault());
-        ZonedDateTime utc = zdt.withZoneSameInstant(ZoneId.of("UTC"));
-        if((now.isAfter(app.getStartDateTime().toLocalDateTime())) && (now.isBefore(app.getEndDateTime().toLocalDateTime()))){
+        LocalDateTime nowLocal = LocalDateTime.now();
+        ZonedDateTime now = ZonedDateTime.of(nowLocal, ZoneId.systemDefault());
+
+        ZonedDateTime appStart = app.getStartDateTime();
+        appStart = appStart.withZoneSameInstant(ZoneId.systemDefault());
+        if(now.isAfter(appStart.minusMinutes(60))&& now.isBefore(appStart))
+            return true;
+        else
+            return false;
+
+        //ZonedDateTime utc = zdt.withZoneSameInstant(ZoneId.of("UTC"));
+        /*if((now.isAfter(app.getStartDateTime().toLocalDateTime())) && (now.isBefore(app.getEndDateTime().toLocalDateTime()))){
             return true;
         } else {
             return false;
-        }
+        }*/
+
+
+
 
     }
-
+    private FilteredList<Appointment> filterList(ObservableList<Appointment> apps){
+        Predicate<Appointment> pred = app -> apps.contains(app);
+        FilteredList<Appointment> filtered = new FilteredList<>(Appointments.getAppointments(), pred);
+        return filtered;
+    }
     private ObservableList<Appointment> setMonthlySchedule() {
-        ObservableList currentSchedule = new FilteredList<>(Appointments.getAppointments());
+        ObservableList currentSchedule = FXCollections.observableArrayList();
         TemporalAccessor month = choiceComboBox.getSelectionModel().getSelectedItem();
         if (monthRadioButton.isSelected()) {
             int monthVal = ((YearMonth) month).getMonthValue();
