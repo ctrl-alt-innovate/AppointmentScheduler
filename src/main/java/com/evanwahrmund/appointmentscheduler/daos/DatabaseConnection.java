@@ -1,4 +1,4 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.daos;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

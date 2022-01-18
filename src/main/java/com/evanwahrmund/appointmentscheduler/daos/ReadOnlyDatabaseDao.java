@@ -1,7 +1,8 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.daos;
 
 import java.sql.SQLException;
 
+import com.evanwahrmund.appointmentscheduler.*;
 import com.evanwahrmund.appointmentscheduler.interfaces.ReadyOnlyDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -5,11 +5,32 @@ import com.evanwahrmund.appointmentscheduler.Division;
 import javafx.collections.ObservableList;
 
 /**
- * Interface representing a data access object used to retrieve read only data
+ * Interface representing read only data operations
  */
 public interface ReadyOnlyDao {
+    /**
+     * Gets list of all Countries
+     * @return ObservableList of all countries
+     */
     ObservableList<Country> getAllCountries();
+
+    /**
+     * Gets list of all first level divisions
+     * @return ObservableList of all first level divisions
+     */
     ObservableList<Division> getAllDivisions();
+
+    /**
+     * Gets Country with given id
+     * @param id int id to search for
+     * @return Country with given id, null otherwise
+     */
     Country getCountry(int id);
+
+    /**
+     * Gets first level division with given id
+     * @param id int id to search for
+     * @return Division with givin id, null otherwise
+     */
     Division getDivision(int id);
 }

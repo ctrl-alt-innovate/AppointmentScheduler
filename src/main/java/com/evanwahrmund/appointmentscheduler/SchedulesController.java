@@ -4,27 +4,19 @@ package com.evanwahrmund.appointmentscheduler;
 import java.sql.SQLException;
 import java.time.*;
 import java.time.temporal.TemporalAccessor;
-import java.util.Locale;
-import java.util.TimeZone;
 import java.util.function.Predicate;
-import java.util.logging.Filter;
 
+import com.evanwahrmund.appointmentscheduler.daos.AppointmentDatabaseDao;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-
-import javax.swing.*;
-import javax.swing.text.html.HTMLDocument;
 
 public class SchedulesController {
 

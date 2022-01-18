@@ -1,5 +1,6 @@
 package com.evanwahrmund.appointmentscheduler;
 
+import com.evanwahrmund.appointmentscheduler.daos.ReadOnlyDatabaseDao;
 import javafx.collections.ObservableList;
 
 public class Divisions {

@@ -1,5 +1,6 @@
 package com.evanwahrmund.appointmentscheduler;
 
+import com.evanwahrmund.appointmentscheduler.daos.CustomerDatabaseDao;
 import javafx.collections.ObservableList;
 
 import java.sql.SQLException;

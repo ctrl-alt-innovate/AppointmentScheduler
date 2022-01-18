@@ -35,8 +35,7 @@ public class LoginController {
 
     private Alert incorrectLogin;
     private File loginActivity;
-    private PrintWriter pw;
-    private FileWriter fw;
+
 
     public void initialize() throws IOException {
         //TimeZone.setDefault(TimeZone.getTimeZone("America/Chicago"));
@@ -46,8 +45,8 @@ public class LoginController {
         //incorrectLogin = new Alert(Alert.AlertType.ERROR);
         //incorrectLogin.setTitle("Error: Login");
         localize();
-        fw = new FileWriter("login_activity.txt", true);
-        pw = new PrintWriter(fw);
+        //fw = new FileWriter("login_activity.txt", true);
+        //pw = new PrintWriter(fw);
         //ZonedDateTime zdt = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC"));
         //pw.println("Login at " + Util.formatDateTime(zdt));
         //pw.close();
@@ -58,7 +57,7 @@ public class LoginController {
         usernameField.clear();
         passwordField.clear();
     }
-    private void login() {
+    private void login()  {
         String name = usernameField.getText();
         String password = passwordField.getText();
         boolean incorrect = true;
@@ -68,17 +67,26 @@ public class LoginController {
                     incorrect = false;
                     Stage stage = ((Stage) loginButton.getScene().getWindow());
                     stage.close();
-                    pw.println("Successful Login Attempt at: " + Util.formatDateTime(ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"))));
-                    pw.close();
                     Loader.Load("FXML/schedules.fxml", "APPOINTMENT SCHEDULER");
+                    try (var pw = new PrintWriter(new FileWriter("login_activity.txt", true))){
+                    pw.println("Successful Login Attempt at: " + Util.formatTimestamp(ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"))));
+                    pw.close();
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }
         if (incorrect) {
-            System.out.println("here");
-            pw.println("Unsuccessful Login Attempt at: " + Util.formatDateTime(ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"))));
-            pw.close();
             incorrectLogin.show();
+            try(var pw = new PrintWriter(new FileWriter("login_activity.txt", true))){
+                pw.println("Unsuccessful Login Attempt at: " + Util.formatTimestamp(ZonedDateTime.now(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"))));
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+
         }
     }
     private void localize(){

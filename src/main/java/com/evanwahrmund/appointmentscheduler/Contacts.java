@@ -1,5 +1,6 @@
 package com.evanwahrmund.appointmentscheduler;
 
+import com.evanwahrmund.appointmentscheduler.daos.ContactDatabaseDao;
 import javafx.collections.ObservableList;
 
 public class Contacts {

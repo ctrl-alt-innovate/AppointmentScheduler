@@ -1,15 +1,15 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.daos;
 
 
 
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import com.evanwahrmund.appointmentscheduler.*;
 import com.evanwahrmund.appointmentscheduler.interfaces.AppointmentDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
