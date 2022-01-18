@@ -263,6 +263,8 @@ public class SchedulesController {
 
             ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.systemDefault());
             end = end.withZoneSameInstant(ZoneId.of("UTC"));
+
+            AppointmentsController.checkStartAndEnd(start, end);
             for(Appointment a: Appointments.getAppointments()){
                 if(!(a.getId() == app.getId()))
                     AppointmentsController.checkForOverlap(a, start, end);

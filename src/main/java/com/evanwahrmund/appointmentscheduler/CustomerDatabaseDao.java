@@ -85,15 +85,18 @@ Division_ID int*/
    }
 
    public void updateCustomer(Customer customer) throws SQLException {
-        String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? " +
-                "WHERE Customer_ID = ?;";
+        String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ?, " +
+                "Last_Update = ?, Last_Updated_By = ? WHERE Customer_ID = ?;";
         try (var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
             ps.setString(1, customer.getName());
             ps.setString(2, customer.getAddress());
             ps.setString(3, customer.getPostalCode());
             ps.setString(4, customer.getPhone());
             ps.setInt(5, customer.getDivision().getId());
-            ps.setInt(6, customer.getId());
+            ps.setTimestamp(6, Timestamp.valueOf(ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault())
+                    .withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+            ps.setString(7,"Application");
+            ps.setInt(8, customer.getId());
             ps.executeUpdate();
             //return true;
         }/*catch (SQLException ex){
@@ -103,14 +106,10 @@ Division_ID int*/
    }
    public void deleteCustomer(Customer customer) throws SQLException{
        String deleteSQL = "DELETE FROM customers WHERE Customer_ID = ?;";
-       try(var ps = DatabaseConnection.getConnection().prepareStatement(deleteSQL)){
-           ps.setInt(1,customer.getId());
+       try(var ps = DatabaseConnection.getConnection().prepareStatement(deleteSQL)) {
+           ps.setInt(1, customer.getId());
            ps.executeUpdate();
-           //return true;
-       } /*catch(SQLException ex){
-           System.out.println("Error: Customer with ID - " + customer.getId() + " not deleted");
-           return false;
-       }*/
+       }
    }
    //HAVE NOT CHECKED
    public Customer getCustomer(int id){

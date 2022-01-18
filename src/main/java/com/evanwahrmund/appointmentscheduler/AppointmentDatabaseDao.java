@@ -26,7 +26,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
     public ObservableList<Appointment> getAllAppointments(){
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, " +
-                "Contact_ID FROM appointments ORDER BY Appointment_ID;";
+                "Contact_ID FROM appointments ORDER BY Start;";
         try (var rs = DatabaseConnection.getConnection().prepareStatement(sql).executeQuery()) {
             while (rs.next()) {
                 int id = rs.getInt(1);

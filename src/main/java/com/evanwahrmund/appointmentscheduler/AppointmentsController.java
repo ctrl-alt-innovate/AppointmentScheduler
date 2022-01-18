@@ -194,6 +194,9 @@ public class AppointmentsController {
 
             ZonedDateTime end = ZonedDateTime.of(LocalDateTime.of(endDate, endTime), ZoneId.systemDefault());
             end = end.withZoneSameInstant(ZoneId.of("UTC"));
+
+            checkStartAndEnd(start, end);
+
             for (Appointment app : Appointments.getAppointments()) {
                 checkForOverlap(app, start, end);
             }
@@ -211,6 +214,12 @@ public class AppointmentsController {
             alert.show();
         }
 
+    }
+    public static void checkStartAndEnd(ZonedDateTime start, ZonedDateTime end) throws IllegalArgumentException{
+        if(start.isAfter(end)){
+            throw new IllegalArgumentException("Start time can not be after end time.");
+
+        }
     }
     public static void checkForOverlap(Appointment existing, ZonedDateTime start, ZonedDateTime end)  throws IllegalArgumentException {
         ZonedDateTime existingStart = existing.getStartDateTime();
@@ -303,6 +312,12 @@ public class AppointmentsController {
             ZonedDateTime endZoned = ZonedDateTime.of(end, ZoneId.systemDefault());
             endZoned = endZoned.withZoneSameInstant(ZoneId.of("UTC"));
 
+            checkStartAndEnd(startZoned, endZoned);
+            for(Appointment a: Appointments.getAppointments()){
+                if(!(a.getId() == appointment.getId())){
+                    checkForOverlap(a, startZoned, endZoned);
+                }
+            }
 
             appointment.setTitle(titleTextField.getText());
             appointment.setDescription(descriptionTextField.getText());
@@ -320,6 +335,7 @@ public class AppointmentsController {
                     appointment.getType() + " updated successfully.");
             confirm.setHeaderText("Appointment Updated");
             confirm.show();
+            resetFields();
 
         } catch(IllegalArgumentException | SQLException | NullPointerException ex){
             Alert error = new Alert(Alert.AlertType.ERROR,"Error updating Appointment ID: " + appointment.getId() + " - " +
