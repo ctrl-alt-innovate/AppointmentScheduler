@@ -1,4 +1,4 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.models;
 
 import com.evanwahrmund.appointmentscheduler.daos.CustomerDatabaseDao;
 import javafx.collections.ObservableList;

@@ -5,6 +5,10 @@ import java.time.ZonedDateTime;
 
 import com.evanwahrmund.appointmentscheduler.daos.ContactDatabaseDao;
 import com.evanwahrmund.appointmentscheduler.daos.ReportsDao;
+import com.evanwahrmund.appointmentscheduler.models.Appointment;
+import com.evanwahrmund.appointmentscheduler.models.Contact;
+import com.evanwahrmund.appointmentscheduler.models.Customer;
+import com.evanwahrmund.appointmentscheduler.util.Util;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;

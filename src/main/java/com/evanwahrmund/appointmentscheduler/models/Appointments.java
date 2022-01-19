@@ -1,4 +1,4 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.models;
 
 import java.sql.SQLException;
 

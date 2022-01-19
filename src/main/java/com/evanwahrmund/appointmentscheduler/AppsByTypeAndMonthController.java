@@ -3,6 +3,7 @@ package com.evanwahrmund.appointmentscheduler;
 import java.time.LocalDate;
 
 import com.evanwahrmund.appointmentscheduler.daos.ReportsDao;
+import com.evanwahrmund.appointmentscheduler.util.ReportVal;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

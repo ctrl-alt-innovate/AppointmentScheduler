@@ -9,10 +9,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import com.evanwahrmund.appointmentscheduler.*;
 import com.evanwahrmund.appointmentscheduler.interfaces.AppointmentDao;
-import com.evanwahrmund.appointmentscheduler.models.User;
-import com.evanwahrmund.appointmentscheduler.models.Users;
+import com.evanwahrmund.appointmentscheduler.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

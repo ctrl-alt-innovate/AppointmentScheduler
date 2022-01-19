@@ -1,4 +1,4 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

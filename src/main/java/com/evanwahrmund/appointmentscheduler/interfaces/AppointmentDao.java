@@ -1,9 +1,7 @@
 package com.evanwahrmund.appointmentscheduler.interfaces;
 
-import com.evanwahrmund.appointmentscheduler.Appointment;
+import com.evanwahrmund.appointmentscheduler.models.Appointment;
 import javafx.collections.ObservableList;
-
-import java.sql.SQLException;
 
 public interface AppointmentDao {
     /**

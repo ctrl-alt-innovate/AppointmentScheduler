@@ -8,7 +8,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import com.evanwahrmund.appointmentscheduler.models.Country;
-import com.evanwahrmund.appointmentscheduler.Customer;
+import com.evanwahrmund.appointmentscheduler.models.Customer;
 import com.evanwahrmund.appointmentscheduler.models.Division;
 import com.evanwahrmund.appointmentscheduler.interfaces.CustomerDao;
 import javafx.collections.FXCollections;

@@ -1,6 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
 import com.evanwahrmund.appointmentscheduler.daos.ReportsDao;
+import com.evanwahrmund.appointmentscheduler.util.ReportVal;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;

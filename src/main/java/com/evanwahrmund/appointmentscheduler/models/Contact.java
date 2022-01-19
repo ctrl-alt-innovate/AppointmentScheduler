@@ -1,4 +1,4 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.models;
 
 public class Contact {
     private int id;

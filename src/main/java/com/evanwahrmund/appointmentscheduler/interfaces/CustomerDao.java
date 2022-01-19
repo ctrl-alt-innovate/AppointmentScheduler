@@ -1,9 +1,7 @@
 package com.evanwahrmund.appointmentscheduler.interfaces;
 
-import com.evanwahrmund.appointmentscheduler.Customer;
+import com.evanwahrmund.appointmentscheduler.models.Customer;
 import javafx.collections.ObservableList;
-
-import java.sql.SQLException;
 
 /**
  * Interface representing Customer operations

@@ -1,9 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
 import com.evanwahrmund.appointmentscheduler.daos.ReadOnlyDatabaseDao;
-import com.evanwahrmund.appointmentscheduler.models.Countries;
-import com.evanwahrmund.appointmentscheduler.models.Country;
-import com.evanwahrmund.appointmentscheduler.models.Division;
+import com.evanwahrmund.appointmentscheduler.models.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

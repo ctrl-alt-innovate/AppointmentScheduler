@@ -1,6 +1,4 @@
-package com.evanwahrmund.appointmentscheduler;
-
-import com.evanwahrmund.appointmentscheduler.models.User;
+package com.evanwahrmund.appointmentscheduler.models;
 
 import java.time.ZonedDateTime;
 
