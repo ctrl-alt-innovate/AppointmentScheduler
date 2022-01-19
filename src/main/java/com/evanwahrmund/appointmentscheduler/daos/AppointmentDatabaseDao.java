@@ -120,16 +120,10 @@ public class AppointmentDatabaseDao implements AppointmentDao {
                 if (rs.next()){
                     appointment.setId(rs.getInt(1));
                     System.out.println("Appointment added");
-                    //return true;
+                    return;
                 }
-                System.out.println("Error: Customer id not set.");
             }
-        } /*catch(SQLException ex){
-            System.out.println("Error in adding appointment.");
-            ex.printStackTrace();
-            return false;
-        }*/
-        //return false;
+        }
     }
     @Override
     public void updateAppointment(Appointment appointment) throws SQLException{
@@ -168,39 +162,7 @@ public class AppointmentDatabaseDao implements AppointmentDao {
 
         return false;*/
     }
-    /*
-    public ObservableList<Appointment> getFilteredAppointments(LocalDate start, LocalDate end){
-        String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, " +
-                "Contact_ID FROM appointments WHERE (Start BETWEEN ? AND ?) AND (End BETWEEN ? AND ?);";
-        ObservableList<Appointment> filteredApps = FXCollections.observableArrayList();
-        try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
-            ps.setDate(1, Date.valueOf(start));
-            ps.setDate(2, Date.valueOf(end));
-            ps.setDate(3, Date.valueOf(start));
-            ps.setDate(4, Date.valueOf(end));
-            try(var rs = ps.executeQuery()){
-                while (rs.next()) {
-                    int id = rs.getInt(1);
-                    String title = rs.getString(2);
-                    String description = rs.getString(3);
-                    String location = rs.getString(4);
-                    String type = rs.getString(5);
-                    ZonedDateTime startTime = rs.getTimestamp(6).toLocalDateTime();
-                    ZonedDateTime endTime = rs.getTimestamp(7).toLocalDateTime();
-                    Customer customer = CustomerDatabaseDao.getInstance().getCustomer(rs.getInt(8));
-                    User user = UserDatabaseDao.getInstance().getUser(rs.getInt(9));
-                    Contact contact = ContactDatabaseDao.getInstance().getContact(rs.getInt(10));
-                    Appointment appointment = new Appointment(id, title, description, location, type, startTime, endTime,
-                            customer, user, contact );
-                    filteredApps.add(appointment);
 
-                }
-            }
-        } catch (SQLException ex){
-            ex.printStackTrace();
-        }
-        return filteredApps;
-    }*/
     public void updateAppTime(Appointment app){
         String sql = "UPDATE appointments SET Start = ?, End = ? WHERE Appointment_ID = ?;";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){

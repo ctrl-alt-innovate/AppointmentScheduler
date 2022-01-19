@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 public class Contacts {
 
     private static ObservableList<Contact> contacts;
-    //private static Contacts INSTANCE;
+
     static {
         contacts = ContactDatabaseDao.getInstance().getAllContacts();
     }
@@ -21,9 +21,9 @@ public class Contacts {
                 return contact;
             }
         }
-        System.out.println("Contact with ID: " + id + " not found.");
+
         return null;
-    }
+    }/*
     public static void createContact(Contact contact){
         if(ContactDatabaseDao.getInstance().createContact(contact)){
             contacts.add(contact);
@@ -38,6 +38,6 @@ public class Contacts {
         if(ContactDatabaseDao.getInstance().deleteContact(contact)){
             contacts.remove(contact);
         }
-    }
+    }*/
 
 }

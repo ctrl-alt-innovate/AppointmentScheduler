@@ -27,29 +27,17 @@ public class AppointmentScheduler extends Application {
         launch(args);
     }
 
+    /**
+     * Loads Login page and sets title
+     * @param primaryStage initial Stage
+     */
     @Override
     public void start(Stage primaryStage){
-        try{
-            //Parent root = FXMLLoader.load(this.getClass().getResource("FXML/customers.fxml"));
-            //DatabaseCustomerDao.getInstance();
-            //DatabaseAppointmentDao.getInstance();
-            //primaryStage.initStyle(StageStyle.UTILITY);
-            //ReportVal reportVal = new ReportVal("string", 83);
-            //reportVal.print();
-            System.out.println(ZoneId.systemDefault());
-            Parent root = FXMLLoader.load(this.getClass().getResource("FXML/login.fxml"));
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("STYLESHEET.css").toExternalForm());
-            primaryStage.setScene(scene);
-            //primaryStage.setTitle(ResourceBundle.getBundle("com.evanwahrmund.appointmentscheduler/Login", new Locale("fr"))
-                                //.getString("title").toUpperCase());
-            //Set<String> ids = ZoneId.getAvailableZoneIds();
-            //for(String id: ids)
-              //  System.out.println(id);
-            primaryStage.show();
-        } catch (IOException ex){
-            ex.printStackTrace();
-            System.out.println("ERROR: Could not load file");
-        }
+        //Locale.setDefault(new Locale("fr"));
+
+        Loader.Load("FXML/login.fxml",
+                ResourceBundle.getBundle("com.evanwahrmund.appointmentscheduler/Login",Locale.getDefault())
+                .getString("title"));
+
     }
 }

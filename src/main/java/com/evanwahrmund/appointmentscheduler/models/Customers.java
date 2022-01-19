@@ -30,10 +30,10 @@ public class Customers {
     }
 
     /**
-     * Gets Customer with given id.
+     * Selects Customer with given id.
      * Ensures any customer selected is associated with its database representation
-     * @param id
-     * @return
+     * @param id int to search for
+     * @return Customer with given id, null otherwise
      */
     public static Customer getCustomer(int id){
         for(Customer customer: customers) {
@@ -54,7 +54,7 @@ public class Customers {
     }
 
     /**
-     * Updates given Customer in database and list of customers
+     * Updates given Customer in database and in list of customers
      * @param customer Customer to be updated
      * @throws SQLException if any errors occur while updating in database
      */
