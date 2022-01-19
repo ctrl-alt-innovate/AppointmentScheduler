@@ -11,19 +11,52 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+/**
+ * Controller for FXML file: appointments.fxml.
+ * Displays all Appointments and allows User to add, edit, and delete Appointments.
+ */
 public class AppointmentsController {
-
+    /**
+     * Contains all Appointments
+     */
     @FXML private TableView<Appointment> appointmentsTable;
+    /**
+     * Column for Appointment_ID
+     */
     @FXML private TableColumn<Appointment, Integer> idCol;
+    /**
+     * Column for Title
+     */
     @FXML private TableColumn<Appointment, String> titleCol;
+    /**
+     * Column for Type
+     */
     @FXML private TableColumn<Appointment, String> typeCol;
+    /**
+     * column for Description
+     */
     @FXML private TableColumn<Appointment, String> descriptionCol;
+    /**
+     * column for Location
+     */
     @FXML private TableColumn<Appointment, String> locationCol;
+    /**
+     * column for Contact name
+     */
     @FXML private TableColumn<Appointment, Contact> contactCol;
+    /**
+     * column for start time
+     */
     @FXML private TableColumn<Appointment, ZonedDateTime> startDateTimeCol;
+    /**
+     * column for end time
+     */
     @FXML private TableColumn<Appointment, ZonedDateTime> endDateTimeCol;
+    /**
+     * column for Customer id
+     */
     @FXML private TableColumn<Appointment, Customer> customerCol;
-
+    @FXML private TableColumn<Appointment, User> userCol;
 
     @FXML private TextField idTextField;
     @FXML private TextField descriptionTextField;
@@ -146,6 +179,7 @@ public class AppointmentsController {
         endDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime()
                 .withZoneSameInstant(ZoneId.systemDefault()))));
         customerCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
+        userCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getUser().getUserId()));
 
     }
     public void resetFields(){

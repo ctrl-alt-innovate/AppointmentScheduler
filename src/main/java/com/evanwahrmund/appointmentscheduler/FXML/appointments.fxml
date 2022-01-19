@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="1090.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.AppointmentsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="1185.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.AppointmentsController">
    <children>
       <Label fx:id="headerLabel" layoutX="68.0" layoutY="51.0" prefHeight="35.0" prefWidth="169.0" style="-fx-font-weight: bold;" text="Appointments">
          <font>
@@ -84,7 +84,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TableView fx:id="appointmentsTable" layoutX="52.0" layoutY="413.0" prefHeight="275.0" prefWidth="1002.0">
+      <TableView fx:id="appointmentsTable" layoutX="52.0" layoutY="413.0" prefHeight="275.0" prefWidth="1078.0">
          <columns>
             <TableColumn fx:id="idCol" prefWidth="100.0" text="Appointment_ID" />
             <TableColumn fx:id="titleCol" prefWidth="75.0" text="Title" />
@@ -95,6 +95,7 @@
             <TableColumn fx:id="startDateTimeCol" minWidth="9.0" prefWidth="124.0" text="Start Date/Time" />
             <TableColumn fx:id="endDateTimeCol" prefWidth="121.0" text="End Date/Time" />
             <TableColumn fx:id="customerCol" prefWidth="86.0" text="Customer_ID" />
+            <TableColumn fx:id="userCol" prefWidth="75.0" text="User_ID" />
          </columns>
       </TableView>
       <TextField fx:id="locationTextField" layoutX="417.0" layoutY="181.0" prefHeight="25.0" prefWidth="121.0" />

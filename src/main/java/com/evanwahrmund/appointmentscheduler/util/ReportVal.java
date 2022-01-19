@@ -8,12 +8,33 @@ import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Utility class used to display report data in TableViews.
+ * Not all columns may be used.
+ * @param <T> any types
+ */
 public class ReportVal<T> {
+    /**
+     * first column for report
+     */
     private T firstCol = null;
+    /**
+     * second column for report
+     */
     private T secondCol = null;
+    /**
+     * third column for report
+     */
     private T thirdCol = null;
+    /**
+     * ObservableList of all vals for report
+     */
     private ObservableList<T> list = FXCollections.observableArrayList();
 
+    /**
+     * Con
+     * @param items list a
+     */
     public ReportVal(T... items){
 
         int i = 0;

@@ -23,7 +23,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="countryText" layoutX="429.0" layoutY="20.0" prefHeight="20.0" prefWidth="167.0" style="-fx-alignment: top-center;" text="tbd" textAlignment="CENTER" wrapText="true">
+      <Label fx:id="zondIdText" layoutX="429.0" layoutY="20.0" prefHeight="20.0" prefWidth="167.0" style="-fx-alignment: top-center;" text="tbd" textAlignment="CENTER" wrapText="true">
          <font>
             <Font size="14.0" />
          </font>

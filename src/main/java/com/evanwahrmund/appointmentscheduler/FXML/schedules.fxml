@@ -10,11 +10,12 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.SchedulesController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="1170.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.evanwahrmund.appointmentscheduler.SchedulesController">
    <children>
       <Label fx:id="headerLabel" layoutX="68.0" layoutY="51.0" prefHeight="35.0" prefWidth="623.0" style="-fx-font-weight: bold;" text="View Appointment Schedules by Week or Month">
          <font>
@@ -26,7 +27,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TableView fx:id="schedulesTable" layoutX="52.0" layoutY="267.0" prefHeight="421.0" prefWidth="961.0">
+      <TableView fx:id="schedulesTable" layoutX="52.0" layoutY="267.0" prefHeight="421.0" prefWidth="1054.0">
          <columns>
             <TableColumn fx:id="idCol" prefWidth="100.0" text="Appointment_ID" />
             <TableColumn fx:id="titleCol" prefWidth="68.0" text="Title" />
@@ -37,6 +38,7 @@
             <TableColumn fx:id="startDateTimeCol" minWidth="9.0" prefWidth="110.0" text="Start Date/Time" />
             <TableColumn fx:id="endDateTimeCol" prefWidth="103.0" text="End Date/Time" />
             <TableColumn fx:id="customerCol" prefWidth="82.0" text="Customer_ID" />
+            <TableColumn fx:id="userCol" prefWidth="75.0" text="User_ID" />
          </columns>
       </TableView>
       <Label fx:id="selectionLabel" alignment="TOP_CENTER" layoutX="96.0" layoutY="101.0" prefHeight="20.0" prefWidth="217.0" style="-fx-text-alignment: center;" text="View Appointment Schedules by: " textAlignment="CENTER">
@@ -116,5 +118,11 @@
             <Font size="14.0" />
          </font>
       </RadioButton>
+      <TextField fx:id="idTextField" disable="true" editable="false" layoutX="959.0" layoutY="99.0" opacity="0.45" prefHeight="25.0" prefWidth="54.0" />
+      <Label fx:id="idLabel" alignment="TOP_CENTER" layoutX="899.0" layoutY="101.0" prefHeight="20.0" prefWidth="41.0" style="-fx-text-alignment: center;" text="ID:" textAlignment="CENTER">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

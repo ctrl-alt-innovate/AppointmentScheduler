@@ -15,6 +15,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+/**
+ * Controller for the FXML file: apps_by_contact_report.fxml.
+ * Displays List of Appointments by Contact based on User selection
+ * <p>
+ *  DISCUSSION OF LAMBDA 2: initialize()
+ */
 public class AppsByContactController {
     @FXML private TableView<Appointment> contactSchedulesTable;
     @FXML private TableColumn<Appointment, Integer> appIdCol;
@@ -26,6 +32,9 @@ public class AppsByContactController {
     @FXML private TableColumn<Appointment, Customer> cusIdCol;
     @FXML private ComboBox<Contact> contactComboBox;
 
+    /**
+     *
+     */
     public void initialize(){
         initializeTable();
         contactComboBox.setItems(ContactDatabaseDao.getInstance().getAllContacts());
