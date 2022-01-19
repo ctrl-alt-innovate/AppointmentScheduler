@@ -26,14 +26,14 @@ public interface CustomerDao {
     /**
      * Create new customer
      * @param customer Customer to be created
-     * @throws Exception if any errors occur while adding Customer
+     * @throws Exception if any errors occur while creating Customer
      */
     void createCustomer(Customer customer) throws Exception;
 
     /**
      * Updates given Customer
      * @param customer Customer to be updated
-     * @throws Exception if any errors occur while update Customer
+     * @throws Exception if any errors occur while updating Customer
      */
     void updateCustomer(Customer customer)throws Exception;
 

@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import com.evanwahrmund.appointmentscheduler.Country;
+import com.evanwahrmund.appointmentscheduler.models.Country;
 import com.evanwahrmund.appointmentscheduler.Customer;
-import com.evanwahrmund.appointmentscheduler.Division;
+import com.evanwahrmund.appointmentscheduler.models.Division;
 import com.evanwahrmund.appointmentscheduler.interfaces.CustomerDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

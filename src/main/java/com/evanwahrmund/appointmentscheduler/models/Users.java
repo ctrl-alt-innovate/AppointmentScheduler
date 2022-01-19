@@ -1,12 +1,11 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.models;
 
 import com.evanwahrmund.appointmentscheduler.daos.UserDatabaseDao;
 import javafx.collections.ObservableList;
 
 /**
  * Represents all Users in the database.
- * Ensures all updates to users are consistent between the application and database.
- * Initializes list of Users when first called.
+ * Initializes list of Users when first called in application
  */
 public class Users {
 
@@ -19,7 +18,7 @@ public class Users {
     }
 
     /**
-     * Gets list of Users in the database
+     * Gets list of all Users
      * @return ObservableList of all Users
      */
     public static ObservableList<User> getUsers(){

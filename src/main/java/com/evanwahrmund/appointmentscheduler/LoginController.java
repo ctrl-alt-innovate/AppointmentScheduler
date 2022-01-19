@@ -1,5 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
+import com.evanwahrmund.appointmentscheduler.models.User;
+import com.evanwahrmund.appointmentscheduler.models.Users;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -8,15 +10,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 
 
 public class LoginController {

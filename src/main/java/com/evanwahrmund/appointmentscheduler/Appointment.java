@@ -1,5 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
+import com.evanwahrmund.appointmentscheduler.models.User;
+
 import java.time.ZonedDateTime;
 
 public class Appointment {

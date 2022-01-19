@@ -1,10 +1,10 @@
 package com.evanwahrmund.appointmentscheduler;
 
 import java.sql.SQLException;
-import java.sql.SQLWarning;
 import java.time.*;
-import java.util.Locale;
 
+import com.evanwahrmund.appointmentscheduler.models.User;
+import com.evanwahrmund.appointmentscheduler.models.Users;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -1,19 +1,19 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.models;
 
 /**
  * Model Object for User table of database.
  */
 public class User {
     /**
-     * int representing User_ID coulumn in database
+     * int representing User_ID column in database
      */
     private int userId;
     /**
-     * String representing User_Name column in databse
+     * String representing User_Name column in database
      */
     private String username;
     /**
-     * String representing Password coulumn in database
+     * String representing Password column in database
      */
     private String password;
 

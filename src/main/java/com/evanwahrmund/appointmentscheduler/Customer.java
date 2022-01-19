@@ -1,5 +1,7 @@
 package com.evanwahrmund.appointmentscheduler;
 
+import com.evanwahrmund.appointmentscheduler.models.Division;
+
 public class Customer {
     private int id = 0;
     private String name;

@@ -1,6 +1,6 @@
 package com.evanwahrmund.appointmentscheduler.interfaces;
 
-import com.evanwahrmund.appointmentscheduler.User;
+import com.evanwahrmund.appointmentscheduler.models.User;
 import javafx.collections.ObservableList;
 
 /**
