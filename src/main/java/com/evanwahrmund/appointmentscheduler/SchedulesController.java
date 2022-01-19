@@ -11,8 +11,6 @@ import com.evanwahrmund.appointmentscheduler.models.Appointment;
 import com.evanwahrmund.appointmentscheduler.models.Appointments;
 import com.evanwahrmund.appointmentscheduler.models.Contact;
 import com.evanwahrmund.appointmentscheduler.models.Customer;
-import com.evanwahrmund.appointmentscheduler.util.Loader;
-import com.evanwahrmund.appointmentscheduler.util.Util;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;

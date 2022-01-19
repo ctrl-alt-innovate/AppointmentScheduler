@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.time.*;
 
 import com.evanwahrmund.appointmentscheduler.models.*;
-import com.evanwahrmund.appointmentscheduler.util.Util;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

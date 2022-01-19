@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.util.Callback;
 
 public class AppsByTypeAndMonthController {
     @FXML private TableView<ReportVal> typeAndMonthTable;

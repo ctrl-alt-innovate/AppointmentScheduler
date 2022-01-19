@@ -3,13 +3,13 @@ package com.evanwahrmund.appointmentscheduler.models;
 import com.evanwahrmund.appointmentscheduler.models.Division;
 
 /**
- * Model object representing Customer table of database
+ * Model object for Customer from Customers table of database
  */
 public class Customer {
     /**
      * int representing Customer_ID column
      */
-    private int id;
+    private int id = 0;
     /**
      * String representing Customer_Name column
      */
@@ -85,37 +85,80 @@ public class Customer {
 
     /**
      * Gets phone number of Customer
-     * @return String represeting Phone
+     * @return String representing Phone
      */
     public String getPhone(){
         return phone;
     }
-    S
+
+    /**
+     * Gets address of Customer
+     * @return String representing Address
+     */
     public String getAddress(){
         return address;
     }
+
+    /**
+     * Gets postal code of Customer
+     * @return String representing Postal_Code
+     */
     public String getPostalCode(){
         return postalCode;
     }
+
+    /**
+     * Gets first level division of customer
+     * @return Division where customer is located
+     */
     public Division getDivision(){
         return division;
     }
 
+    /**
+     * Updates Id of Customer
+     * @param id int to replace id
+     */
     public void setId(int id){
         this.id = id;
     }
+
+    /**
+     * Updates name of Customer
+     * @param name String to replace name
+     */
     public void setName(String name){
         this.name = name;
     }
+
+    /**
+     * Updates phone number of Customer
+     * @param phone String to replace phone
+     */
     public void setPhone(String phone){
         this.phone = phone;
     }
+
+    /**
+     * Updates address of Customer
+     * @param address String to replace address
+     */
     public void setAddress(String address){
         this.address = address;
     }
+
+    /**
+     * Updates postal code of Customer
+     * @param postalCode String to replace postalCode
+     */
     public void setPostalCode(String postalCode){
         this.postalCode = postalCode;
     }
+
+    /**
+     * Updates first level division of Customer
+     * @param division Division to replace division
+     */
     public void setDivision(Division division){
         this.division = division;
     }

@@ -2,20 +2,18 @@ package com.evanwahrmund.appointmentscheduler;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.function.Predicate;
 
 import com.evanwahrmund.appointmentscheduler.daos.ContactDatabaseDao;
 import com.evanwahrmund.appointmentscheduler.daos.ReportsDao;
-import com.evanwahrmund.appointmentscheduler.models.Appointment;
-import com.evanwahrmund.appointmentscheduler.models.Contact;
-import com.evanwahrmund.appointmentscheduler.models.Customer;
-import com.evanwahrmund.appointmentscheduler.util.Util;
+import com.evanwahrmund.appointmentscheduler.models.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
 
 public class AppsByContactController {
     @FXML private TableView<Appointment> contactSchedulesTable;
@@ -31,7 +29,7 @@ public class AppsByContactController {
     public void initialize(){
         initializeTable();
         contactComboBox.setItems(ContactDatabaseDao.getInstance().getAllContacts());
-        contactComboBox.setConverter(new StringConverter<Contact>() {
+        /*contactComboBox.setConverter(new StringConverter<Contact>() {
             @Override
             public String toString(Contact contact) {
                 if(contact != null)
@@ -43,9 +41,12 @@ public class AppsByContactController {
             public Contact fromString(String s) {
                 return null;
             }
-        });
+        }); */
+        Predicate<Appointment> pred = app -> ReportsDao.getInstance().getAppsByContact(contactComboBox.getValue()).contains(app);
+
         contactComboBox.setOnAction(event -> {
-            contactSchedulesTable.setItems(ReportsDao.getInstance().getAppsByContact(contactComboBox.getValue()));
+            FilteredList<Appointment> byContact = new FilteredList<Appointment>(Appointments.getAppointments(), pred);
+            contactSchedulesTable.setItems(byContact);
         });
     }
 

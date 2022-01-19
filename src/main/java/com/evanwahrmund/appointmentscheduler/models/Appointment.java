@@ -2,19 +2,64 @@ package com.evanwahrmund.appointmentscheduler.models;
 
 import java.time.ZonedDateTime;
 
+/**
+ * Model object representing Appointment from Appointments table of database
+ */
 public class Appointment {
-
+    /**
+     * int representing Appointment_ID column
+     */
     private int id = 0;
+    /**
+     * String representing Title column
+     */
     private String title;
+    /**
+     * String representing Description column
+     */
     private String description;
+    /**
+     * String representing Location column
+     */
     private String location;
+    /**
+     * String representing Type column
+     */
     private String type;
+    /**
+     * ZonedDateTime reprsenting Start column
+     */
     private ZonedDateTime startDateTime;
+    /**
+     * ZonedDateTime representing End column
+     */
     private ZonedDateTime endDateTime;
+    /**
+     * User of the Appointment
+     */
     private User user;
+    /**
+     * Contact of the Appointment
+     */
     private Contact contact;
+    /**
+     * Customer of the Appointment
+     */
     private Customer customer;
 
+    /**
+     *
+     * @param id
+     * @param title
+     * @param description
+     * @param location
+     * @param type
+     * @param startDateTime
+     * @param endDateTime
+     * @param customer
+     * @param user
+     * @param contact
+     */
     public Appointment(int id, String title, String description, String location, String type, ZonedDateTime startDateTime,
                        ZonedDateTime endDateTime, Customer customer, User user, Contact contact){
         this.id = id;
@@ -29,6 +74,7 @@ public class Appointment {
         this.contact = contact;
 
     }
+
     public Appointment(String title, String description, String location, String type, ZonedDateTime startDateTime,
                        ZonedDateTime endDateTime, Customer customer, User user, Contact contact){
         this.title = title;

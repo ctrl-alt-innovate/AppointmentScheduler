@@ -1,7 +1,7 @@
 package com.evanwahrmund.appointmentscheduler.models;
 
 /**
- * Model object representing Country table of database
+ * Model object representing Country from Countries table of database
  */
 public class Country {
     /**

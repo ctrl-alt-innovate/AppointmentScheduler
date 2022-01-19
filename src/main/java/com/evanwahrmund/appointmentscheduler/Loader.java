@@ -1,4 +1,4 @@
-package com.evanwahrmund.appointmentscheduler.util;
+package com.evanwahrmund.appointmentscheduler;
 
 import java.io.IOException;
 

@@ -3,7 +3,7 @@ package com.evanwahrmund.appointmentscheduler.models;
 import com.evanwahrmund.appointmentscheduler.models.Country;
 
 /**
- * Model Object for First Level Division table of database
+ * Model object for First Level Division from First Level Divisions table of database
  */
 public class Division {
     /**

@@ -1,7 +1,7 @@
 package com.evanwahrmund.appointmentscheduler.models;
 
 /**
- * Model Object for User table of database.
+ * Model Object for User from User table of database.
  */
 public class User {
     /**
