@@ -1,4 +1,4 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.controllers;
 
 import com.evanwahrmund.appointmentscheduler.daos.ReadOnlyDatabaseDao;
 import com.evanwahrmund.appointmentscheduler.models.*;
@@ -45,7 +45,13 @@ public class CustomersController {
      * tablecolumn representing country in customers table
      */
     @FXML private TableColumn<Customer, Country> countryCol;
+    /**
+     * combobox that lists available countries
+     */
     @FXML private ComboBox<Country> countryComboBox;
+    /**
+     * combobox to list first level divisions based on country choice
+     */
     @FXML private ComboBox<Division> divisionComboBox;
     /**
      * disabled textfield to display Customer id when updating Customers

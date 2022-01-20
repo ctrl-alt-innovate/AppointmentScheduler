@@ -1,4 +1,4 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.controllers;
 
 import com.evanwahrmund.appointmentscheduler.daos.ReportsDao;
 import com.evanwahrmund.appointmentscheduler.util.ReportVal;

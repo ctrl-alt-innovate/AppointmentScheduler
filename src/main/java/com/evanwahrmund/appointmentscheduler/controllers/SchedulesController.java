@@ -1,4 +1,4 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.controllers;
 
 
 import java.sql.SQLException;
@@ -6,8 +6,11 @@ import java.time.*;
 import java.time.temporal.TemporalAccessor;
 import java.util.function.Predicate;
 
+import com.evanwahrmund.appointmentscheduler.Loader;
+import com.evanwahrmund.appointmentscheduler.controllers.AppointmentsController;
 import com.evanwahrmund.appointmentscheduler.daos.AppointmentDatabaseDao;
 import com.evanwahrmund.appointmentscheduler.models.*;
+import com.evanwahrmund.appointmentscheduler.util.Util;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -27,51 +30,165 @@ import javafx.util.StringConverter;
  * DISCUSSION OF LAMBDA 1: filterList(ObservableList<Appointment> apps)
  */
 public class SchedulesController {
-
+    /**
+     * TableView containing all appointments
+     */
     @FXML private TableView<Appointment> schedulesTable;
+    /**
+     * col for Appointment_ID
+     */
     @FXML private TableColumn<Appointment, Integer> idCol;
+    /**
+     * col for Title
+     */
     @FXML private TableColumn<Appointment, String> titleCol;
+    /**
+     * col for Type
+     */
     @FXML private TableColumn<Appointment, String> typeCol;
+    /**
+     * col for Description
+     */
     @FXML private TableColumn<Appointment, String> descriptionCol;
+    /**
+     * col for Location
+     */
     @FXML private TableColumn<Appointment, String> locationCol;
+    /**
+     * col for Contact name
+     */
     @FXML private TableColumn<Appointment, Contact> contactCol;
+    /**
+     * col for start time
+     */
     @FXML private TableColumn<Appointment, ZonedDateTime> startDateTimeCol;
+    /**
+     * col for end time
+     */
     @FXML private TableColumn<Appointment, ZonedDateTime> endDateTimeCol;
+    /**
+     * col for customer id
+     */
     @FXML private TableColumn<Appointment, Customer> customerCol;
+    /**
+     * col for user id
+     */
     @FXML private TableColumn<Appointment, User> userCol;
-
+    /**
+     * combobox for month/week choice
+     */
     @FXML private ComboBox<TemporalAccessor> choiceComboBox;
+    /**
+     * label for choiceComboBox
+     */
     @FXML private Label choiceLabel;
+    /**
+     * toggle group for radio buttons
+     */
     @FXML private ToggleGroup schedulesGroup;
+    /**
+     * radio button for week options
+     */
     @FXML private RadioButton weekRadioButton;
+    /**
+     * radio button for month options
+     */
     @FXML private RadioButton monthRadioButton;
+    /**
+     * radio button for all appointments
+     */
     @FXML private RadioButton allRadioButton;
+    /**
+     * button to fill textfields selected appointment vals
+     */
     @FXML private Button modifyButton;
+    /**
+     * button to save changes to appointment
+     */
     @FXML private Button saveButton;
 
+    /**
+     * start date for appoointment
+     */
     @FXML private DatePicker startDatePicker;
+    /**
+     * end date for appointment
+     */
     @FXML private DatePicker endDatePicker;
+    /**
+     * start time for appintment
+     */
     @FXML private ComboBox<LocalTime> startTimeComboBox;
+    /**
+     * end time for appointment
+     */
     @FXML private ComboBox<LocalTime> endTimeComboBox;
+    /**
+     * disabled textfield to display appiontment id of selected appointment for modification
+     */
     @FXML private TextField idTextField;
-
+    /**
+     * menubar for main menu
+     */
     @FXML private MenuBar applicationMenuBar;
+    /**
+     * displays current page
+     */
     @FXML private Menu schedulesMenu;
+    /**
+     * edit appointments and customers menu
+     */
     @FXML private Menu editInfoMenu;
+    /**
+     * edit customers
+     */
     @FXML private MenuItem editCus;
+    /**
+     * edit appointments
+     */
     @FXML private MenuItem editApps;
+    /**
+     * reports menu
+     */
     @FXML private Menu reportsMenu;
+    /**
+     * apps by type report
+     */
     @FXML private MenuItem appsByType;
+    /**
+     * apps and cus by location report
+     */
     @FXML private MenuItem appsAndCusByLoc;
+    /**
+     * contact schedules report
+     */
     @FXML private MenuItem contactSchedules;
+    /**
+     * logut menu
+     */
     @FXML private Menu logoutMenu;
+    /**
+     * option to logout of application
+     */
     @FXML private MenuItem logout;
 
-
+    /**
+     * current time
+     */
     private LocalDate current = LocalDateTime.now().toLocalDate();
+    /**
+     * flag to detect start day change
+     */
     private Boolean startChanged = false;
+    /**
+     * flag to detect end day change
+     */
     private Boolean endChanged = false;
 
+    /**
+     * Initializes tables, menus, radio buttons, sets handlers for buttons, and alerts User of upcoming appointments.
+     * Sets date values to current date and adds listener on time comboboxes to change date if time rolls over to next day
+     */
     @FXML
     public void initialize() {
         initializeTable();

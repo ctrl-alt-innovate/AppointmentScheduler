@@ -32,8 +32,8 @@ public class ReportVal<T> {
     private ObservableList<T> list = FXCollections.observableArrayList();
 
     /**
-     * Con
-     * @param items list a
+     * Assigns values from items list to report columns
+     * @param items list of columns for report val
      */
     public ReportVal(T... items){
 
@@ -52,18 +52,27 @@ public class ReportVal<T> {
             }
         }
     }
-    public void print(){
-        for(T t: list){
-            if(t != null)
-                System.out.println("Contatins" + t.toString());
-        }
-    }
+
+    /**
+     * Gets value of first col
+     * @return T value of first col
+     */
     public T getFirstCol(){
         return firstCol;
     }
+
+    /**
+     * Gets value of second col
+     * @return T value of second col
+     */
     public T getSecondCol() {
         return secondCol;
     }
+
+    /**
+     * Gets value of third col
+     * @return T value of third col
+     */
     public T getThirdCol(){
         return thirdCol;
     }

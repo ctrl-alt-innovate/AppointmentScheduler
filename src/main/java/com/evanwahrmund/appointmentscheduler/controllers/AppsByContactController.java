@@ -1,12 +1,12 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.controllers;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.function.Predicate;
 
-import com.evanwahrmund.appointmentscheduler.daos.ContactDatabaseDao;
 import com.evanwahrmund.appointmentscheduler.daos.ReportsDao;
 import com.evanwahrmund.appointmentscheduler.models.*;
+import com.evanwahrmund.appointmentscheduler.util.Util;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;

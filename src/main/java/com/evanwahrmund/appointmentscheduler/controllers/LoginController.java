@@ -1,7 +1,9 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.controllers;
 
+import com.evanwahrmund.appointmentscheduler.Loader;
 import com.evanwahrmund.appointmentscheduler.models.User;
 import com.evanwahrmund.appointmentscheduler.models.Users;
+import com.evanwahrmund.appointmentscheduler.util.Util;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;

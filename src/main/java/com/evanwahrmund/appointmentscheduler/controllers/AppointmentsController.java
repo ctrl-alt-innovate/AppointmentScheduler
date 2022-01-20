@@ -1,9 +1,10 @@
-package com.evanwahrmund.appointmentscheduler;
+package com.evanwahrmund.appointmentscheduler.controllers;
 
 import java.sql.SQLException;
 import java.time.*;
 
 import com.evanwahrmund.appointmentscheduler.models.*;
+import com.evanwahrmund.appointmentscheduler.util.Util;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -81,9 +82,12 @@ public class AppointmentsController {
      */
     @FXML private TextField locationTextField;
     /**
-     *
+     *combobox to display local start times that are equivalent to business hours EST
      */
     @FXML private ComboBox<LocalTime> startTimeComboBox;
+    /**
+     * combobox to display local end times that equivalent to business hours EST
+     */
     @FXML private ComboBox<LocalTime> endTimeComboBox;
     /**
      * DatePicker to select appointment start date
@@ -266,6 +270,12 @@ public class AppointmentsController {
         userIdTextField.clear();
         contactComboBox.setValue(null);
     }
+
+    /**
+     * Creates new Appointment and displays confirmation alert if successful. Displays Error alert if any fields or comboboxes
+     * are blank. Checks that user, contact, and customer choices are valid. Checks for appointment overlap and displays error
+     * message if there are any overlaps.
+     */
     public void createAppointment(){
         try {
             String title = titleTextField.getText();
@@ -318,12 +328,27 @@ public class AppointmentsController {
         }
 
     }
+
+    /**
+     * Checks that appointment start time is not after end time.
+     * @param start ZonedDateTime of appointment start
+     * @param end ZonedDateTime of appointment end
+     * @throws IllegalArgumentException if start time is after end time
+     */
     public static void checkStartAndEnd(ZonedDateTime start, ZonedDateTime end) throws IllegalArgumentException{
         if(start.isAfter(end)){
             throw new IllegalArgumentException("Start time can not be after end time.");
 
         }
     }
+
+    /**
+     * Checks proposed start and end times to see if they overlap with any existing appointment times.
+     * @param existing Appointment to check
+     * @param start ZonedDateTime proposed start
+     * @param end ZonedDateTime proposed end
+     * @throws IllegalArgumentException if proposed start and end times overlap with exsisting appointment
+     */
     public static void checkForOverlap(Appointment existing, ZonedDateTime start, ZonedDateTime end)  throws IllegalArgumentException {
         ZonedDateTime existingStart = existing.getStartDateTime();
         ZonedDateTime existingEnd = existing.getEndDateTime();
@@ -364,6 +389,10 @@ public class AppointmentsController {
             throw new IllegalArgumentException("Can not schedule overlapping appointments");
         }
     }
+
+    /**
+     * Fills textfields and comboboxes with values of selected appointment. Displays error alert if no appointment selected.
+     */
     public void modifyAppointment(){
         Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
         if(appointment == null) {
@@ -385,6 +414,11 @@ public class AppointmentsController {
         customerIdTextField.setText(String.valueOf(appointment.getCustomer().getId()));
         contactComboBox.setValue(appointment.getContact());
     }
+
+    /**
+     * Updates selected appointment and display confirmation alert if successful.  Display error alert if no appointment selected.
+     * Displays Error alert and cancel update if any fields are blank or any time overlaps occur.
+     */
     public void updateAppointment() {
         Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
         if(appointment == null){
@@ -448,6 +482,11 @@ public class AppointmentsController {
 
         }
     }
+
+    /**
+     * Deletes selected appointment and displays confirmation alert.  Displays error alert if no appointment selected or there
+     * are any problems deleting from database.
+     */
     public void deleteAppointment(){
         try {
             Appointment appointment = appointmentsTable.getSelectionModel().getSelectedItem();
@@ -457,12 +496,12 @@ public class AppointmentsController {
                 alert.show();
             }
             Appointments.deleteAppointment(appointment);
-            //deleteLabel.setText(appointment.getTitle() + " has been successfully deleted");
+
             Alert confirm = new Alert(Alert.AlertType.INFORMATION, "Appointment ID: " + appointment.getId() + " - " +
                     appointment.getType() + " deleted successfully.");
             confirm.setHeaderText("Appointment Deleted");
             confirm.show();
-            //ALERT HERE NOTIFY DELETEION DISPLAY ID AND TYPE
+
         } catch (SQLException ex){
             Alert error = new Alert(Alert.AlertType.ERROR, "Error deleting Appointment" + "\n" + ex.getMessage());
             error.setHeaderText("Appointment Deletion Error");
