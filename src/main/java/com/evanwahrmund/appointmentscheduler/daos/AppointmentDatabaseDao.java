@@ -14,14 +14,29 @@ import com.evanwahrmund.appointmentscheduler.models.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Database implementation of AppointmentDao
+ */
 public class AppointmentDatabaseDao implements AppointmentDao {
-
+    /**
+     * singleton instance
+     */
     private static AppointmentDatabaseDao INSTANCE;
+
+    /**
+     * Gets instance of AppointmentDatabaseDao
+     * @return singleton instance of AppointmentDatabaseDao
+     */
     public static AppointmentDatabaseDao getInstance(){
         if (INSTANCE == null)
             INSTANCE = new AppointmentDatabaseDao();
         return INSTANCE;
     }
+
+    /**
+     * Gets all Appointments from database
+     * @return ObservableList of all Appointments from database
+     */
     @Override
     public ObservableList<Appointment> getAllAppointments(){
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
@@ -48,7 +63,12 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         }
         return appointments;
     }
-    //HAVE NOT CHECKED
+
+    /**
+     * Gets Appointment with given id
+     * @param id int id to search for
+     * @return Appointment with given id, null otherwise
+     */
     @Override
     public Appointment getAppointment(int id){
         String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, User_ID, Contact_ID, Customer_ID " +
@@ -78,23 +98,12 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         }
         return null;
     }
-        /*Table: appointments
-    Columns:
-    Appointment_ID int AI PK
-    Title varchar(50)
-    Description varchar(50)
-    Location varchar(50)
-    Type varchar(50)
-    Start datetime
-    End datetime
-    Create_Date datetime
-    Created_By varchar(50)
-    Last_Update timestamp
-    Last_Updated_By varchar(50)
-    Customer_ID int
-    User_ID int
-    Contact_ID int
-    */
+
+    /**
+     * Adds new Appointment to database
+     * @param appointment Appointment to be added
+     * @throws SQLException if any errors occur while adding to database
+     */
     @Override
     public void createAppointment(Appointment appointment) throws SQLException{
         String sql = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Create_Date, Created_By," +
@@ -125,6 +134,12 @@ public class AppointmentDatabaseDao implements AppointmentDao {
             }
         }
     }
+
+    /**
+     * Updates given Appointment in the database
+     * @param appointment Appointment to be updated
+     * @throws SQLException if any erros occur while updating
+     */
     @Override
     public void updateAppointment(Appointment appointment) throws SQLException{
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
@@ -150,6 +165,12 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         }
         return false;*/
     }
+
+    /**
+     * Deletes given Appointment from database
+     * @param appointment Appointment to be deleted
+     * @throws SQLException if any errors occur while deleting
+     */
     @Override
     public void deleteAppointment(Appointment appointment) throws SQLException{
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?;";
@@ -163,23 +184,12 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         return false;*/
     }
 
-    public void updateAppTime(Appointment app){
-        String sql = "UPDATE appointments SET Start = ?, End = ? WHERE Appointment_ID = ?;";
-        try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
-            ps.setTimestamp(1, Timestamp.valueOf(app.getStartDateTime().toLocalDateTime()));
-            ps.setTimestamp(2,Timestamp.valueOf(app.getEndDateTime().toLocalDateTime()));
-            ps.setInt(3, app.getId());
-            ps.executeUpdate();
-            /* --Check and Update this
-            for(Appointment appointment: appointments){
-                if(appointment.getId() == app.getId())
-                    appointments.set(appointments.indexOf(appointment), app);
-            }*/
-
-        } catch (SQLException ex){
-            ex.printStackTrace();
-        }
-    }
+    /**
+     * Gets Appointments by month and year
+     * @param month int of month
+     * @param year int of year
+     * @return ObservableList of Apopintments
+     */
     public ObservableList<Appointment> getAppsByMonth(int month, int year ){
         ObservableList<Appointment> appsByMonth = FXCollections.observableArrayList();
         String sql = "SELECT Appointment_ID FROM appointments WHERE MONTH(Start) = ? and YEAR(start) = ?;";
@@ -197,6 +207,12 @@ public class AppointmentDatabaseDao implements AppointmentDao {
         return appsByMonth;
     }
 
+    /**
+     * Gets Apointments by Week
+     * @param start String start day
+     * @param end String end day
+     * @return ObservableList of Appointments
+     */
     public ObservableList<Appointment> getAppsByWeek(String start, String end){
         ObservableList<Appointment> appsByWeek = FXCollections.observableArrayList();
         String sql = "SELECT Appointment_ID FROM appointments WHERE DATE(start) BETWEEN ? AND ?;";

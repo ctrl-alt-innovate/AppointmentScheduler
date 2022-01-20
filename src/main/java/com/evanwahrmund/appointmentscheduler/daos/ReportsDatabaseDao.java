@@ -64,8 +64,8 @@ public class ReportsDatabaseDao implements ReportsDao {
     }
 
     /**
-     *
-     * @return
+     * Gets Appointments by Country
+     * @return ObservableList of Report values from database query
      */
     @Override
     public ObservableList<ReportVal> getAppsByCountry(){
@@ -85,6 +85,10 @@ public class ReportsDatabaseDao implements ReportsDao {
         return appsByCountry;
     }
 
+    /**
+     * Gets Appointments by Division
+     * @return ObservbableList of Report values from database query
+     */
     @Override
     public ObservableList<ReportVal> getAppsByFirstLevelDiv(){
         ObservableList<ReportVal> appsByDiv = FXCollections.observableArrayList();
@@ -103,6 +107,10 @@ public class ReportsDatabaseDao implements ReportsDao {
         return appsByDiv;
     }
 
+    /**
+     * Gets Customers by Country
+     * @return ObservableLIst of Report values from database query
+     */
     @Override
     public ObservableList<ReportVal> getCusByCountry(){
         ObservableList<ReportVal> cusByCountry = FXCollections.observableArrayList();
@@ -121,6 +129,10 @@ public class ReportsDatabaseDao implements ReportsDao {
         return cusByCountry;
     }
 
+    /**
+     * Gets Customers by Division
+     * @return ObservableList of Report values from database query
+     */
     @Override
     public ObservableList<ReportVal> getCusByFirstLevelDiv(){
         ObservableList<ReportVal> cusByDiv = FXCollections.observableArrayList();

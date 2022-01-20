@@ -10,15 +10,29 @@ import com.evanwahrmund.appointmentscheduler.models.Divisions;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Database implementation of ReadOnlyDao
+ */
 public class ReadOnlyDatabaseDao implements ReadyOnlyDao {
-
+    /**
+     * singleton instance
+     */
     private static ReadOnlyDatabaseDao INSTANCE;
+
+    /**
+     * Gets instance of ReadOnlyDao
+     * @return singleton instance of ReadOnlyDao
+     */
     public static ReadOnlyDatabaseDao getInstance() {
         if (INSTANCE == null)
             INSTANCE = new ReadOnlyDatabaseDao();
         return INSTANCE;
     }
 
+    /**
+     * Gets all Countries from database
+     * @return ObservableList of Countries
+     */
     public ObservableList<Country> getAllCountries() {
         ObservableList<Country> countries = FXCollections.observableArrayList();
         String sql = "SELECT Country, Country_ID FROM countries;";
@@ -32,6 +46,10 @@ public class ReadOnlyDatabaseDao implements ReadyOnlyDao {
         return countries;
     }
 
+    /**
+     * Gets all first level divisions from the database
+     * @return ObservableList of all Divisions
+     */
     public ObservableList<Division> getAllDivisions() {
         ObservableList<Division> divisions = FXCollections.observableArrayList();
         String sql = "SELECT Division, Division_ID, Country, c.Country_ID FROM first_level_divisions AS f " +
@@ -47,6 +65,11 @@ public class ReadOnlyDatabaseDao implements ReadyOnlyDao {
         return divisions;
     }
 
+    /**
+     * Gets Divisions by given Country
+     * @param country Country to find Divisions for
+     * @return ObservableList of Divisions by given Country
+     */
     public ObservableList<Division> listDivisions(Country country) {
         String sql = "SELECT Division, Division_ID, Country, c.Country_ID FROM first_level_divisions AS f " +
                 "INNER JOIN countries AS c " +
@@ -65,7 +88,12 @@ public class ReadOnlyDatabaseDao implements ReadyOnlyDao {
         }
         return divsByCountry;
     }
-    //HAVE NOT CHECKED
+
+    /**
+     * Gets Country with given id
+     * @param id int id to search for
+     * @return Country with given id, null otherwise
+     */
     public Country getCountry(int id){
         String sql = "SELECT Country, Country_ID FROM countries WHERE Country_ID = ?;";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
@@ -81,7 +109,12 @@ public class ReadOnlyDatabaseDao implements ReadyOnlyDao {
         }
         return null;
     }
-    //HAVE NOT CHECKED.
+
+    /**
+     * Gets Division with selected id
+     * @param id int id to search for
+     * @return Division with selected id, otherwise null
+     */
     public Division getDivision(int id){
         String sql = "SELECT Division, Division_ID FROM first_level_divisions WHERE Division_ID = ?";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){

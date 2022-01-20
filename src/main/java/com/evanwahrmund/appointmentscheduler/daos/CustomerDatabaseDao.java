@@ -14,15 +14,29 @@ import com.evanwahrmund.appointmentscheduler.interfaces.CustomerDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Database implementation of CustomerDao
+ */
 public class CustomerDatabaseDao implements CustomerDao {
-
+    /**
+     * singleton instance
+     */
     private static CustomerDatabaseDao INSTANCE;
+
+    /**
+     * Gets instance of CustomerDatabaseDao
+     * @return singleton instace of CustomerDatabaseDao
+     */
     public static CustomerDatabaseDao getInstance() {
        if (INSTANCE == null)
            INSTANCE = new CustomerDatabaseDao();
        return INSTANCE;
     }
 
+    /**
+     * Gets list of all Customers in database
+     * @return ObservableList of all Customers
+     */
    public ObservableList<Customer> getAllCustomers(){
        ObservableList<Customer> customers = FXCollections.observableArrayList();
         String selectSQL = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, f.Division_ID " +
@@ -43,18 +57,12 @@ public class CustomerDatabaseDao implements CustomerDao {
        }
        return customers;
    }
-    /*Table: customers
-Columns:
-Customer_ID int AI PK
-Customer_Name varchar(50)
-Address varchar(100)
-Postal_Code varchar(50)
-Phone varchar(50)
-Create_Date datetime
-Created_By varchar(50)
-Last_Update timestamp
-Last_Updated_By varchar(50)
-Division_ID int*/
+
+    /**
+     * Adds new Customer to the database
+     * @param customer Customer to be added to database
+     * @throws SQLException if any errors occur adding to the database
+     */
     @Override
    public void createCustomer(Customer customer) throws SQLException {
        String insertSql = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Create_Date, " +
@@ -78,15 +86,17 @@ Division_ID int*/
                   customer.setId(rs.getInt(1));
 
                }
-               //System.out.println("Error: Customer id not set.");
-           }
-       } /*catch(SQLException ex){
-            System.out.println("Error: Customer not created.");
-            ex.printStackTrace();*/
 
-       //return false;
+           }
+       }
+
    }
 
+    /**
+     * Updates given customer in the database
+     * @param customer Customer to be updated
+     * @throws SQLException if any errors occur updating Customer
+     */
    public void updateCustomer(Customer customer) throws SQLException {
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ?, " +
                 "Last_Update = ?, Last_Updated_By = ? WHERE Customer_ID = ?;";
@@ -101,12 +111,15 @@ Division_ID int*/
             ps.setString(7,"Application");
             ps.setInt(8, customer.getId());
             ps.executeUpdate();
-            //return true;
-        }/*catch (SQLException ex){
-            System.out.println("Error: Customer with ID - " + customer.getId() + " not updated");
-            //return false;
-        }*/
+
+        }
    }
+
+    /**
+     * Deletes given Customer from database
+     * @param customer customer to be deleted
+     * @throws SQLException if any errors occur while deleting Customer
+     */
    public void deleteCustomer(Customer customer) throws SQLException{
        String deleteSQL = "DELETE FROM customers WHERE Customer_ID = ?;";
        try(var ps = DatabaseConnection.getConnection().prepareStatement(deleteSQL)) {
@@ -114,7 +127,12 @@ Division_ID int*/
            ps.executeUpdate();
        }
    }
-   //HAVE NOT CHECKED
+
+    /**
+     * Gets Customer with given id
+     * @param id int id to search for
+     * @return Customer with given id, null otherwise
+     */
    public Customer getCustomer(int id){
         String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division, f.Division_ID, Country, c.Country_ID " +
                 "FROM customers as customer INNER JOIN first_level_divisions as f ON customer.Division_ID = f.Division_ID " +
