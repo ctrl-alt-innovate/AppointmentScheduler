@@ -56,34 +56,94 @@ public class AppointmentsController {
      * column for Customer id
      */
     @FXML private TableColumn<Appointment, Customer> customerCol;
+    /**
+     * column for User id
+     */
     @FXML private TableColumn<Appointment, User> userCol;
-
+    /**
+     * disabled textfield that displays id when updating Appointments
+     */
     @FXML private TextField idTextField;
+    /**
+     * textfield to collect description
+     */
     @FXML private TextField descriptionTextField;
+    /**
+     * textfield to collect title
+     */
     @FXML private TextField titleTextField;
+    /**
+     * textfield to collect type
+     */
     @FXML private TextField typeTextField;
+    /**
+     * textfield to collect location
+     */
     @FXML private TextField locationTextField;
+    /**
+     *
+     */
     @FXML private ComboBox<LocalTime> startTimeComboBox;
     @FXML private ComboBox<LocalTime> endTimeComboBox;
+    /**
+     * DatePicker to select appointment start date
+     */
     @FXML private DatePicker startDatePicker;
+    /**
+     * DatePicker to slect appointment end date
+     */
     @FXML private DatePicker endDatePicker;
+    /**
+     * textfield to collect user id
+     */
     @FXML private TextField userIdTextField;
+    /**
+     * textfield to collect customer id
+     */
     @FXML private TextField customerIdTextField;
+    /**
+     * ComboBox to assign Contact
+     */
     @FXML private ComboBox<Contact> contactComboBox;
-    @FXML private Label deleteLabel;
 
+
+    /**
+     * button to add new Appointment
+     */
     @FXML private Button addButton;
+    /**
+     * button to fill text fields with vals of selected appointment
+     */
     @FXML private Button modifyButton;
+    /**
+     * button to deleted selected appointment
+     */
     @FXML private Button deleteButton;
+    /**
+     * button to save changes to existing appointment
+     */
     @FXML private Button saveButton;
+    /**
+     * button to clear fields and set date to current
+     */
     @FXML private Button resetButton;
+    /**
+     * used as a flag to detect if start date has changed
+     */
     private Boolean startChanged = false;
+    /**
+     * used as a flag to detect if end date changed
+     */
     private Boolean endChanged = false;
 
+    /**
+     * Populates contacts in contactComboBox, appointments in appointments table, and LocalTimes in time combo boxes.
+     * Assigns button handlers to respective methods. Links start and end date pickers if time options do not carry over to next day.
+     * If time options carry over to next day, date pickers adjust accordingly
+     */
     public void initialize(){
         initializeTable();
         contactComboBox.setItems(Contacts.getContacts());
-
 
         appointmentsTable.setItems(Appointments.getAppointments());
         resetButton.setOnAction(event -> resetFields());
@@ -148,9 +208,31 @@ public class AppointmentsController {
             }
         });
         populateTimeComboBoxes();
-        loadTestData();
+        //loadTestData();
     }
 
+    /**
+     * Initializes appointmentsTable
+     */
+    private void initializeTable(){
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        contactCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getContact().getName()));
+        startDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime()
+                .withZoneSameInstant((ZoneId.systemDefault())))));
+        endDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime()
+                .withZoneSameInstant(ZoneId.systemDefault()))));
+        customerCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
+        userCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getUser().getUserId()));
+
+    }
+
+    /**
+     * Initializes start and end time combo boxes with local times that are equivalent to hours of operation in EST
+     */
     private void populateTimeComboBoxes() {
         ObservableList<LocalTime> options = FXCollections.observableArrayList();
         LocalTime beginning = LocalTime.of(8, 0);
@@ -167,21 +249,9 @@ public class AppointmentsController {
         endTimeComboBox.setItems(options);
     }
 
-    private void initializeTable(){
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
-        contactCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getContact().getName()));
-        startDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getStartDateTime()
-                .withZoneSameInstant((ZoneId.systemDefault())))));
-        endDateTimeCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(Util.formatDateTime(cell.getValue().getEndDateTime()
-                .withZoneSameInstant(ZoneId.systemDefault()))));
-        customerCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getCustomer().getId()));
-        userCol.setCellValueFactory(cell -> new ReadOnlyObjectWrapper(cell.getValue().getUser().getUserId()));
-
-    }
+    /**
+     * clears textfields and comboBoxes. Sets start and end dates to current.
+     */
     public void resetFields(){
         idTextField.clear();
         titleTextField.clear();
@@ -400,7 +470,7 @@ public class AppointmentsController {
 
         }
     }
-    private void loadTestData(){
+    /*private void loadTestData(){
         titleTextField.setText("title");
         locationTextField.setText("location");
         typeTextField.setText("Board Meeting");
@@ -412,5 +482,5 @@ public class AppointmentsController {
         contactComboBox.setValue(contactComboBox.getItems().get(0));
         startTimeComboBox.setValue(startTimeComboBox.getItems().get(6));
         endTimeComboBox.setValue(endTimeComboBox.getItems().get(8));
-    }
+    }*/
 }

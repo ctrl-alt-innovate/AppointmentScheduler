@@ -10,8 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.sql.SQLException;
 
 /**
- * Controller for adding, removing, and updating Customers. <p>
- * Used by: FXML/customers.fxml.
+ * Controller for FXML file: customers.fxml. Allows User to view, add, update, and delete Customers
  */
 public class CustomersController {
     /**
@@ -48,23 +47,55 @@ public class CustomersController {
     @FXML private TableColumn<Customer, Country> countryCol;
     @FXML private ComboBox<Country> countryComboBox;
     @FXML private ComboBox<Division> divisionComboBox;
+    /**
+     * disabled textfield to display Customer id when updating Customers
+     */
     @FXML private TextField idTextField;
+    /**
+     * textfield to collect address
+     */
     @FXML private TextField addressTextField;
+    /**
+     * textfield to collect name
+     */
     @FXML private TextField nameTextField;
+    /**
+     * textfield to collect postal code
+     */
     @FXML private TextField postalCodeTextField;
+    /**
+     * textfield to collect phone number
+     */
     @FXML private TextField phoneTextField;
+    /**
+     * button to add new customer
+     */
     @FXML private Button addButton;
+    /**
+     * button to fill textfields with vals from selected Customer
+     */
     @FXML private Button modifyButton;
+    /**
+     * button to delete selected Customer
+     */
     @FXML private Button deleteButton;
+    /**
+     * button to save changes when updating Customer
+     */
     @FXML private Button saveButton;
+    /**
+     * button to reset textfields
+     */
     @FXML private Button resetButton;
-    @FXML private Label deleteLabel;
 
 
+    /**
+     * Calls Initialization methods, sets handler methods for buttons, sets customrsTable values
+     */
     public void initialize() {
         initializeTable();
         initializeComboBoxes();
-        loadTestData();
+        //loadTestData();
         addButton.setOnAction(event -> {
             createCustomer();
         });
@@ -74,12 +105,14 @@ public class CustomersController {
         saveButton.setOnAction(event -> updateCustomer());
 
         customersTable.setItems(Customers.getCustomers());
-        customersTable.itemsProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("Activated");
-        });
+
 
 
     }
+
+    /**
+     * Adds Countries from database to countryComboBox, and adds handler to list divisions by country
+     */
     private void initializeComboBoxes(){
         countryComboBox.getItems().addAll(Countries.getCountries());
         countryComboBox.setOnAction((event) -> {
@@ -90,9 +123,9 @@ public class CustomersController {
             }
             //divisionComboBox.setItems(Data)
         });
-        countryComboBox.setValue(ReadOnlyDatabaseDao.getInstance().getCountry(1));
-        divisionComboBox.setItems(ReadOnlyDatabaseDao.getInstance().listDivisions(countryComboBox.getValue()));
-        divisionComboBox.setValue(ReadOnlyDatabaseDao.getInstance().getDivision(3));
+        //countryComboBox.setValue(ReadOnlyDatabaseDao.getInstance().getCountry(1));
+        //divisionComboBox.setItems(ReadOnlyDatabaseDao.getInstance().listDivisions(countryComboBox.getValue()));
+        //divisionComboBox.setValue(ReadOnlyDatabaseDao.getInstance().getDivision(3));
         //divisionComboBox.getItems().addAll(DatabaseReadOnlyDao.getInstance().listDivisions(new Country("United States")));
 
     }
@@ -115,6 +148,12 @@ public class CustomersController {
             return new ReadOnlyObjectWrapper(cell.getValue().getDivision().getCountry().getName());
         });
     }
+
+    /**
+     * Creates new customer and displays confirmation alert if successful.  Provides error checking for blank fields
+     *. Displays error alert if unsuccessfyl.
+     * error alert if unsuccessful.
+     */
     public void createCustomer(){
         try {
             String name = nameTextField.getText();
@@ -146,6 +185,11 @@ public class CustomersController {
 
         }
     }
+
+    /**
+     * Deletes selected Customer and displays confirmation alert. Displays error alert if no Customer selected, Customer has
+     * existing appointments, or any problems deleting from database.
+     */
     public void deleteCustomer(){
         Customer cusToDelete = customersTable.getSelectionModel().getSelectedItem();
         if(cusToDelete == null) {
@@ -176,6 +220,10 @@ public class CustomersController {
         }
 
     }
+
+    /**
+     * Resets textfields and comboboxes
+     */
     public void resetFields(){
         idTextField.clear();
         nameTextField.clear();
@@ -187,6 +235,9 @@ public class CustomersController {
 
     }
 
+    /**
+     * Fills textfields and comboboxes with values from selected Customer
+     */
     public void modifyCustomer(){
         Customer cusToMod = customersTable.getSelectionModel().getSelectedItem();
         idTextField.setText(String.valueOf(cusToMod.getId()));
@@ -198,6 +249,10 @@ public class CustomersController {
         divisionComboBox.setValue(cusToMod.getDivision());
     }
 
+    /**
+     * Updates Selected Customer and displays confirmation alert. Displays error alert if any fields are blank or there
+     * are any errors updating in database.
+     */
     public void updateCustomer(){
         try {
             if(nameTextField.getText().isBlank() || addressTextField.getText().isBlank() || postalCodeTextField.getText().isBlank() ||

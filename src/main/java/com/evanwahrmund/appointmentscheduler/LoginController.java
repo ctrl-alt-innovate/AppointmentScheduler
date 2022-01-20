@@ -14,7 +14,9 @@ import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-
+/**
+ * Controller for FXML file: login.fxml. Launched at start to validate access to application.
+ */
 public class LoginController {
     /**
      * label to display ZoneId

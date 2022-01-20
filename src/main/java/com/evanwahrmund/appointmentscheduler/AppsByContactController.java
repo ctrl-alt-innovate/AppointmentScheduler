@@ -22,35 +22,54 @@ import javafx.scene.control.cell.PropertyValueFactory;
  *  DISCUSSION OF LAMBDA 2: initialize()
  */
 public class AppsByContactController {
+    /*
+     * TableView of all Appointments, to be filtered by contact
+     */
     @FXML private TableView<Appointment> contactSchedulesTable;
+    /**
+     * col for id
+     */
     @FXML private TableColumn<Appointment, Integer> appIdCol;
+    /**
+     * col for title
+     */
     @FXML private TableColumn<Appointment, String> titleCol;
+    /**
+     * col for type
+     */
     @FXML private TableColumn<Appointment, String> typeCol;
+    /**
+     * col for description
+     */
     @FXML private TableColumn<Appointment, String> descriptionCol;
+    /**
+     * col for start time
+     */
     @FXML private TableColumn<Appointment, ZonedDateTime> startCol;
+    /**
+     * col for end time
+     */
     @FXML private TableColumn<Appointment, ZonedDateTime> endCol;
+    /**
+     * col for customer id
+     */
     @FXML private TableColumn<Appointment, Customer> cusIdCol;
+    /**
+     * ComboBox of Contacts for User to choose from
+     */
     @FXML private ComboBox<Contact> contactComboBox;
 
     /**
-     *
+     * Assigns all contacts to contactComboBox and sets event handler for contactComboBox.
+     * <p>
+     * DISCUSSION OF LAMMDA 2: pred is a predicated used to filter the appiontments list based on contact choice of the
+     * contactComboBox. The filtered list is created and displayed everytime a contact choice is made.  This ensures that
+     * no new lists have to be created and enables fast displaying of data.
      */
     public void initialize(){
         initializeTable();
-        contactComboBox.setItems(ContactDatabaseDao.getInstance().getAllContacts());
-        /*contactComboBox.setConverter(new StringConverter<Contact>() {
-            @Override
-            public String toString(Contact contact) {
-                if(contact != null)
-                    return contact.getId() + " - " + contact.getName();
-                return null;
-            }
+        contactComboBox.setItems(Contacts.getContacts());
 
-            @Override
-            public Contact fromString(String s) {
-                return null;
-            }
-        }); */
         Predicate<Appointment> pred = app -> ReportsDao.getInstance().getAppsByContact(contactComboBox.getValue()).contains(app);
 
         contactComboBox.setOnAction(event -> {
@@ -59,6 +78,9 @@ public class AppsByContactController {
         });
     }
 
+    /**
+     * Initializes table columns
+     */
     private void initializeTable() {
         appIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
