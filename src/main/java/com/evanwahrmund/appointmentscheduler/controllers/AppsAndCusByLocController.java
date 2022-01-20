@@ -1,6 +1,6 @@
 package com.evanwahrmund.appointmentscheduler.controllers;
 
-import com.evanwahrmund.appointmentscheduler.daos.ReportsDao;
+import com.evanwahrmund.appointmentscheduler.daos.ReportsDatabaseDao;
 import com.evanwahrmund.appointmentscheduler.util.ReportVal;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
@@ -68,10 +68,10 @@ public class AppsAndCusByLocController {
      */
     public void initialize(){
         initializeTables();
-        appointmentsTableCountry.setItems(ReportsDao.getInstance().getAppsByCountry());
-        customersTableCountry.setItems(ReportsDao.getInstance().getCusByCountry());
-        appointmentsTableDiv.setItems(ReportsDao.getInstance().getAppsByFirstLevelDiv());
-        customersTableDiv.setItems(ReportsDao.getInstance().getCusByFirstLevelDiv());
+        appointmentsTableCountry.setItems(ReportsDatabaseDao.getInstance().getAppsByCountry());
+        customersTableCountry.setItems(ReportsDatabaseDao.getInstance().getCusByCountry());
+        appointmentsTableDiv.setItems(ReportsDatabaseDao.getInstance().getAppsByFirstLevelDiv());
+        customersTableDiv.setItems(ReportsDatabaseDao.getInstance().getCusByFirstLevelDiv());
 
     }
 

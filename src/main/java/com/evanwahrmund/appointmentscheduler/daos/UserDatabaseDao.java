@@ -7,15 +7,29 @@ import com.evanwahrmund.appointmentscheduler.interfaces.UserDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Database impolementation of UserDao
+ */
 public class UserDatabaseDao implements UserDao {
-
+    /**
+     * Singleton instance
+     */
     private static UserDatabaseDao INSTANCE;
+
+    /**
+     * Gets Instance of UserDatabaseDao
+     * @return singleton instance of UserDatabaseDao
+     */
     public static UserDatabaseDao getInstance(){
         if (INSTANCE == null)
             INSTANCE = new UserDatabaseDao();
         return INSTANCE;
     }
 
+    /**
+     * Selects all Users from database
+     * @return ObservableList of all Users in database
+     */
     public ObservableList<User> getAllUsers(){
         ObservableList<User> users = FXCollections.observableArrayList();
         String sql = "SELECT User_ID, User_Name, Password FROM users;";
@@ -31,7 +45,11 @@ public class UserDatabaseDao implements UserDao {
         return users;
     }
 
-    //HAVE NOT CHECKED
+    /**
+     * Gets User with given id
+     * @param id int to search for
+     * @return User with given id, null otherwise
+     */
     public User getUser(int id){
         String sql = "SELECT User_ID, User_Name, Password FROM users WHERE User_ID = ?";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
@@ -48,6 +66,7 @@ public class UserDatabaseDao implements UserDao {
         }
         return null;
     }
+    /*
     public boolean createUser(User user){
         String sql = "INSERT INTO users(User_Name, Password, Created_By, Last_Updated_By) VALUES(?, ?, ?, ?);";
         try (var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
@@ -93,7 +112,7 @@ public class UserDatabaseDao implements UserDao {
             return false;
         }
     }
-
+*/
 
 
 }

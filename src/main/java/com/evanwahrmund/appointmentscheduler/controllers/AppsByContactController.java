@@ -4,7 +4,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.function.Predicate;
 
-import com.evanwahrmund.appointmentscheduler.daos.ReportsDao;
+import com.evanwahrmund.appointmentscheduler.daos.ReportsDatabaseDao;
 import com.evanwahrmund.appointmentscheduler.models.*;
 import com.evanwahrmund.appointmentscheduler.util.Util;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -70,7 +70,7 @@ public class AppsByContactController {
         initializeTable();
         contactComboBox.setItems(Contacts.getContacts());
 
-        Predicate<Appointment> pred = app -> ReportsDao.getInstance().getAppsByContact(contactComboBox.getValue()).contains(app);
+        Predicate<Appointment> pred = app -> ReportsDatabaseDao.getInstance().getAppsByContact(contactComboBox.getValue()).contains(app);
 
         contactComboBox.setOnAction(event -> {
             FilteredList<Appointment> byContact = new FilteredList<Appointment>(Appointments.getAppointments(), pred);

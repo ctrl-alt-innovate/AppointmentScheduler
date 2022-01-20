@@ -2,7 +2,7 @@ package com.evanwahrmund.appointmentscheduler.controllers;
 
 import java.time.LocalDate;
 
-import com.evanwahrmund.appointmentscheduler.daos.ReportsDao;
+import com.evanwahrmund.appointmentscheduler.daos.ReportsDatabaseDao;
 import com.evanwahrmund.appointmentscheduler.util.ReportVal;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.util.Callback;
 
 /**
  * Controller for FXML file: apps_by_type_and_month.fxml. Provides report for Appointments by Type and Month.
@@ -38,7 +37,7 @@ public class AppsByTypeAndMonthController {
      */
     public void initialize(){
         initializeTables();
-        ObservableList <ReportVal> typelist = FXCollections.observableArrayList(ReportsDao.getInstance().getAppsByTypeAndMonth());
+        ObservableList <ReportVal> typelist = FXCollections.observableArrayList(ReportsDatabaseDao.getInstance().getAppsByTypeAndMonth());
         typeAndMonthTable.setItems(typelist);
     }
 

@@ -8,16 +8,29 @@ import com.evanwahrmund.appointmentscheduler.interfaces.ContactDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Database implementation of ContactDao
+ */
 public class ContactDatabaseDao implements ContactDao {
-
+    /**
+     * singleton instance
+     */
     private static ContactDatabaseDao INSTANCE;
 
+    /**
+     * Gets instance of ContaceDatabaseDao
+     * @return singleton instane of ContactDatabaseDao
+     */
     public static ContactDatabaseDao getInstance(){
         if (INSTANCE == null)
             INSTANCE = new ContactDatabaseDao();
         return INSTANCE;
     }
 
+    /**
+     * Gets all Contacts from database
+     * @return ObservableList of all Contacts in database
+     */
     public ObservableList<Contact> getAllContacts() {
         ObservableList<Contact> contacts = FXCollections.observableArrayList();
         String sql = "SELECT Contact_ID, Contact_Name, Email FROM contacts;";
@@ -33,7 +46,11 @@ public class ContactDatabaseDao implements ContactDao {
         return contacts;
     }
 
-    //HAVE NOT CHECKED
+    /**
+     * Gets Contact with selected id
+     * @param id int id to search for
+     * @return Contact with given id, null otherwise
+     */
     public Contact getContact(int id){
         String sql = "SELECT Contact_ID, Contact_Name, Email FROM contacts WHERE Contact_ID = ?;";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql)){
@@ -50,6 +67,7 @@ public class ContactDatabaseDao implements ContactDao {
         }
         return null;
     }
+    /*
     public boolean createContact(Contact contact){
         String sql = "INSERT INTO contacts(Contact_Name, Email) VALUES(?, ?);";
         try(var ps = DatabaseConnection.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
@@ -93,4 +111,6 @@ public class ContactDatabaseDao implements ContactDao {
             return false;
         }
     }
+
+     */
 }
