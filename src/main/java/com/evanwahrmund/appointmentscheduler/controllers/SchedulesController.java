@@ -27,7 +27,7 @@ import javafx.util.StringConverter;
  * Displays Appointment schedules filtered by User choice.
  * Allows User to adjust appointment times.
  * <p>
- * DISCUSSION OF LAMBDA 1: filterList(ObservableList<Appointment> apps)
+ * DISCUSSION OF LAMBDA 1: filterList(ObservableList apps)
  */
 public class SchedulesController {
     /**

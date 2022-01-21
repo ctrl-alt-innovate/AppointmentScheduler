@@ -3,6 +3,9 @@ package com.evanwahrmund.appointmentscheduler.interfaces;
 import com.evanwahrmund.appointmentscheduler.models.Appointment;
 import javafx.collections.ObservableList;
 
+/**
+ * interface representing Appointment operations
+ */
 public interface AppointmentDao {
     /**
      * Gets list of all Appointments

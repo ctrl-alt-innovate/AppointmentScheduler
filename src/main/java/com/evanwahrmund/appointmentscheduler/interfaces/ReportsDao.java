@@ -5,6 +5,9 @@ import com.evanwahrmund.appointmentscheduler.models.Contact;
 import com.evanwahrmund.appointmentscheduler.util.ReportVal;
 import javafx.collections.ObservableList;
 
+/**
+ * interface for report operations
+ */
 public interface ReportsDao {
     /**
      * Gets Appointments by type and month
