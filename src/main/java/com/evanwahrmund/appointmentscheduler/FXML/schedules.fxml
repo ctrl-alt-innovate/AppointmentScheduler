@@ -105,7 +105,7 @@
             </Menu>
             <Menu fx:id="logoutMenu" mnemonicParsing="false" text="Logout">
                <items>
-                  <MenuItem fx:id="logout" mnemonicParsing="false" text="logout" />
+                  <MenuItem fx:id="logout" mnemonicParsing="false" text="Logout" />
                </items></Menu>
          </menus>
       </MenuBar>
